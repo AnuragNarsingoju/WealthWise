@@ -11,7 +11,6 @@ import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import { Phone } from 'lucide-react';
 
-
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
     <path
