@@ -114,40 +114,34 @@ const Login = (log) => {
       return;
     }
     try {
-      try{
-        firebase.auth().fetchSignInMethodsForEmail(email)
-          .then((signInMethods) => {
-            if (signInMethods.length > 0) {
-              console.log('User exists with sign-in methods:', signInMethods);
-            } else {
-              console.log('User does not exist');
-              setshouldHaveRainbowEffect(true);
-              setTimeout(() => {
-                setshouldHaveRainbowEffect(false);
-              }, 3000);
-              return;
-            }
-          })
-      } catch (error) {
-        console.error('Unexpected error:', error);
+      const signInMethods = await firebase.auth().fetchSignInMethodsForEmail(email);
+      if (signInMethods.length === 0) {
+        console.log('User does not exist');
+        setshouldHaveRainbowEffect(true);
+        setTimeout(() => {
+          setshouldHaveRainbowEffect(false);
+        }, 3000);
+        setLoading(false);  
+        return;
       }
+  
+      console.log('User exists with sign-in methods:', signInMethods);
       await sendPasswordResetEmail(auth, email);
       toast.dismiss();
       toast.success('Password reset email sent! Please check your inbox.', { position: 'top-center' });
       setEmail('');
     } catch (error) {
       console.error('Error sending reset email:', error);
+      toast.dismiss();
       if (error.code === 'auth/user-not-found') {
-        toast.dismiss();
         toast.error('No account found with this email.', { position: 'top-center' });
       } else {
-        toast.dismiss();
         toast.error('Something went wrong. Please try again.', { position: 'top-center' });
       }
     }
-    setLoading(false);
+    
+    setLoading(false); 
   };
-
   const signUp = async (email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
