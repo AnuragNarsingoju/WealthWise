@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route ,useNavigate} from 'react-router-dom';
 import Login from './components/login';
+import Home from './components/Home';
+import { auth} from "./firebase";
+
 import HashLoader from "react-spinners/HashLoader";
 
 
@@ -11,27 +14,30 @@ const App = () => {
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(async (user) => {
-  //     try {
-  //       setLoading(true); 
+
+
+ useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      try {
+
+        setLoading(true);   
+        if (user) {
+          setMail(user.email);
+          console.log("user email : " ,user.email)
+        } else {
+          setMail('');
+          await auth.signOut();
+        }
   
-  //       if (user) {
-  //         setMail(user.email);
-  //       } else {
-  //         setMail('');
-  //         await auth.signOut();
-  //       }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error during authentication state change:', error);
+        setLoading(false); 
+      }
+    });
   
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error('Error during authentication state change:', error);
-  //       setLoading(false); 
-  //     }
-  //   });
-  
-  //   return () => unsubscribe(); 
-  // }, []);
+    return () => unsubscribe();
+  }, []);
   
 
   if (loading) {
@@ -46,7 +52,8 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login/>} />
+        <Route path="/" element={<Login log={setLog} />} />
+        <Route path="/home" element={<Home mail={mail} />} />
       </Routes>
     </div>
   );

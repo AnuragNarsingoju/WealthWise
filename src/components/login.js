@@ -101,6 +101,10 @@ const Login = (log) => {
 
   const navigate = useNavigate(); 
 
+  useEffect(()=>{
+    log=isLoggedIn;
+  },[isLoggedIn])
+
   const signUp = async (email, password) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -136,6 +140,9 @@ const Login = (log) => {
         toast.error('Email not verified. Please verify your email',{position:'top-center'});
       } else {
         try {
+          setIsLoggedIn(true);
+          navigate('/home',{replace:true});
+          
           const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
           const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
            const val={email1:email,auth:auth1};
@@ -145,6 +152,8 @@ const Login = (log) => {
               mode: CryptoJS.mode.CBC,
               padding: CryptoJS.pad.Pkcs7
           }).toString();
+          
+          
   
   
   
@@ -170,7 +179,6 @@ const Login = (log) => {
         
             
       }
-      console.log(user);
       
     } catch (error) {
       console.error(error);
@@ -221,6 +229,7 @@ const Login = (log) => {
       try {
         await auth.signOut(); 
         navigate('/', { replace: true });
+        setIsLoggedIn(false);
       } catch (error) {
         console.error('Error signing out:', error);
       }
@@ -240,13 +249,10 @@ const Login = (log) => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      setEmail(user.email)
+      setIsLoggedIn(true);
       console.log("User Info:", user.email);
-      // console.log("User email:", user.UserImpl.email);
-      // console.log("User displayName:", user.UserImpl.displayName);
-      // console.log("User emailVerified:", user.UserImpl.emailVerified);
-      // console.log("User phoneNumber:", user.UserImpl.phoneNumber);
-      // console.log("User photoURL:", user.UserImpl.photoURL);
-      // console.log("User accessToken:", user.UserImpl.accessToken);
+      navigate('/home', { replace: true });
 
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
