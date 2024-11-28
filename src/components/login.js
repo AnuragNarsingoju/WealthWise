@@ -114,15 +114,24 @@ const Login = (log) => {
       return;
     }
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      if (signInMethods.length === 0) {
-        toast.dismiss();
-        toast.error('No account found with this email. Please Signup', { position: 'top-center' });
-        setshouldHaveRainbowEffect(true);
-        setTimeout(() => {
-          setshouldHaveRainbowEffect(false);
-        }, 3000);
-        return;
+      firebase.auth().fetchSignInMethodsForEmail(email)
+          .then((signInMethods) => {
+            if (signInMethods.length > 0) {
+              console.log('User exists with sign-in methods:', signInMethods);\
+            } else {
+              console.log('User does not exist');
+              setshouldHaveRainbowEffect(true);
+                setTimeout(() => {
+                  setshouldHaveRainbowEffect(false);
+                }, 3000);
+              return;
+            }
+          })
+          .catch((error) => {
+            console.error('Error fetching sign-in methods:', error);
+          });
+       
+        
       }
       await sendPasswordResetEmail(auth, email);
       toast.dismiss();
