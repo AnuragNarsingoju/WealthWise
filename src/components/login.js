@@ -2,7 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import {  Mail, ChevronLeft, Eye, EyeOff, User, Lock, AlertCircle, AlignCenter } from 'lucide-react';
 import '../index.css';
 import { auth, provider   } from "../firebase";
-import { signInWithPopup ,signInWithEmailAndPassword, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
+import { signInWithPopup ,signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import { Phone } from 'lucide-react';
+
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -103,6 +104,42 @@ const Login = (log) => {
   useEffect(()=>{
     log=isLoggedIn;
   },[isLoggedIn])
+
+  const handleForgotPassword = async (e) => {
+    setLoading(true);
+    if (!email) {
+      toast.dismiss();
+      toast.error('Please enter your email address.', { position: 'top-center' });
+      setLoading(false);
+      return;
+    }
+    try {
+      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      if (signInMethods.length === 0) {
+        toast.dismiss();
+        toast.error('No account found with this email. Please Signup', { position: 'top-center' });
+        setshouldHaveRainbowEffect(true);
+        setTimeout(() => {
+          setshouldHaveRainbowEffect(false);
+        }, 3000);
+        return;
+      }
+      await sendPasswordResetEmail(auth, email);
+      toast.dismiss();
+      toast.success('Password reset email sent! Please check your inbox.', { position: 'top-center' });
+      setEmail('');
+    } catch (error) {
+      console.error('Error sending reset email:', error);
+      if (error.code === 'auth/user-not-found') {
+        toast.dismiss();
+        toast.error('No account found with this email.', { position: 'top-center' });
+      } else {
+        toast.dismiss();
+        toast.error('Something went wrong. Please try again.', { position: 'top-center' });
+      }
+    }
+    setLoading(false);
+  };
 
   const signUp = async (email, password) => {
     try {
@@ -483,6 +520,7 @@ const Login = (log) => {
                       <input
                           type={showPassword ? "text" : "password"}
                           value={password}
+                          onCopy={(e) => e.preventDefault()}
                           onChange={(e) => setPassword(e.target.value)}
                           className={`w-full p-2 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
                             errors.password ? 'border-red-500' : 'border-gray-300'
@@ -504,6 +542,36 @@ const Login = (log) => {
                       </div>
                     )}
                   </div>
+                  {isLogin && (
+                    <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end', 
+                      width: '100%',
+                      margin: '0 auto', 
+                      backgroundColor: 'transparent',
+                    }}
+                   >
+                      <button 
+                        onClick={() => {
+                          
+                          handleForgotPassword();
+                        }}
+                        style={{
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          color: 'blue',
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          marginRight:'10px'
+                        }}
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
+                  )}
+
+
                   {!isLogin && (
                   <div className="w-full">
                     <div className="relative">
@@ -511,6 +579,7 @@ const Login = (log) => {
                       <input
                         type={showPassword ? "text" : "password"}
                         value={confirmPassword}
+                        onCopy={(e) => e.preventDefault()}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className={`w-full p-2 pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
                           errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
@@ -530,7 +599,7 @@ const Login = (log) => {
                   <button
                     type="submit"
                     onClick={() => handleSubmit()}
-                    className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                    className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2" style={{marginTop:'5px'}}
                   >
                     {isLogin ? 'Sign In' : 'Sign Up'}
                   </button>
