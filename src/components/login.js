@@ -127,9 +127,6 @@ const Login = (log) => {
               return;
             }
           })
-          .catch((error) => {
-            console.error('Error fetching sign-in methods:', error);
-          });
       } catch (error) {
         console.error('Unexpected error:', error);
       }
