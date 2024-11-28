@@ -117,7 +117,7 @@ const Login = (log) => {
       firebase.auth().fetchSignInMethodsForEmail(email)
           .then((signInMethods) => {
             if (signInMethods.length > 0) {
-              console.log('User exists with sign-in methods:', signInMethods);\
+              console.log('User exists with sign-in methods:', signInMethods);
             } else {
               console.log('User does not exist');
               setshouldHaveRainbowEffect(true);
