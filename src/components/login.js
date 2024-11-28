@@ -114,16 +114,16 @@ const Login = (log) => {
       return;
     }
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      if (signInMethods.length === 0) {
-        toast.dismiss();
-        toast.error('No account found with this email. Please Signup', { position: 'top-center' });
-        setshouldHaveRainbowEffect(true);
-        setTimeout(() => {
-          setshouldHaveRainbowEffect(false);
-        }, 3000);
-        return;
-      }
+      // const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      // if (signInMethods.length === 0) {
+      //   toast.dismiss();
+      //   toast.error('No account found with this email. Please Signup', { position: 'top-center' });
+      //   setshouldHaveRainbowEffect(true);
+      //   setTimeout(() => {
+      //     setshouldHaveRainbowEffect(false);
+      //   }, 3000);
+      //   return;
+      // }
       await sendPasswordResetEmail(auth, email);
       toast.dismiss();
       toast.success('Password reset email sent! Please check your inbox.', { position: 'top-center' });
