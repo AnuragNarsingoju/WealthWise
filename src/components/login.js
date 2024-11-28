@@ -114,7 +114,7 @@ const Login = (log) => {
       return;
     }
     try {
-      const signInMethods = await firebase.auth().fetchSignInMethodsForEmail(email);
+      const signInMethods = await fetchSignInMethodsForEmail(email);
       if (signInMethods.length === 0) {
         console.log('User does not exist');
         setshouldHaveRainbowEffect(true);
