@@ -114,6 +114,7 @@ const Login = (log) => {
       return;
     }
     try {
+      try{
         firebase.auth().fetchSignInMethodsForEmail(email)
           .then((signInMethods) => {
             if (signInMethods.length > 0) {
