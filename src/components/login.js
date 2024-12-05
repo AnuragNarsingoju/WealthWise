@@ -178,7 +178,7 @@ const Login = (log) => {
       } else {
         try {
           setIsLoggedIn(true);
-          navigate('/home',{replace:true});
+          navigate('/foam',{replace:true});
           
           const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
           const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
@@ -276,11 +276,6 @@ const Login = (log) => {
   }, []); 
 
 
-  const rainbowTextClass = 'bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent';
-  const rainbowBorderClass = 'border-4 border-transparent bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-origin-border';
-
-
-  
   
   const signInWithGoogle = async () => {
     try {
@@ -289,7 +284,7 @@ const Login = (log) => {
       setEmail(user.email)
       setIsLoggedIn(true);
       console.log("User Info:", user.email);
-      navigate('/home', { replace: true });
+      navigate('/foam', { replace: true });
 
     } catch (error) {
       console.error("Error during Google Sign-In:", error);

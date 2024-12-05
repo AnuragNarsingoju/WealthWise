@@ -7,21 +7,93 @@ const generateColorPalette = () => {
     primary: `hsl(${hue}, 70%, 50%)`,
     light: `hsl(${hue}, 70%, 90%)`,
     dark: `hsl(${hue}, 70%, 30%)`,
-    text: `hsl(${hue}, 70%, 20%)`,
-    background: `hsl(${hue}, 70%, 95%)`
+    text: `hsl(${hue}, 70%, 20%)`
   };
 };
 
-const Psinfo = () => {
+const StockMarketPattern = React.memo(() => (
+  <>
+    <style>
+    {`
+      body, html {
+        overflow: hidden;
+        margin: 0;
+        height: 100%;
+        
+      }
+      .video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        
+        height: 100vh;
+        z-index: -1; /* Keep the video in the background */
+      }
+      .video-container video {
+        width: 100%;
+        
+        height: 100%;
+        object-fit: cover; /* Ensures the video covers the screen properly */\
+      }
+    `}
+  </style>
+    <defs>
+      <pattern
+        id="stock-pattern"
+        x="0"
+        y="0"
+        width="100%"
+        height="100%"
+        patternUnits="userSpaceOnUse"
+      >
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          style={{filter:"blur(4px)", background:'#36454F'}}
+          preserveAspectRatio="xMidYMid slice"
+          autoPlay
+          loop
+          muted
+          
+        >
+          
+          <source src="/stockvideo.mp4" type="video/mp4" />
+        </video>
+      </pattern>
+    </defs>
+    <div className="video-container" >
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#stock-pattern)" />
+    </div>
+  </>
+));
+
+const Psinfo = ({ mail }) => {
   const [colors, setColors] = useState(generateColorPalette());
   const [formData, setFormData] = useState({
     income: '',
-    age: ''
+    age: '',
+    city: '',
+    foodAtHome: '',
+    foodAwayFromHome: '',
+    housing: '',
+    transportation: '',
+    healthcare: '',
+    education: '',
+    entertainment: '',
+    personalCare: '',
+    apparelAndServices: '',
+    tobaccoProducts: '',
+    cashContributions: '',
+    alcoholicBeverages: '',
+    savings: ''
   });
   const [formStep, setFormStep] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [city,setcity]=useState('')
-
+ 
   
   useEffect(() => {
     setColors(generateColorPalette());
@@ -36,7 +108,7 @@ const Psinfo = () => {
   };
 
   const nextStep = () => {
-    setFormStep(prev => Math.min(prev + 1, 2));
+    setFormStep(prev => Math.min(prev + 1, 7));
   };
 
   const prevStep = () => {
@@ -47,6 +119,22 @@ const Psinfo = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setFormSubmitted(true);
+    setFormData({income: '',
+      age: '',
+      city: '',
+      foodAtHome: '',
+      foodAwayFromHome: '',
+      housing: '',
+      transportation: '',
+      healthcare: '',
+      education: '',
+      entertainment: '',
+      personalCare: '',
+      apparelAndServices: '',
+      tobaccoProducts: '',
+      cashContributions: '',
+      alcoholicBeverages: '',
+      savings: ''})
   };
 
   const containerVariants = {
@@ -125,12 +213,11 @@ const Psinfo = () => {
   }
 
   return (
-    <div 
-      className="flex justify-center items-center min-h-screen"
-      style={{ 
-        background: `linear-gradient(to bottom right, ${colors.light}, ${colors.background})` 
-      }}
-    >
+    <div className="relative flex justify-center items-center min-h-screen overflow-hidden">
+
+    <StockMarketPattern />
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div> 
+
       <motion.div
         initial="hidden"
         animate="visible"
@@ -138,22 +225,22 @@ const Psinfo = () => {
         className="w-full max-w-md"
       >
         <div 
-          className="rounded-xl shadow-2xl overflow-hidden"
-          style={{ backgroundColor: 'white' }}
+          className="relative z-10 rounded-xl shadow-2xl overflow-hidden"
+          style={{ backgroundColor: 'white',margin:'10px' }}
         >
           <div 
             className="py-4"
             style={{ 
-              backgroundColor: colors.primary,
+              backgroundColor: '#90CC65',
               color: 'white' 
             }}
           >
             <h1 className="text-2xl font-bold text-center">
-              Personal Information
+              {formStep < 3 ? "Personal Information" : "Expense Track"}
             </h1>
           </div>
           <div className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            
               <AnimatePresence mode="wait">
                 {formStep === 0 && (
                   <motion.div
@@ -179,13 +266,19 @@ const Psinfo = () => {
                         placeholder="Enter your annual income"
                         value={formData.income}
                         onChange={handleInputChange}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            nextStep();
+                          }
+                        }} 
                         className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
                         style={{
-                          borderColor: colors.primary,
+                          borderColor: "#90CC65",
                           ':focus': {
-                            ringColor: colors.primary
+                            ringColor: "#90CC65"
                           }
                         }}
+                        autoFocus
                         required
                       />
                     </div>
@@ -194,7 +287,7 @@ const Psinfo = () => {
                       onClick={nextStep} 
                       className="w-full px-4 py-2 rounded-lg transition-colors"
                       style={{ 
-                        backgroundColor: colors.primary,
+                        backgroundColor: "#90CC65",
                         color: 'white',
                         opacity: formData.income ? 1 : 0.5
                       }}
@@ -228,17 +321,23 @@ const Psinfo = () => {
                         name="age"
                         placeholder="Enter your age"
                         value={formData.age}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            nextStep();
+                          }
+                        }} 
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
                         style={{
-                          borderColor: colors.primary,
+                          borderColor: "#90CC65",
                           ':focus': {
-                            ringColor: colors.primary
+                            ringColor: "#90CC65"
                           }
                         }}
                         min="0"
                         max="120"
                         required
+                        autoFocus
                       />
                     </div>
                     <div className="flex space-x-2">
@@ -247,9 +346,9 @@ const Psinfo = () => {
                         onClick={prevStep} 
                         className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
                         style={{
-                          borderColor: colors.primary,
-                          color: colors.text,
-                          ':hover': { backgroundColor: colors.light }
+                          borderColor: "#90CC65",
+                          color: "#90CC65",
+                          ':hover': { backgroundColor: "#90CC65" }
                         }}
                       >
                         Back
@@ -259,7 +358,7 @@ const Psinfo = () => {
                         onClick={nextStep} 
                         className="w-full px-4 py-2 rounded-lg transition-colors"
                         style={{ 
-                          backgroundColor: colors.primary,
+                          backgroundColor: "#90CC65",
                           color: 'white',
                           opacity: formData.age ? 1 : 0.5
                         }}
@@ -288,13 +387,16 @@ const Psinfo = () => {
                         City Type
                       </label>
                       <select
-                        value={city}
-                        onChange={(e) => setcity(e.target.value)}
+                        value={formData.city} 
+                        onChange={(e) => setFormData(prevState => ({
+                          ...prevState,
+                          city: e.target.value
+                        }))}
                         className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
                         style={{
-                          borderColor: colors.primary,
+                          borderColor: "#90CC65",
                           ':focus': {
-                            ringColor: colors.primary
+                            ringColor: "#90CC65"
                           }
                         }}
                       >
@@ -311,23 +413,344 @@ const Psinfo = () => {
                         onClick={prevStep} 
                         className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
                         style={{
-                          borderColor: colors.primary,
+                          borderColor: "#90CC65",
                           color: colors.text,
-                          ':hover': { backgroundColor: colors.light }
+                          ':hover': { backgroundColor: "#90CC65" }
                         }}
                       >
                         Back
                       </button>
                       <button 
-                        type="submit" 
+                        type="button" 
+                        onClick={nextStep} 
                         className="w-full px-4 py-2 rounded-lg transition-colors"
                         style={{ 
-                          backgroundColor: colors.primary,
+                          backgroundColor: "#90CC65",
                           color: 'white',
-                          opacity: city ? 1 : 0.5
+                          opacity: formData.age ? 1 : 0.5
                         }}
-                        disabled={!city}
-                        onClick={() => {setFormSubmitted(true);}}
+                        disabled={!formData.city}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {formStep === 3 && (
+                        <motion.div
+                          key="expense-step-1"
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          className="space-y-4"
+                        >
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Food at Home
+                            </label>
+                            <input
+                              type="number"
+                              name="foodAtHome"
+                              value={formData.foodAtHome}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Food Away from Home
+                            </label>
+                            <input
+                              type="number"
+                              name="foodAwayFromHome"
+                              value={formData.foodAwayFromHome}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div className="flex space-x-2">
+                            <button
+                              type="button"
+                              onClick={prevStep}
+                              className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                              style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                            >
+                              Back
+                            </button>
+                            <button
+                              type="button"
+                              onClick={nextStep}
+                              className="w-full px-4 py-2 rounded-lg transition-colors"
+                              style={{ backgroundColor: "#90CC65", color: 'white' }}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {formStep === 4 && (
+                        <motion.div
+                          key="expense-step-2"
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          className="space-y-4"
+                        >
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Housing
+                            </label>
+                            <input
+                              type="number"
+                              name="housing"
+                              value={formData.housing}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Transportation
+                            </label>
+                            <input
+                              type="number"
+                              name="transportation"
+                              value={formData.transportation}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div className="flex space-x-2">
+                            <button
+                              type="button"
+                              onClick={prevStep}
+                              className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                              style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                            >
+                              Back
+                            </button>
+                            <button
+                              type="button"
+                              onClick={nextStep}
+                              className="w-full px-4 py-2 rounded-lg transition-colors"
+                              style={{ backgroundColor: "#90CC65", color: 'white' }}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+
+
+
+                {formStep === 5 && (
+                  <motion.div
+                    key="expense-step-3"
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Healthcare
+                      </label>
+                      <input
+                        type="number"
+                        name="healthcare"
+                        value={formData.healthcare}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Education
+                      </label>
+                      <input
+                        type="number"
+                        name="education"
+                        value={formData.education}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Entertainment
+                      </label>
+                      <input
+                        type="number"
+                        name="entertainment"
+                        value={formData.entertainment}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={prevStep}
+                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                        style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="button"
+                        onClick={nextStep}
+                        className="w-full px-4 py-2 rounded-lg transition-colors"
+                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {formStep === 6 && (
+                  <motion.div
+                    key="expense-step-4"
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Personal Care
+                      </label>
+                      <input
+                        type="number"
+                        name="personalCare"
+                        value={formData.personalCare}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Apparel and Services
+                      </label>
+                      <input
+                        type="number"
+                        name="apparelAndServices"
+                        value={formData.apparelAndServices}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Tobacco Products
+                      </label>
+                      <input
+                        type="number"
+                        name="tobaccoProducts"
+                        value={formData.tobaccoProducts}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={prevStep}
+                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                        style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="button"
+                        onClick={nextStep}
+                        className="w-full px-4 py-2 rounded-lg transition-colors"
+                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {formStep === 7 && (
+                  <motion.div
+                    key="expense-step-5"
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Cash Contributions
+                      </label>
+                      <input
+                        type="number"
+                        name="cashContributions"
+                        value={formData.cashContributions}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Alcoholic Beverages
+                      </label>
+                      <input
+                        type="number"
+                        name="alcoholicBeverages"
+                        value={formData.alcoholicBeverages}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Savings
+                      </label>
+                      <input
+                        type="number"
+                        name="savings"
+                        value={formData.savings}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={prevStep}
+                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                        style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                      >
+                        Back
+                      </button>
+                      <button
+                        type="submit"
+                        className="w-full px-4 py-2 rounded-lg transition-colors"
+                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                        onClick={handleSubmit}
                       >
                         Submit
                       </button>
@@ -337,7 +760,6 @@ const Psinfo = () => {
 
                 
               </AnimatePresence>
-            </form>
           </div>
         </div>
       </motion.div>

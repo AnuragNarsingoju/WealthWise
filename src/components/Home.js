@@ -3,9 +3,8 @@ const Home = ({ mail }) => {
     return ( 
         <>
         <h1 style={{display:'flex',margin:'auto',justifyContent:'center',alignItems:'center',
-    fontWeight: 'bold',height:'100vh',
-    textAlign: 'center',}}>Hello User {mail} </h1>
-            
+        fontWeight: 'bold',height:'100vh',
+        textAlign: 'center',}}>Hello User {mail} </h1>
         </>
     );
 }
