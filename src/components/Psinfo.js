@@ -115,18 +115,19 @@ const Psinfo = ({ mail }) => {
  
   
   useEffect(() => {
-    if (timer > 0) {
+    if (formSubmitted && timer > 0) {
       const interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
+  
       return () => clearInterval(interval);
-    } else {
+    } else if (timer <= 0) {
       setFormSubmitted(false);
       setFormStep(0);
       setColors("#90CC65");
       navigate('/home');
     }
-  }, [timer, navigate, setFormSubmitted, setFormStep, setColors]);
+  }, [formSubmitted, timer]);
 
   
   const nextStep = () => {
