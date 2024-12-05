@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { useNavigate } from 'react-router-dom';
 const generateColorPalette = () => {
   const hue = Math.floor(Math.random() * 360);
   return {
@@ -10,6 +10,8 @@ const generateColorPalette = () => {
     text: `hsl(${hue}, 70%, 20%)`
   };
 };
+
+
 
 const StockMarketPattern = React.memo(() => (
   <>
@@ -73,6 +75,7 @@ const StockMarketPattern = React.memo(() => (
 
 const Psinfo = ({ mail }) => {
   const [colors, setColors] = useState(generateColorPalette());
+  const [timer, setTimer] = useState(3);
   const [formData, setFormData] = useState({
     income: '',
     age: '',
@@ -107,6 +110,25 @@ const Psinfo = ({ mail }) => {
     }));
   };
 
+  const navigate = useNavigate();
+
+ 
+  
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setFormSubmitted(false);
+      setFormStep(0);
+      setColors("#90CC65");
+      navigate('/home');
+    }
+  }, [timer, navigate, setFormSubmitted, setFormStep, setColors]);
+
+  
   const nextStep = () => {
     setFormStep(prev => Math.min(prev + 1, 7));
   };
@@ -164,51 +186,44 @@ const Psinfo = ({ mail }) => {
 
   if (formSubmitted) {
     return (
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex justify-center items-center min-h-screen"
-        style={{ 
-          background: `linear-gradient(to bottom right, ${colors.light}, ${colors.background})` 
-        }}
-      >
-        <div 
-          className="w-full max-w-md p-8 rounded-xl shadow-2xl text-center"
-          style={{ 
-            backgroundColor: 'white',
-            borderColor: colors.primary,
-            borderWidth: '2px'
-          }}
-        >
-          <h2 
-            className="text-2xl font-bold mb-4"
-            style={{ color: colors.dark }}
-          >
-            Thank You!
-          </h2>
-          <p 
-            className="mb-4"
-            style={{ color: colors.text }}
-          >
-            Your information has been submitted successfully.
-          </p>
-          <button 
-            onClick={() => {
-              setFormSubmitted(false);
-              setFormStep(0);
-              setColors(generateColorPalette());
-            }}
-            className="px-4 py-2 rounded-lg transition-colors"
-            style={{ 
-              backgroundColor: colors.primary,
-              color: 'white',
-              ':hover': { backgroundColor: colors.dark }
-            }}
-          >
-            Submit Another
-          </button>
-        </div>
+      <>
+      <div className="relative flex justify-center items-center min-h-screen overflow-hidden">
+
+      <StockMarketPattern />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div> 
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative flex justify-center items-center min-h-screen"
+              style={{ 
+                background: `linear-gradient(to bottom right, ${colors.light}, ${colors.background})` 
+              }}
+            >
+             <div
+                className="w-full max-w-md p-8 rounded-xl shadow-2xl text-center"
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: "#90CC65",
+                  borderWidth: '2px'
+                }}
+              >
+                <h2
+                  className="text-2xl font-bold mb-4"
+                  style={{ color: colors.dark }}
+                >
+                  Thank You!
+                </h2>
+                <p
+                  className="mb-4"
+                  style={{ color: colors.text }}
+                >
+                 Your information has been submitted successfully. Redirecting in {timer} {timer === 1 ? 'second' : 'seconds'}.
+                </p>
+              </div>
       </motion.div>
+      </div>
+
+      </>
     );
   }
 
