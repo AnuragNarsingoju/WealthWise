@@ -5,6 +5,9 @@ import Home from './components/Home';
 import { auth} from "./firebase";
 
 import HashLoader from "react-spinners/HashLoader";
+import Psinfo from './components/Psinfo';
+
+
 
 
 const App = () => {
@@ -54,6 +57,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login log={setLog} />} />
         <Route path="/home" element={<Home mail={mail} />} />
+        <Route path="/foam" element={<Psinfo mail={mail} />} />
+        
+
       </Routes>
     </div>
   );
