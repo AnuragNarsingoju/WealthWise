@@ -95,7 +95,10 @@ const Home = ({ mail = 'User' }) => {
       ];
       
     return  (
-        <div className="bg-gray-900 text-white p-4  overflow-hidden" style={{width:'60%',justifyContent:'center',alignItems:'center',margin:'auto'}}>
+        <div 
+        className="bg-gray-900 text-white p-4 overflow-hidden w-full sm:w-3/5" 
+        style={{ justifyContent: 'center', alignItems: 'center', margin: 'auto' }}
+        >
           <div 
             className="grid grid-cols-2 gap-4 mb-6 pb-2" style={{marginTop:'20px',marginBottom:'40px'}}
             >
