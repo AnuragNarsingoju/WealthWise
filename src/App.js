@@ -6,6 +6,7 @@ import { auth} from "./firebase";
 
 import HashLoader from "react-spinners/HashLoader";
 import Psinfo from './components/Psinfo';
+import ChatBot from './components/ChatBot';
 
 
 
@@ -58,6 +59,7 @@ const App = () => {
         <Route path="/" element={<Login log={setLog} />} />
         <Route path="/home" element={<Home mail={mail} />} />
         <Route path="/foam" element={<Psinfo mail={mail} />} />
+        <Route path="/chatbot" element={<ChatBot mail={mail} />} />
         
 
       </Routes>
