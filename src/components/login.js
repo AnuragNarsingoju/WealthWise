@@ -10,6 +10,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import { Phone } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 const GoogleIcon = () => (
@@ -84,6 +85,37 @@ const Login = (log) => {
   const [isLogin, setIsLogin] = useState(true);
   const logoutTimerRef = useRef(null); 
 
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const recaptchaRef = useRef();
+  const siteKey = process.env.REACT_APP_SITEKEY;
+
+  const handleRecaptcha = (token) => {
+    setRecaptchaToken(token);
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    const loadRecaptchaScript = () => {
+      script.src = `https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit`;
+      script.async = true;
+      script.onload = () => {
+        if (window.grecaptcha) {
+          window.grecaptcha.ready(() => {
+            window.grecaptcha.execute();
+          });
+        }
+      };
+      script.onerror = () => {
+        console.error('Failed to load reCAPTCHA script.');
+      };
+      document.body.appendChild(script);
+    };
+    loadRecaptchaScript();
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [siteKey]);
+
   const [errors, setErrors] = useState({});
 
   const [name, setName] = useState('');
@@ -104,6 +136,10 @@ const Login = (log) => {
   useEffect(()=>{
     log=isLoggedIn;
   },[isLoggedIn])
+
+
+
+
 
   const handleForgotPassword = async (e) => {
     setLoading(true);
@@ -167,7 +203,9 @@ const Login = (log) => {
   const handleLogin = async (e) => {
     setLoading(true);
     let encrypted="";
-  
+    const Rtoken = await recaptchaRef.current.execute();
+    setRecaptchaToken(Rtoken);
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
@@ -177,41 +215,36 @@ const Login = (log) => {
         toast.error('Email not verified. Please verify your email',{position:'top-center'});
       } else {
         try {
-          setIsLoggedIn(true);
-          navigate('/foam',{replace:true});
-          
+          setIsLoggedIn(true);          
           const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
           const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
-           const val={email1:email,auth:auth1};
+           const val={email1:email,auth:auth1,token1:Rtoken};
            const valString = JSON.stringify(val);
           encrypted = CryptoJS.AES.encrypt(valString, key, {
               iv: iv,
               mode: CryptoJS.mode.CBC,
               padding: CryptoJS.pad.Pkcs7
           }).toString();
-          
-          
+              
+          } catch (error) {
+              console.error('Encryption/Decryption error:', error);
+          }
+
   
-  
-  
-          
-      } catch (error) {
-          console.error('Encryption/Decryption error:', error);
-      }
-        // const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted} ,{ withCredentials: true });
+        const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted} ,{ withCredentials: true });
         const expires = new Date();
-        // expires.setTime(expires.getTime() + 8 * 60 * 60 * 1000)
-        // settoken(response.data);
-        // const dat=response.data;
+        expires.setTime(expires.getTime() + 8 * 60 * 60 * 1000)
+        settoken(response.data);
+        const dat=response.data;
   
-        //     Cookies.set('sessionToken', dat , { expires, secure: true, sameSite: 'Strict' });
-        //     setLoading(false);  
-        //     setIsLoggedIn(true);
-        //     toast.success('Login successful!');
-        //     log.user1(true);
-        //     log.email(email);
-        //     clear();
-        //     navigate('/GiriviSearch', { replace: true })
+            Cookies.set('sessionToken', dat.token , { expires, secure: true, sameSite: 'Strict' });
+            setLoading(false);  
+            setIsLoggedIn(true);
+            toast.success('Login successful!');
+            log.user1(true);
+            log.email(email);
+            clear();
+            navigate('/foam', { replace: true })
     
         
             
@@ -223,6 +256,7 @@ const Login = (log) => {
       settoken(null);
       toast.dismiss()
       toast.error('Invalid email or password. If You are a New User Please Signup');
+      recaptchaRef.current.reset();
       setshouldHaveRainbowEffect(true);
 
       setTimeout(() => {
@@ -241,6 +275,7 @@ const Login = (log) => {
       toast.dismiss()
 
       toast.success('Logout successful!');
+      recaptchaRef.current.reset();
       if (logoutTimerRef.current) {
         clearTimeout(logoutTimerRef.current); // Clear the logout timer on manual logout
       }
@@ -253,7 +288,7 @@ const Login = (log) => {
     } catch (error) {
       console.error(error);
       toast.dismiss()
-
+      recaptchaRef.current.reset();
       toast.error('Error occurred during logout. Please try again.');
      
       
@@ -278,13 +313,48 @@ const Login = (log) => {
 
   
   const signInWithGoogle = async () => {
+    setLoading(true);
+    let encrypted="";
+    const Rtoken = await recaptchaRef.current.execute();
+    setRecaptchaToken(Rtoken);
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setEmail(user.email)
       setIsLoggedIn(true);
-      console.log("User Info:", user.email);
-      navigate('/foam', { replace: true });
+      const ps=process.env.REACT_APP_SECRET;
+      const auth1= await user.getIdToken();
+
+      try {
+        setIsLoggedIn(true);
+        
+        const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
+        const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
+         const val={email1:email,auth:auth1,token1:Rtoken};
+         const valString = JSON.stringify(val);
+        encrypted = CryptoJS.AES.encrypt(valString, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString();
+            
+        } catch (error) {
+            console.error('Encryption/Decryption error:', error);
+        }
+
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted} ,{ withCredentials: true });
+      const expires = new Date();
+      expires.setTime(expires.getTime() + 8 * 60 * 60 * 1000)
+      settoken(response.data);
+      const dat=response.data;
+      Cookies.set('sessionToken', dat.token , { expires, secure: true, sameSite: 'Strict' });
+      setLoading(false);  
+      setIsLoggedIn(true);
+      toast.success('Login successful!');
+      log.user1(true);
+      log.email(email);
+      clear();
+      navigate('/foam', { replace: true })
 
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
@@ -380,10 +450,25 @@ const Login = (log) => {
       pauseOnHover
     />    
     <div className="min-h-screen relative bg-gradient-to-br from-blue-900 to-purple-900 flex flex-col items-center xl:items-end justify-center xl:pr-12  p-5 overflow-hidden">
+    <style>
+        {`
+          .grecaptcha-badge {
+            visibility: hidden;
+          }
+        `}
+      </style>
 
+      <ReCAPTCHA
+          ref={recaptchaRef} 
+          sitekey={siteKey}
+          onChange={handleRecaptcha}
+          size="invisible"
+            
+        />
     <StockMarketPattern />
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div> 
       <div className="relative bg-white/95 backdrop-blur-sm rounded-xl shadow-xl w-full max-w-md p-6">
+     
         <div className="text-center mb-3 " >
           <h1
             className="text-2xl font-bold text-black-900 object-cover"
