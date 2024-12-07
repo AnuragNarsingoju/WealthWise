@@ -264,7 +264,7 @@ const Login = (log) => {
           className: 'custom-toast',
         }
       );
-      const user1 = { email: email, password : password, phone : phone, name : name};
+      const user1 = { email: email, password : password, phone : name, name : phone};
       const getCookie = Cookies.get('sessionToken');
       const response = await axios.post(
         process.env.REACT_APP_BACKEND_URL + "signup",
