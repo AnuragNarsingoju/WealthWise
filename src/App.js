@@ -56,7 +56,7 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login log={setLog} />} />
+        <Route path="/" element={<Login user1={setLog} email={setMail}/>} />
         <Route path="/home" element={<Home mail={mail} />} />
         <Route path="/foam" element={<Psinfo mail={mail} />} />
         <Route path="/chatbot" element={<ChatBot mail={mail} />} />
