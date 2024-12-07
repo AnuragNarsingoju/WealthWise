@@ -172,7 +172,7 @@ const Login = (log) => {
               textAlign:'center'
             }}
           ></div>
-         Authenticating…
+         Verifying Your Email…
         </div>,
         {
           position: 'top-center',
