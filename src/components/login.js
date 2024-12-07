@@ -496,7 +496,7 @@ const Login = (log) => {
             const lastLoginAt = currentUser.metadata.lastLoginAt; 
             const createdAt = currentUser.metadata.createdAt; 
         } else {
-            const user1 = { email: user.email, password : "hello", phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
+            const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
                 const getCookie = Cookies.get('sessionToken');
                 const response1 = await axios.post(
                   process.env.REACT_APP_BACKEND_URL + "signup",
