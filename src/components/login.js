@@ -2,7 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import {  Mail, ChevronLeft, Eye, EyeOff, User, Lock, AlertCircle, AlignCenter } from 'lucide-react';
 import '../index.css';
 import { auth, provider   } from "../firebase";
-import { signInWithPopup ,signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
+import { signInWithPopup ,signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail,getAuth, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
@@ -138,69 +138,207 @@ const Login = (log) => {
   },[isLoggedIn])
 
 
-
-
-
   const handleForgotPassword = async (e) => {
     setLoading(true);
+  
     if (!email) {
       toast.dismiss();
       toast.error('Please enter your email address.', { position: 'top-center' });
       setLoading(false);
       return;
     }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      toast.dismiss();
+      toast.error('Please enter a valid email address.', { position: 'top-center' });
+      setLoading(false);
+      return;
+    }
+  
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(email);
-      if (signInMethods.length === 0) {
-        console.log('User does not exist');
+      toast(
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              width: '20px',
+              height: '20px',
+              border: '3px solid #ddd',
+              borderTop: '3px solid #4caf50',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              marginRight: '10px',
+              alignContent:'center',
+              justifyContent:'center',
+              textAlign:'center'
+            }}
+          ></div>
+         Authenticating…
+        </div>,
+        {
+          position: 'top-center',
+          autoClose: false,
+          closeOnClick: false,
+          hideProgressBar: true,
+          draggable: false,
+          className: 'custom-toast',
+        }
+      );
+      const signInMethods = await fetchSignInMethodsForEmail(getAuth(), email);
+      const getCookie = Cookies.get('sessionToken');
+      const findemail = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (findemail.message === "No user found with this email") {
+        toast.dismiss();
+        toast.error('No account found with this email.', { position: 'top-center' });
+        setLoading(false);
         setshouldHaveRainbowEffect(true);
         setTimeout(() => {
           setshouldHaveRainbowEffect(false);
         }, 3000);
-        setLoading(false);  
         return;
       }
-  
-      console.log('User exists with sign-in methods:', signInMethods);
-      await sendPasswordResetEmail(auth, email);
+
+      await sendPasswordResetEmail(getAuth(), email);
       toast.dismiss();
       toast.success('Password reset email sent! Please check your inbox.', { position: 'top-center' });
       setEmail('');
     } catch (error) {
       console.error('Error sending reset email:', error);
+  
       toast.dismiss();
-      if (error.code === 'auth/user-not-found') {
+      if (error.message==='Request failed with status code 404') {
+      toast.dismiss();
+
         toast.error('No account found with this email.', { position: 'top-center' });
-      } else {
-        toast.error('Something went wrong. Please try again.', { position: 'top-center' });
-      }
-    }
-    
-    setLoading(false); 
-  };
-  const signUp = async (email, password) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      await sendEmailVerification(user);
-      toast.dismiss()
-      toast.success('User created. Please verify the email and log in');
-      clear();
-      setIsLogin(true);
-    } catch (error) {
-      console.log(error.message)
-      if(error.message==='Firebase: Error (auth/email-already-in-use).'){
-        toast.dismiss()
-        toast.error('Email Already Exists Please Log in')
         setshouldHaveRainbowEffect(true);
         setTimeout(() => {
           setshouldHaveRainbowEffect(false);
         }, 3000);
+      } else {
+      toast.dismiss();
+
+        toast.error('Something went wrong. Please try again.', { position: 'top-center' });
+      }
+    }
+  
+    setLoading(false); 
+  };
+
+
+  const signUp = async (email, password, phone, name) => {
+    try {
+
+      toast(
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              width: '20px',
+              height: '20px',
+              border: '3px solid #ddd',
+              borderTop: '3px solid #4caf50',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              marginRight: '10px',
+              alignContent:'center',
+              justifyContent:'center',
+              textAlign:'center'
+            }}
+          ></div>
+         Authenticating…
+        </div>,
+        {
+          position: 'top-center',
+          autoClose: false,
+          closeOnClick: false,
+          hideProgressBar: true,
+          draggable: false,
+          className: 'custom-toast',
+        }
+      );
+      const user1 = { email: email, password : password, phone : phone, name : name};
+      const getCookie = Cookies.get('sessionToken');
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "signup",
+        user1,
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+  
+      if (response) {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        await sendEmailVerification(user);
+  
+        toast.dismiss();
+        toast.success('User created. Please verify the email and log in');
+        clear();
+        setIsLogin(true);
+      } else {
+        toast.dismiss();
+        toast.error('Please Try Again...');
+        clear();
+      }
+    } catch (error) {
+      console.log(error.message);
+      if (error.message === 'Firebase: Error (auth/email-already-in-use).') {
+        toast.dismiss();
+        toast.error('Email Already Exists Please Log in');
+        setshouldHaveRainbowEffect(true);
+        setTimeout(() => {
+          setshouldHaveRainbowEffect(false);
+        }, 3000);
+      } else {
+        toast.dismiss();
+        toast.error('An error occurred. Please try again.');
       }
     }
   };
 
   const handleLogin = async (e) => {
+
+    toast(
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            width: '20px',
+            height: '20px',
+            border: '3px solid #ddd',
+            borderTop: '3px solid #4caf50',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            marginRight: '10px',
+            alignContent:'center',
+            justifyContent:'center',
+            textAlign:'center'
+          }}
+        ></div>
+       Authenticating…
+      </div>,
+      {
+        position: 'top-center',
+        autoClose: false,
+        closeOnClick: false,
+        hideProgressBar: true,
+        draggable: false,
+        className: 'custom-toast',
+      }
+    );
+ 
+
     setLoading(true);
     let encrypted="";
     const Rtoken = await recaptchaRef.current.execute();
@@ -212,6 +350,7 @@ const Login = (log) => {
       const ps=process.env.REACT_APP_SECRET;
       const auth1= await user.getIdToken();
       if (user && !user.emailVerified) {
+        toast.dismiss();
         toast.error('Email not verified. Please verify your email',{position:'top-center'});
       } else {
         try {
@@ -229,7 +368,6 @@ const Login = (log) => {
           } catch (error) {
               console.error('Encryption/Decryption error:', error);
           }
-
   
         const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted} ,{ withCredentials: true });
         const expires = new Date();
@@ -240,6 +378,7 @@ const Login = (log) => {
             Cookies.set('sessionToken', dat.token , { expires, secure: true, sameSite: 'Strict' });
             setLoading(false);  
             setIsLoggedIn(true);
+            toast.dismiss();
             toast.success('Login successful!');
             log.user1(true);
             log.email(email);
@@ -270,19 +409,19 @@ const Login = (log) => {
     try {
       await signOut(auth);
       setIsLoggedIn(false);
-      // log.user1(false);
+      // googleuser1(false);
       settoken(null);
       toast.dismiss()
 
       toast.success('Logout successful!');
       recaptchaRef.current.reset();
       if (logoutTimerRef.current) {
-        clearTimeout(logoutTimerRef.current); // Clear the logout timer on manual logout
+        clearTimeout(logoutTimerRef.current); 
       }
 
       if (logoutTimerRef.current) {
-        clearTimeout(logoutTimerRef.current); // Clear the timer on manual logout
-        logoutTimerRef.current = null; // Reset the timer reference
+        clearTimeout(logoutTimerRef.current);
+        logoutTimerRef.current = null; 
       }
 
     } catch (error) {
@@ -313,6 +452,35 @@ const Login = (log) => {
 
   
   const signInWithGoogle = async () => {
+
+    toast(
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            width: '20px',
+            height: '20px',
+            border: '3px solid #ddd',
+            borderTop: '3px solid #4caf50',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            marginRight: '10px',
+            alignContent:'center',
+            justifyContent:'center',
+            textAlign:'center'
+          }}
+        ></div>
+       Authenticating…
+      </div>,
+      {
+        position: 'top-center',
+        autoClose: false,
+        closeOnClick: false,
+        hideProgressBar: true,
+        draggable: false,
+        className: 'custom-toast',
+      }
+    );
+
     setLoading(true);
     let encrypted="";
     const Rtoken = await recaptchaRef.current.execute();
@@ -321,6 +489,7 @@ const Login = (log) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       setEmail(user.email)
+      log.email(user.email);
       setIsLoggedIn(true);
       const ps=process.env.REACT_APP_SECRET;
       const auth1= await user.getIdToken();
@@ -350,14 +519,16 @@ const Login = (log) => {
       Cookies.set('sessionToken', dat.token , { expires, secure: true, sameSite: 'Strict' });
       setLoading(false);  
       setIsLoggedIn(true);
+      toast.dismiss();
       toast.success('Login successful!');
       log.user1(true);
-      log.email(email);
       clear();
       navigate('/foam', { replace: true })
 
+
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
+      toast.dismiss()
     }
   };
 
@@ -384,6 +555,7 @@ const Login = (log) => {
     setphone('');
     setShowPassword(false);
     setConfirmPassword('');
+    
   }
 
  
@@ -431,7 +603,8 @@ const Login = (log) => {
         handleLogin();
       }
       else{
-        signUp(email,password);
+        signUp(email,password,name,phone);
+        
       }
     } else {
       console.log('Form is invalid, show errors');
