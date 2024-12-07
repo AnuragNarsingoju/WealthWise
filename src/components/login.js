@@ -491,7 +491,7 @@ const Login = (log) => {
 
       const currentUser = auth.currentUser; 
 
-        if (user1) {
+        if (currentUser) {
             const lastLoginAt = currentUser.metadata.lastLoginAt; 
             const createdAt = currentUser.metadata.createdAt; 
         
