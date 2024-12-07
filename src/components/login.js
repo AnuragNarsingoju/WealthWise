@@ -489,21 +489,32 @@ const Login = (log) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      if(user.emailVerified){
-        const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
-        const getCookie = Cookies.get('sessionToken');
-        const response1 = await axios.post(
-          process.env.REACT_APP_BACKEND_URL + "signup",
-          user1,
-          {
-            headers: {
-              Authorization: `Bearer ${getCookie}`,
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          }
-        );
-      }
+      const currentUser = auth.currentUser; 
+
+        if (user1) {
+            const lastLoginAt = currentUser.metadata.lastLoginAt; 
+            const createdAt = currentUser.metadata.createdAt; 
+        
+            if (lastLoginAt !== createdAt) {
+                console.log('User has logged in at least once');
+            } else {
+               const user1 = { email: user.email, password : "hello", phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
+                const getCookie = Cookies.get('sessionToken');
+                const response1 = await axios.post(
+                  process.env.REACT_APP_BACKEND_URL + "signup",
+                  user1,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie}`,
+                      'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                  }
+                );
+            }
+        } else {
+            console.log('No user is currently logged in');
+        }
       
       setEmail(user.email)
       log.email(user.email);
