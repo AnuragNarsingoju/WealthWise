@@ -489,7 +489,7 @@ const Login = (log) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      if(!user.emailVerified){
+      if(user.emailVerified){
         const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
         const getCookie = Cookies.get('sessionToken');
         const response1 = await axios.post(
