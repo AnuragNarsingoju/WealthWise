@@ -46,6 +46,9 @@ const Home = ({ mail = 'User' }) => {
           if (activeButton === "Chat with Niveshak") {
             navigate('/chatbot');
           }
+          else if ( activeButton === "Personalized Mutual Funds"){
+            navigate('/personal-MF');
+          }
         }, [activeButton, navigate]);
 
         const personalizeButtons = [
