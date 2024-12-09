@@ -71,16 +71,16 @@ const App = () => {
 
  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      console.log(user.email);
       try {
         setLoading(true); 
-  
         if (user) {
           setMail(user.email);
+          console.log(user.email);
         } else {
           setMail('');
           await auth.signOut();
         }
-  
         setLoading(false);
       } catch (error) {
         console.error('Error during authentication state change:', error);
@@ -183,12 +183,12 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
-        <Route path="*" element={auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/home" element={auth.currentUser && mail !== '' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/foam" element={auth.currentUser && mail !== '' ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/chatbot" element={auth.currentUser && mail !== '' ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={auth.currentUser && mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> : auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/personal-MF" element={auth.currentUser && mail !== '' ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="*" element={mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/home" element={mail !== '' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/foam" element={mail !== '' ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/chatbot" element={ mail !== '' ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fileupload" element={ mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> : auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/personal-MF" element={ mail !== '' ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
       </Routes>
     </div>
   );
