@@ -61,7 +61,7 @@ const App = () => {
         <Route path="/home" element={auth.currentUser && mail !== '' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/foam" element={auth.currentUser && mail !== '' ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/chatbot" element={auth.currentUser && mail !== '' ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={auth.currentUser && mail !== '' ? <FileUpload /> : <PageNotFound />} />
+        <Route path="/fileupload" element={auth.currentUser && mail !== 'anuragnarsingoju@gmail.com' ? <FileUpload /> : <PageNotFound />} />
         <Route path="/personal-MF" element={auth.currentUser && mail !== '' ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
       </Routes>
     </div>
