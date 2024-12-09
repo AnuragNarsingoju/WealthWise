@@ -383,21 +383,7 @@ const Login = (log) => {
             log.user1(true);
             log.email(email);
             clear();
-            const getCookie = Cookies.get('sessionToken');
-            const findemail = await axios.get(
-              `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${getCookie}`,
-                  'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-              }
-            );
-            console.log(findemail.data.user)
-            findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
-
-            
+            navigate('/foam', { replace: true })
     
         
             
@@ -505,9 +491,7 @@ const Login = (log) => {
 
       const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
       const getCookie = Cookies.get('sessionToken');
-      
-      try{
-        const response1 = await axios.post(
+      const response1 = await axios.post(
         process.env.REACT_APP_BACKEND_URL + "signup",
         user1,
         {
@@ -518,9 +502,6 @@ const Login = (log) => {
           withCredentials: true,
         }
       );
-    }catch(e){
-      console.log(e);
-    }
       
       setEmail(user.email)
       log.email(user.email);
@@ -557,18 +538,7 @@ const Login = (log) => {
       toast.success('Login successful!');
       log.user1(true);
       clear();
-      const findemail = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getCookie}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      );
-      findemail.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
-
+      navigate('/foam', { replace: true })
 
 
     } catch (error) {
