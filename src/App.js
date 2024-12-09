@@ -23,11 +23,10 @@ const App = () => {
  useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       try {
-
-        setLoading(true);   
+        setLoading(true); 
+  
         if (user) {
           setMail(user.email);
-          console.log("user email : " ,user.email)
         } else {
           setMail('');
           await auth.signOut();
@@ -40,7 +39,7 @@ const App = () => {
       }
     });
   
-    return () => unsubscribe();
+    return () => unsubscribe(); 
   }, []);
   
 
