@@ -9,7 +9,7 @@ import Psinfo from './components/Psinfo';
 import ChatBot from './components/ChatBot';
 import FileUpload from './components/FileUpload';
 import InvestmentRecommendationForm from './components/personalMF';
-
+import PageNotFound from './components/PageNotFound';
 
 const App = () => {
   const [log, setLog] = useState(false);
@@ -57,6 +57,7 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail}/>} />
+        <Route path="*" element={auth.currentUser && mail!==''  ? <PageNotFound /> :<Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={<Home mail={mail} />} />
         <Route path="/foam" element={<Psinfo mail={mail} />} />
         <Route path="/chatbot" element={<ChatBot mail={mail} />} />
