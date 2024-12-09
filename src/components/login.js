@@ -133,9 +133,9 @@ const Login = (log) => {
 
   const navigate = useNavigate(); 
 
-  useEffect(()=>{
-    log=isLoggedIn;
-  },[isLoggedIn])
+  // useEffect(()=>{
+  //   log=isLoggedIn;
+  // },[isLoggedIn])
 
 
   const handleForgotPassword = async (e) => {
