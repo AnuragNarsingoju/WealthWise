@@ -8,7 +8,7 @@ import HashLoader from "react-spinners/HashLoader";
 import Psinfo from './components/Psinfo';
 import ChatBot from './components/ChatBot';
 import FileUpload from './components/FileUpload';
-
+import InvestmentRecommendationForm from './components/personalMF';
 
 
 const App = () => {
@@ -61,7 +61,7 @@ const App = () => {
         <Route path="/foam" element={<Psinfo mail={mail} />} />
         <Route path="/chatbot" element={<ChatBot mail={mail} />} />
         <Route path='/fileupload' element={<FileUpload/>} />
-        
+        <Route path='/personal-MF' element={<InvestmentRecommendationForm/>} />
 
       </Routes>
     </div>
