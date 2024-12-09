@@ -1,7 +1,9 @@
 import React, { useState,useRef,useEffect } from 'react';
 import {  Mail, ChevronLeft, Eye, EyeOff, User, Lock, AlertCircle, AlignCenter } from 'lucide-react';
 import '../index.css';
-import { auth, provider   } from "../firebase";
+import { auth } from "../firebase.config";
+
+import {  provider   } from "../firebase";
 import { signInWithPopup ,signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail,getAuth, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
