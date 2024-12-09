@@ -76,10 +76,10 @@ const App = () => {
         setLoading(true); 
         if (user) {
           setMail(user.email);
-          console.log(user.email);
+          console.log("AFADF : ",user.email);
         } else {
-          setMail('');
-          await auth.signOut();
+          // setMail('');
+          // await auth.signOut();
         }
         setLoading(false);
       } catch (error) {
