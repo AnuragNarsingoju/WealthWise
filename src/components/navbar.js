@@ -1,8 +1,3 @@
-import React, { useState ,useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Dropdown, ModalHeader } from 'react-bootstrap'; 
-// import { auth } from '../firebase.config';
-import toast from 'react-hot-toast';
 const Navbar = (user) => {
   const navigate = useNavigate();
   const [collapseOpen, setCollapseOpen] = useState(false);
