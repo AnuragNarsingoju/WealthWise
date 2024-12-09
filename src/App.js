@@ -187,7 +187,8 @@ const App = () => {
         <Route path="/home" element={mail !== '' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/foam" element={mail !== '' ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/chatbot" element={ mail !== '' ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={ mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> : auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fileupload" element={ mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> :  <PageNotFound /> } />
+        // <Route path="/fileupload" element={ mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> : auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/personal-MF" element={ mail !== '' ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
       </Routes>
     </div>
