@@ -3,6 +3,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Users, TrendingUp, Wallet, Coins, ChevronRight } from 'lucide-react';
 import Cookies from 'js-cookie';
+import Navbar from './navbar';
 
 const InvestmentRecommendationForm = () => {
 
@@ -57,6 +58,8 @@ const InvestmentRecommendationForm = () => {
     };
 
     return (
+    <>
+    <Navbar/>
         <div className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4">
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -161,6 +164,7 @@ const InvestmentRecommendationForm = () => {
                 )}
             </motion.div>
         </div>
+    </>
     );
 };
 
