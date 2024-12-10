@@ -56,7 +56,7 @@ const personalFD = () => {
         try {
             const getCookie = Cookies.get('sessionToken');
             const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND_URL}recommend-fixed-deposit`, 
+                `${process.env.REACT_APP_BACKEND_URL}fd-recommendations`, 
                 formData,
                 {
                     headers: {
