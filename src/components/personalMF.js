@@ -190,7 +190,7 @@ const InvestmentRecommendationForm = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    inputMode="numeric"
+                                    inputMode={formData[field.name] === "user_risk_appetite" ? "numeric" : "text"}
                                     pattern="\d*"
                                     name={field.name}
                                     value={formData[field.name]}
