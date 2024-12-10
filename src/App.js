@@ -179,17 +179,18 @@ const App = () => {
     );
   }
 
+
+
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
-        <Route path="*" element={auth.currentUser  ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/home" element={auth.currentUser ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/foam" element={auth.currentUser ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/chatbot" element={ auth.currentUser ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={ auth.currentUser === 'anuragnarsingoju@gmail.com' ? <FileUpload /> :  <PageNotFound /> } />
-        // <Route path="/fileupload" element={ mail === 'anuragnarsingoju@gmail.com' ? <FileUpload /> : auth.currentUser && mail !== '' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/personal-MF" element={ auth.currentUser ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="*" element={log ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/home" element={log ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/foam" element={log ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/chatbot" element={log ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fileupload" element={log ? <FileUpload /> : <PageNotFound />} />
+        <Route path="/personal-MF" element={log ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
       </Routes>
     </div>
   );
