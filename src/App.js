@@ -11,7 +11,7 @@ import ChatBot from './components/ChatBot';
 import FileUpload from './components/FileUpload';
 import InvestmentRecommendationForm from './components/personalMF';
 import PageNotFound from './components/PageNotFound';
-import personalFD from './components/personalFD';
+import PersonalFDRecommendation from './components/personalFD';
 const App = () => {
   const [log, setLog] = useState(false);
   const [mail, setMail] = useState('');
@@ -191,7 +191,7 @@ const App = () => {
         <Route path="/chatbot" element={<ChatBot mail={mail} /> } />
         <Route path="/fileupload" element={ <FileUpload /> } />
         <Route path="/personal-MF" element={ <InvestmentRecommendationForm /> } />
-        <Route path="/fd-recommendations" element={ <personalFD/> } />
+        <Route path="/fd-recommendations" element={ <PersonalFDRecommendation/> } />
       </Routes>
     </div>
   );
