@@ -189,8 +189,6 @@ const InvestmentRecommendationForm = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    inputMode={field.name === "user_risk_appetite" ? "text" : "numeric"}
-                                    pattern="\d*"
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
