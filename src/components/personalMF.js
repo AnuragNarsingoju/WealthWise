@@ -35,14 +35,11 @@ const InvestmentRecommendationForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name);
-        const newValue =
-            name === 'user_risk_appetite'? value : value.replace(/[^0-9]/g, '');
         setFormData((prev) => ({
             ...prev,
-            [name]: newValue,
+            [name]: value,
         }));
-        console.log({ ...formData, [name]: newValue });
+        console.log({ ...formData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
