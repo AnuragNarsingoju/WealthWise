@@ -3,17 +3,16 @@ import axios from 'axios';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { 
     CalendarDays, 
-    TrendingUp, 
     Coins, 
     ChevronRight, 
     ArrowUp, 
-    Bank 
+    Building2 
 } from 'lucide-react';
 import Cookies from 'js-cookie';
 import Navbar from './navbar';
 
-const personalFD = () => {
-    function formatChatbotResponse(response) {
+const PersonalFDRecommendation = () => {
+    const formatChatbotResponse = (response) => {
         return response
           .replace(/\n/g, '<br>') 
           .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
@@ -56,7 +55,7 @@ const personalFD = () => {
         try {
             const getCookie = Cookies.get('sessionToken');
             const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND_URL}fd-recommendations`, 
+                `${process.env.REACT_APP_BACKEND_URL}recommend-fixed-deposit`, 
                 formData,
                 {
                     headers: {
@@ -166,6 +165,7 @@ const personalFD = () => {
                             { 
                                 name: 'termYears', 
                                 label: 'Term (Years)', 
+                                icon: <Building2 className="text-white/70" /> 
                             }
                         ].map((field, index) => (
                             <motion.div 
@@ -257,4 +257,4 @@ const personalFD = () => {
     );
 };
 
-export default personalFD;
+export default PersonalFDRecommendation;
