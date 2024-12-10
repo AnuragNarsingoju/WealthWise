@@ -35,8 +35,7 @@ const InvestmentRecommendationForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const numericValue = value.replace(/[^0-9]/g, '');
-        
+        const numericValue = name === 'user_risk_appetite' ? value : value.replace(/[^0-9]/g, '');
         setFormData(prev => ({
             ...prev,
             [name]: numericValue
