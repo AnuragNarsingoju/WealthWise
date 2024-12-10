@@ -35,11 +35,22 @@ const InvestmentRecommendationForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const newValue = name === 'user_risk_appetite' ? value : value.replace(/[^0-9]/g, '');
+    
+        let newValue = value;
+        if (name !== 'user_risk_appetite') {
+            newValue = value.replace(/[^0-9]/g, '');
+        }
+    
+        if (name === 'user_risk_appetite' && !['low', 'medium', 'high'].includes(value.toLowerCase())) {
+            return; // Ignore invalid values
+        }
+    
         setFormData((prev) => ({
             ...prev,
             [name]: newValue,
         }));
+
+        console.log(formData);
     };
 
     const handleSubmit = async (e) => {
