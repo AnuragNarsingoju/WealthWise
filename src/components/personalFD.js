@@ -166,7 +166,6 @@ const personalFD = () => {
                             { 
                                 name: 'termYears', 
                                 label: 'Term (Years)', 
-                                icon: <Bank className="text-white/70" /> 
                             }
                         ].map((field, index) => (
                             <motion.div 
