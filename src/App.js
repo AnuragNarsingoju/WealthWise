@@ -185,12 +185,12 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
-        <Route path="*" element={log ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/home" element={log ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/foam" element={log ? <Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/chatbot" element={log ? <ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={log ? <FileUpload /> : <PageNotFound />} />
-        <Route path="/personal-MF" element={log ? <InvestmentRecommendationForm /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="*" element={ <PageNotFound /> } />
+        <Route path="/home" element={ <Home mail={mail} /> } />
+        <Route path="/foam" element={ <Psinfo mail={mail} />} />
+        <Route path="/chatbot" element={<ChatBot mail={mail} /> } />
+        <Route path="/fileupload" element={ <FileUpload /> } />
+        <Route path="/personal-MF" element={ <InvestmentRecommendationForm /> } />
       </Routes>
     </div>
   );
