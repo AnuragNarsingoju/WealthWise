@@ -49,6 +49,10 @@ const Home = ({ mail = 'User' }) => {
           else if ( activeButton === "Personalized Mutual Funds"){
             navigate('/personal-MF');
           }
+          else if ( activeButton === "Personalized FD"){
+            navigate('/fd-recommendations');
+          }
+
         }, [activeButton, navigate]);
 
         const personalizeButtons = [
