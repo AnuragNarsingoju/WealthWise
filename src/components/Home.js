@@ -289,7 +289,33 @@ const Home = ({ mail = 'User' }) => {
           </h2>
     
           {investments.map((category, categoryIndex) => (
-            <div key={category.type} className="mb-6">
+            <div key={category.type} className="mb-6" style={{ userSelect: 'none' }}>
+              <style>
+                {`
+                  ::-webkit-scrollbar {
+                    width: 2px;
+                    height: 2px;
+                  }
+                  ::-webkit-scrollbar:horizontal {
+                    width: 2px;
+                    height: 2px;
+                  }
+                  
+                  ::-webkit-scrollbar-thumb {
+                    background: linear-gradient(to bottom right, rgba(0, 0, 255, 0.9), rgba(128, 0, 128, 0.9)); /* Gradient from blue to purple */
+                    border-radius: 3px;
+                  }
+            
+                  ::-webkit-scrollbar-thumb:hover {
+                    background-color: #666; 
+                  }
+            
+                  ::-webkit-scrollbar-track {
+                    background-color: linear-gradient(to bottom right, rgba(0, 0, 255, 0.9), rgba(128, 0, 128, 0.9)); /* Gradient from blue to purple */
+                    border-radius: 3px;
+                  }
+                `}
+              </style>
               <h3 className="text-lg font-semibold mb-3 text-bg-gradient-to-br from-blue-900/90 to-purple-900/50">{category.type}</h3>
               
               <div 
