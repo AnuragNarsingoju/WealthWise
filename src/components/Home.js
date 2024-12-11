@@ -78,16 +78,18 @@ async function fetchYouTubeVideoDetails(link) {
 
 const items = [
   'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
-  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
-  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP'
+    'https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA',
+    'https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b'
 ];
 
 async function fetchAllVideos() {
   const videoDetails = await Promise.all(
     items.map(async (link) => {
+      
       return await fetchYouTubeVideoDetails(link);
     })
   );
+  console.log(videoDetails);
   return videoDetails;
 
 }
@@ -129,7 +131,6 @@ const Home = ({ mail = 'User' }) => {
   const handleSendMessage = () => {
     if (input.trim() === '') return;
 
-    // Add user message
     const userMessage = { role: 'user', content: input.trim() };
     setMessages((prev) => [...prev, userMessage]);
 
@@ -238,22 +239,16 @@ const Home = ({ mail = 'User' }) => {
             type: 'Investment Videos',
             items: [
               { 
-                name: 'Stock Market Basics', 
-                thumbnail: '/api/placeholder/300/200', 
-                duration: '12:45',
-                views: '1.2M'
+                id : 0,
+                details : ('https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP')
               },
               { 
-                name: 'Investment Strategies', 
-                thumbnail: '/api/placeholder/300/200', 
-                duration: '18:30',
-                views: '890K'
+                id : 1,
+                details : ('https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA')
               },
-              { 
-                name: 'Mutual Funds Explained', 
-                thumbnail: '/api/placeholder/300/200', 
-                duration: '15:15',
-                views: '1.5M'
+              {
+                id : 2,
+                details : ('https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b')
               }
             ]
           }
