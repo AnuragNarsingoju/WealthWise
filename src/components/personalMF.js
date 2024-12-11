@@ -5,7 +5,7 @@ import { Users, TrendingUp, Wallet, Coins, ChevronRight, ArrowUp } from 'lucide-
 import Cookies from 'js-cookie';
 import Navbar from './navbar';
 
-const InvestmentRecommendationForm = () => {
+const InvestmentRecommendationForm = ({mail}) => {
     function formatChatbotResponse(response) {
         return response
           .replace(/\n/g, '<br>') 
@@ -120,7 +120,7 @@ const InvestmentRecommendationForm = () => {
             </motion.button>
         )}
 
-        <Navbar/>
+        <Navbar mail={mail}/>
         <div 
             ref={scrollRef}
             className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4"
