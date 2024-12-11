@@ -213,10 +213,10 @@ const Home = ({ mail = 'User' }) => {
           {
             type: 'Mutual Funds',
             items: [
-              { name: 'HDFC Bluechip', code: 'HDFCBLUE', return: 16.5, icon: '₹' },
-              { name: 'Axis Midcap', code: 'AXISMID', return: 18.3, icon: '₹' },
-              { name: 'SBI Largecap', code: 'SBILARGE', return: 15.2, icon: '₹' },
-              { name: 'ICICI Prudential', code: 'ICICIPRu', return: 17.1, icon: '₹' }
+              { name: 'HDFC Bluechip', code: 'HDFCBLUE', return: 16.5, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622' },
+              { name: 'Axis Midcap', code: 'AXISMID', return: 18.3, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477' },
+              { name: 'SBI Largecap', code: 'SBILARGE', return: 15.2, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918' },
+              { name: 'ICICI Prudential', code: 'ICICIPRu', return: 17.1, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416' }
             ]
           },
           {
@@ -334,6 +334,7 @@ const Home = ({ mail = 'User' }) => {
                         transform transition-all duration-300 
                         hover:scale-105 hover:shadow-lg
                         scroll-snap-align: start;`}
+                        onClick={() => window.open(investment.link, '_blank')}
                     >
                       <div className="flex justify-between items-center mb-3">
                         <div>
