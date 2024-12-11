@@ -218,6 +218,7 @@ const Home = ({ mail = 'User' }) => {
             ]
           },
           {
+            
             type: 'Investment Videos',
             items: [
               { 
@@ -231,6 +232,14 @@ const Home = ({ mail = 'User' }) => {
               {
                 id : 2,
                 details : ('https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b')
+              },
+              { 
+                id : 3,
+                details : ('https://youtu.be/7jvTrxh0kGc?si=xOKMXSjHdb-oaw-X')
+              },
+              {
+                id : 4,
+                details : ('https://youtu.be/raW2FIPnqIc?si=yGUBkLsnZgYuByhu')
               }
             ]
           }
