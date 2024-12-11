@@ -78,7 +78,7 @@ async function fetchYouTubeVideoDetails(link) {
 }
 
 
-const Home = ({ mail = 'User' }) => {
+const Home = ({ mail }) => {
 
 
    const [videoDetails, setVideoDetails] = useState([]);
@@ -466,7 +466,7 @@ const Home = ({ mail = 'User' }) => {
       transition={{ duration: 0.3, ease: "easeIn" }}
     >
       <div className=' bg-gradient-to-br from-blue-900/50 to-purple-900/50 ' >
-        <Navbar/>
+        <Navbar mail={mail}/>
 
       <StocksData/>
 
