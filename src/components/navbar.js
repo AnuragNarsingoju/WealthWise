@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Home, 
   Layout, 
@@ -6,23 +6,24 @@ import {
   Bell, 
   Search, 
   Activity,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+
 const Navbar = ({mail}) => {
-  console.log("navbar : ",mail)
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [data,setdata] = useState({});
+  const [data, setData] = useState({});
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const handleProfile = async (e) => {
     try {
-
       const getCookie = Cookies.get('sessionToken');
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(mail)}`,
@@ -34,23 +35,19 @@ const Navbar = ({mail}) => {
           withCredentials: true,
         }
       );
-      setdata(response.data.user);
-      console.log(response.data.user)
-      
-     
+      setData(response.data.user);
     } catch (error) {
-        console.error('Error fetching recommendation:', error);
+      console.error('Error fetching recommendation:', error);
     }
   }
-  useEffect(()=>{
+
+  useEffect(() => {
     if(mail){
       handleProfile()
     }
-    
   },[mail])
-  // 
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Example mobile breakpoint
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const handleResize = () => {
@@ -67,8 +64,11 @@ const Navbar = ({mail}) => {
     }
   };
 
-
-
+  const handleLogout = () => {
+    // Implement logout logic here
+    Cookies.remove('sessionToken');
+    navigate('/login');
+  };
 
   const navItems = [
     { 
@@ -93,30 +93,23 @@ const Navbar = ({mail}) => {
     }
   ];
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
-    }
-  };
-
   return (
     <>
       {/* Main Navbar */}
       <nav
-          className={`fixed top-0 left-0 right-0 z-50 
-            shadow-lg transform transition-all duration-300
-            ${
-              isMobileMenuOpen
-              ? 'bg-gradient-to-br from-purple-800/75 to-blue-900/75'
-              : 'bg-gradient-to-br from-white-600/80 to-blue-800/40'
-            }
-          `}
-        >
+        className={`fixed top-0 left-0 right-0 z-50 
+          shadow-lg transform transition-all duration-300
+          ${
+            isMobileMenuOpen
+            ? 'bg-gradient-to-br from-purple-800/75 to-blue-900/75'
+            : 'bg-gradient-to-br from-white-600/80 to-blue-800/40'
+          }
+        `}
+      >
         <div className="mx-auto py-3 px-8">
           <div className="flex items-center justify-between ">
             {/* Left Side - Logo */}
-            <div className="flex items-center space-x-4" onClick={()=>{navigate('/home')}} style={{cursor:'pointer'}}>
+            <div className="flex items-center space-x-4" onClick={() => navigate('/home')} style={{cursor:'pointer'}}>
               <img 
                 src="/navlogo1.png" 
                 alt="App Logo" 
@@ -153,47 +146,23 @@ const Navbar = ({mail}) => {
               ))}
             </div>
 
-            {/* Right Side - Search and Interactions */}
-            <div className="flex items-center space-x-4">
-              {/* Search */}
-              {/* <form onSubmit={handleSearch} className="relative hidden md:block">
-                <div className="flex items-center">
-                  <button 
-                    type="button"
-                    onClick={() => setIsSearchActive(!isSearchActive)}
-                    className="text-white/70 hover:text-white 
-                    transition-colors mr-2"
-                  >
-                    <Search className="w-5 h-5" />
-                  </button>
-
-                  {isSearchActive && (
-                    <input 
-                      type="text" 
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search..." 
-                      className="
-                      bg-white/20 border border-white/30 rounded-full 
-                      px-3 py-1 w-48
-                      text-white 
-                      placeholder-white/50
-                      animate-slide-in-right
-                      focus:outline-none 
-                      focus:ring-2 
-                      focus:ring-white/50"
-                    />
-                  )}
-                </div> */}
-              {/* </form> */}
-
+            {/* Right Side - Profile and Interactions */}
+            <div className="flex items-center space-x-4 relative">
               {/* Profile Photo */}
               <div 
-                className="relative "
+                className="relative"
                 onClick={handleClick}
-                style={{marginRight:'5px',marginLeft:'110px'}}
+                style={{marginRight:'5px', marginLeft:'110px'}}
               >
-                 {data.profile ? (
+                <div 
+                  onClick={() => {
+                    if (!isMobile) {
+                      setIsProfileDropdownOpen(!isProfileDropdownOpen);
+                    }
+                  }}
+                  className="cursor-pointer"
+                >
+                  {data.profile ? (
                     <img
                       src={data.profile}
                       alt={data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
@@ -203,8 +172,7 @@ const Navbar = ({mail}) => {
                         transform transition-all duration-300 
                         group-hover:scale-110 
                         group-hover:rotate-6 
-                        group-hover:shadow-lg 
-                        cursor-pointer"
+                        group-hover:shadow-lg"
                     />
                   ) : (
                     <div
@@ -213,8 +181,7 @@ const Navbar = ({mail}) => {
                         transform transition-all duration-300 
                         group-hover:scale-110 
                         group-hover:rotate-6 
-                        group-hover:shadow-lg 
-                        cursor-pointer"
+                        group-hover:shadow-lg"
                     >
                       {data.name && data.name.charAt(0) ? (
                         <span className="text-xl font-semibold text-gray-800">
@@ -225,16 +192,40 @@ const Navbar = ({mail}) => {
                       )}
                     </div>
                   )}
-                {/* <div className="absolute -top-2 -right-2 
-                h-4 w-4 bg-green-500 
-                rounded-full border-2 border-white 
-                animate-ping 
-                group-hover:animate-none"></div> */}
+                </div>
+
+                
+                {!isMobile && isProfileDropdownOpen && (
+                  <div 
+                  className="absolute right-0 top-full mt-2 w-80 h-50
+                    bg-gradient-to-br from-white-600/80 to-blue-800/40 shadow-lg rounded-lg 
+                    border border-red-500 
+                    z-50 flex flex-col items-center justify-center"
+                >
+                  <div className="p-4 border-b border-red-500 text-center w-full">
+                    <p className="text-sm font-semibold text-gray-200 whitespace-normal">
+                      {data.name}
+                    </p>
+                    <p className="text-xs text-gray-00 whitespace-normal">{data.email}</p>
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full px-4 py-2 flex items-center justify-center 
+                   
+                    flex items-center 
+                    text-red-500 hover:text-red-600"
+                  >
+                    <button className="w-4 h-4 "/>
+                      Logout
+                    </button>
+                </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </nav>
+
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
