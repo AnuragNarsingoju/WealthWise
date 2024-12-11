@@ -31,18 +31,19 @@ function formatDuration(duration) {
 }
 
 function formatViews(views) {
-  if (typeof views !== 'number') {
+  const numericViews = Number(views);
+  if (isNaN(numericViews) || numericViews < 0) {
     return 'Invalid view count';
   }
-
-  if (views >= 1e6) {
-    return (views / 1e6).toFixed(1) + 'M views';
-  } else if (views >= 1e3) {
-    return (views / 1e3).toFixed(1) + 'K views';
+  if (numericViews >= 1e6) {
+    return (numericViews / 1e6).toFixed(1).replace(/\.0$/, '') + 'M views';
+  } else if (numericViews >= 1e3) {
+    return (numericViews / 1e3).toFixed(1).replace(/\.0$/, '') + 'K views';
   } else {
-    return views + ' views';
+    return numericViews + ' views';
   }
 }
+
 async function fetchYouTubeVideoDetails(link) {
   const API_KEY = 'AIzaSyC-y_81kkguQwtMrMBTYs-hDFmx3C_my0w';
   const videoId = extractVideoId(link);
