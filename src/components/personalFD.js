@@ -11,7 +11,7 @@ import {
 import Cookies from 'js-cookie';
 import Navbar from './navbar';
 
-const PersonalFDRecommendation = () => {
+const PersonalFDRecommendation = ({mail}) => {
     const formatChatbotResponse = (response) => {
         return response
           .replace(/\n/g, '<br>') 
@@ -124,7 +124,7 @@ const PersonalFDRecommendation = () => {
             </motion.button>
         )}
 
-        <Navbar/>
+        <Navbar mail={mail}/>
         <div 
             ref={scrollRef}
             className="min-h-screen bg-gradient-to-br from-blue-900/70 to-indigo-900/70 flex items-center justify-center p-4"
