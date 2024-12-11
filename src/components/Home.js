@@ -5,7 +5,120 @@ import 'font-awesome/css/font-awesome.min.css';
 import Navbar from './navbar.js'
 import { useNavigate } from 'react-router-dom';
 
+
+
+function extractVideoId(url) {
+  const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|(?:https?:\/\/(?:www\.)?youtu\.be\/))([a-zA-Z0-9_-]{11})/;
+  const match = url.match(regex);
+  if (match && match[1]) {
+    return match[1];
+  } else {
+    console.error('No match found for URL:', url);
+    return null;
+  }
+}
+
+function formatDuration(duration) {
+  const regex = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+  const match = duration.match(regex);
+  
+  if (!match) return 'Invalid duration format';
+  
+  const minutes = match[2] ? match[2] : '0';
+  const seconds = match[3] ? match[3] : '0';
+  
+  return `${minutes}:${seconds.padStart(2, '0')}`;
+}
+
+function formatViews(views) {
+  if (typeof views !== 'number') {
+    return 'Invalid view count';
+  }
+
+  if (views >= 1e6) {
+    return (views / 1e6).toFixed(1) + 'M views';
+  } else if (views >= 1e3) {
+    return (views / 1e3).toFixed(1) + 'K views';
+  } else {
+    return views + ' views';
+  }
+}
+async function fetchYouTubeVideoDetails(link) {
+  const API_KEY = 'AIzaSyC-y_81kkguQwtMrMBTYs-hDFmx3C_my0w';
+  const videoId = extractVideoId(link);
+  if (!videoId) {
+    console.log('Invalid YouTube link!');
+    return;
+  }
+
+  const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet,contentDetails,statistics`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.items.length > 0) {
+      const video = data.items[0];
+
+      const videoDetails = {
+        name: video.snippet.title,
+        thumbnail: video.snippet.thumbnails.high.url,
+        duration: formatDuration(video.contentDetails.duration),
+        views: formatViews(video.statistics.viewCount),
+        videoUrl: `https://youtu.be/${videoId}`,
+      };
+      return videoDetails;
+    } else {
+      console.log('Video not found!');
+    }
+  } catch (error) {
+    console.error('Error fetching video details:', error);
+  }
+}
+
+const items = [
+  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
+  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
+  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP'
+];
+
+async function fetchAllVideos() {
+  const videoDetails = await Promise.all(
+    items.map(async (link) => {
+      return await fetchYouTubeVideoDetails(link);
+    })
+  );
+  return videoDetails;
+
+}
+
+
+
 const Home = ({ mail = 'User' }) => {
+
+
+   const [videoDetails, setVideoDetails] = useState([]);
+
+  const videoLinks = [
+    'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
+    'https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA',
+    'https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b'
+  ];
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const details = await Promise.all(
+          videoLinks.map(link => fetchYouTubeVideoDetails(link))
+        );
+        setVideoDetails(details.filter(detail => detail !== null));
+      } catch (error) {
+        console.error('Failed to fetch video details', error);
+      }
+    };
+
+    fetchVideos();
+  }, []);
 
 
   const [messages, setMessages] = useState([
@@ -126,114 +239,138 @@ const Home = ({ mail = 'User' }) => {
             items: [
               { 
                 name: 'Stock Market Basics', 
-                video: 'https://youtu.be/fiLVHI8CUZE?si=h2iVucgo2NNvd-M-'
+                thumbnail: '/api/placeholder/300/200', 
+                duration: '12:45',
+                views: '1.2M'
               },
               { 
                 name: 'Investment Strategies', 
-                video: 'https://youtu.be/fiLVHI8CUZE?si=h2iVucgo2NNvd-M-'
+                thumbnail: '/api/placeholder/300/200', 
+                duration: '18:30',
+                views: '890K'
               },
               { 
                 name: 'Mutual Funds Explained', 
-                video: 'https://youtu.be/fiLVHI8CUZE?si=h2iVucgo2NNvd-M-'
+                thumbnail: '/api/placeholder/300/200', 
+                duration: '15:15',
+                views: '1.5M'
               }
             ]
           }
       ];
       
-    return (
-      <div
-        className="inset-0 bg-gradient-to-br from-blue-900/90 to-purple-900/90 text-white p-4 overflow-hidden w-full"
+    return  (
+        <div 
+        className="inset-0 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90 text-white p-4 overflow-hidden w-full " 
         style={{ justifyContent: 'center', alignItems: 'center', margin: 'auto' }}
-      >
-        <div
-          className="grid grid-cols-2 gap-4 mb-6 pb-2 overflow-hidden"
-          style={{ marginTop: '20px', marginBottom: '40px' }}
         >
-          {personalizeButtons.map((button) => (
-            <button
-              key={button.name}
-              onClick={() => setActiveButton(button.name)}
-              className={`
-                flex items-center space-x-2 px-4 py-2 transform transition-all duration-300
-                ${
-                  activeButton === button.name
-                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/90 text-white scale-105 shadow-lg'
-                    : 'bg-gradient-to-br from-blue-900/90 to-purple-900/50 text-gray-300 hover:bg-gray-700'
-                }
-              `}
-              style={{
-                margin: '10px',
-                height: '90px',
-                borderRadius: '15px',
-              }}
+          
+          <div 
+            className="grid grid-cols-2 gap-4 mb-6 pb-2 overflow-hidden" style={{marginTop:'20px',marginBottom:'40px'}}
             >
-              <span className="flex items-center justify-center text-sm font-medium mx-auto">
-                {button.icon}&nbsp;&nbsp;{button.name}
-              </span>
-            </button>
+            {personalizeButtons.map((button) => (
+                <button 
+                key={button.name}
+                onClick={() => setActiveButton(button.name)}
+                className={`
+                    flex items-center space-x-2 px-4 py-2 
+                    transform transition-all duration-300
+                    
+                    ${activeButton === button.name 
+                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/90  text-white scale-105 shadow-lg' 
+                    : 'bg-gradient-to-br from-blue-900/90 to-purple-900/50 text-gray-300 hover:bg-gray-700'}
+                `}
+
+                style={{margin:'10px',height:'90px',borderRadius:'15px'}}
+                >
+                
+                <span 
+                    className="flex items-center justify-center text-sm font-medium mx-auto"
+                    >
+                    {button.icon}&nbsp;&nbsp;{button.name}
+                </span>
+                </button>
+            ))}
+            </div>
+    
+          <h2 className="text-2xl font-bold mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            Top Investments & Learning
+          </h2>
+    
+          {investments.map((category, categoryIndex) => (
+            <div key={category.type} className="mb-6">
+              <h3 className="text-lg font-semibold mb-3 text-bg-gradient-to-br from-blue-900/90 to-purple-900/50">{category.type}</h3>
+              
+              <div 
+                className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide whitespace-nowrap scroll-smooth overflow-hidden"
+                style={{
+                  scrollSnapType: 'x mandatory',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {category.items.map((investment, index) => {
+
+                  const bgIntensity = Math.max(700 - (index * 50), 800);
+                  
+                  return category.type === 'Investment Videos' && videoDetails && videoDetails[investment.id] ? (
+                      <div
+                        key={videoDetails[investment.id].name}
+                        className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-900/90 to-purple-900/90-${bgIntensity} rounded-lg p-4 
+                          transform transition-all duration-300 
+                          hover:scale-105 hover:shadow-lg
+                          scroll-snap-align: start;`}
+                      >
+                        <div className="relative mb-3">
+                          <img
+                            src={videoDetails[investment.id].thumbnail}
+                            alt={videoDetails[investment.id].name}
+                            onClick={() => window.open(videoDetails[investment.id].videoUrl, '_blank')}
+                            className="w-full h-40 object-cover rounded-md"
+                          />
+                          <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 rounded">
+                            {videoDetails[investment.id].duration}
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-lg line-clamp-2">{videoDetails[investment.id].name}</h4>
+                          <p className="text-sm text-gray-300">{videoDetails[investment.id].views} views</p>
+                        </div>
+                      </div>
+                    ) : (
+                    <div 
+                      key={investment.code || investment.name} 
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                        transform transition-all duration-300 
+                        hover:scale-105 hover:shadow-lg
+                        scroll-snap-align: start;`}
+                    >
+                      <div className="flex justify-between items-center mb-3">
+                        <div>
+                          <h4 className="font-bold text-lg">{investment.name}</h4>
+                          <p className="text-sm text-gray-400">{investment.code}</p>
+                        </div>
+                        <span className="text-green-500 font-bold text-xl">₹</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <div className="bg-green-900 text-green-400 px-2 py-1 rounded-full text-sm">
+                          +{investment.return}%
+                        </div>
+                        <span className="text-sm text-white-500">Annual Return</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
-    
-        <h2 className="text-2xl font-bold mb-4 flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 mr-2 text-green-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-            />
-          </svg>
-          Top Investments & Learning
-        </h2>
-    
-        {investments.map((category) => (
-          <div key={category.type} className="mb-6">
-            <h3 className="text-lg font-semibold mb-3 bg-gradient-to-br from-blue-900/90 to-purple-900/50 text-transparent bg-clip-text">
-              {category.type}
-            </h3>
-    
-            <div
-              className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide whitespace-nowrap scroll-smooth"
-              style={{
-                scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch',
-              }}
-            >
-              {category.items.map((investment, index) => (
-                <div
-                  key={investment.name}
-                  className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-900/90 to-purple-900/90 rounded-lg p-4 
-                    transform transition-all duration-300 hover:scale-105 hover:shadow-lg`}
-                  style={{ scrollSnapAlign: 'start' }}
-                >
-                  <div className="relative mb-3">
-                    <iframe
-                      width="100%"
-                      height="200"
-                      src={investment.video.replace('watch?v=', 'embed/')}
-                      title={investment.name}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="rounded-md"
-                    ></iframe>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">{investment.name}</h4>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+      );
+      };
+      
 
       
 
