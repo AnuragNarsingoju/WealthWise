@@ -254,7 +254,7 @@ const Home = ({ mail }) => {
         >
           
           <div 
-            className="grid grid-cols-2 gap-4 mb-6 pb-2 overflow-hidden" style={{marginTop:'20px',marginBottom:'40px'}}
+            className="grid grid-cols-2 gap-4 mb-6 pb-2 overflow-hidden" style={{marginTop:'90px',marginBottom:'40px'}}
             >
             {personalizeButtons.map((button) => (
                 <button 
