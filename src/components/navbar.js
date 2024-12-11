@@ -193,18 +193,24 @@ const Navbar = ({mail}) => {
                 onClick={handleClick}
                 style={{marginRight:'5px',marginLeft:'110px'}}
               >
-                <img 
-                  src={data.profile}
-                  alt="User Profile" 
-                  className="w-12 h-12 rounded-full 
-                  border-2 border-white/70 
-                  object-cover 
-                  transform transition-all duration-300 
-                  group-hover:scale-110 
-                  group-hover:rotate-6 
-                  group-hover:shadow-lg 
-                  cursor-pointer"
-                />
+                 {data.profile ? (
+                    <img
+                      src={data.profile}
+                      alt={data.name ? data.name.charAt(0) : 'Profile'}
+                      className="w-12 h-12 rounded-full 
+                        border-2 border-white/70 
+                        object-cover 
+                        transform transition-all duration-300 
+                        group-hover:scale-110 
+                        group-hover:rotate-6 
+                        group-hover:shadow-lg 
+                        cursor-pointer"
+                    />
+                  ) : (
+                    <span className="text-xl font-bold text-gray-700">
+                      {data.name.charAt(0)}
+                    </span>
+                  )}
                 {/* <div className="absolute -top-2 -right-2 
                 h-4 w-4 bg-green-500 
                 rounded-full border-2 border-white 
@@ -240,10 +246,10 @@ const Navbar = ({mail}) => {
             </button>
 
             {/* User Profile Section */}
-            <div className="p-6 text-center border-b">
+           <div className="p-6 text-center border-b">
               <img 
-                src={data.profile}
-                alt="User Profile" 
+                src={data.profile} 
+                alt={data.name ? `${data.name.charAt(0)}` : 'User Profile'} 
                 className="w-16 h-16 rounded-full mx-auto mb-3"
               />
               <h2 className="text-xl text-gray-100 font-semibold">{data.name}</h2>
