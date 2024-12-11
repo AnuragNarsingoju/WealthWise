@@ -206,7 +206,7 @@ const Navbar = ({mail}) => {
                     <p className="text-sm font-semibold text-gray-200 whitespace-normal">
                       {data.name}
                     </p>
-                    <p className="text-xs text-gray-00 whitespace-normal">{data.email}</p>
+                    <p className="text-sm font-semibold text-gray-200 mt-2 whitespace-normal">{data.email}</p>
                   </div>
                   <button 
                     onClick={handleLogout}
