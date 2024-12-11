@@ -77,25 +77,6 @@ async function fetchYouTubeVideoDetails(link) {
   }
 }
 
-const items = [
-  'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
-    'https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA',
-    'https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b'
-];
-
-async function fetchAllVideos() {
-  const videoDetails = await Promise.all(
-    items.map(async (link) => {
-      
-      return await fetchYouTubeVideoDetails(link);
-    })
-  );
-  console.log(videoDetails);
-  return videoDetails;
-
-}
-
-
 
 const Home = ({ mail = 'User' }) => {
 
