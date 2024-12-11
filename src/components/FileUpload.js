@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Upload, FileText, X } from 'lucide-react';
 import Navbar from './navbar';
 
-const FileUpload = () => {
+const FileUpload = ({mail}) => {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
 
@@ -73,7 +73,7 @@ const FileUpload = () => {
                 draggable 
                 pauseOnHover 
             />
-            <Navbar/>
+            <Navbar mail={mail}/>
             <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-indigo-900/70 to-purple-900/70 p-4">
                 <div className="w-full max-w-md bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
                     <h2 className="text-3xl font-bold mb-6 text-white text-center">Upload CSV File</h2>
