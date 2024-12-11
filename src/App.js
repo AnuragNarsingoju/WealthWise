@@ -189,9 +189,9 @@ const App = () => {
         <Route path="/home" element={ <Home mail={mail} /> } />
         <Route path="/foam" element={ <Psinfo mail={mail} />} />
         <Route path="/chatbot" element={<ChatBot mail={mail} /> } />
-        <Route path="/fileupload" element={ <FileUpload /> } />
-        <Route path="/personal-MF" element={ <InvestmentRecommendationForm /> } />
-        <Route path="/fd-recommendations" element={ <PersonalFDRecommendation/> } />
+        <Route path="/fileupload" element={ <FileUpload mail={mail} /> } />
+        <Route path="/personal-MF" element={ <InvestmentRecommendationForm mail={mail} /> } />
+        <Route path="/fd-recommendations" element={ <PersonalFDRecommendation mail={mail} /> } />
       </Routes>
     </div>
   );
