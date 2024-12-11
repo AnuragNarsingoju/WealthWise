@@ -207,9 +207,23 @@ const Navbar = ({mail}) => {
                         cursor-pointer"
                     />
                   ) : (
-                    <span className="text-xl font-bold text-gray-700">
-                      {data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
-                    </span>
+                    <div
+                      className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center 
+                        border-2 border-white/70 
+                        transform transition-all duration-300 
+                        group-hover:scale-110 
+                        group-hover:rotate-6 
+                        group-hover:shadow-lg 
+                        cursor-pointer"
+                    >
+                      {data.name && data.name.charAt(0) ? (
+                        <span className="text-xl font-semibold text-gray-800">
+                          {data.name.charAt(0).toUpperCase()}
+                        </span>
+                      ) : (
+                        <span className="fa fa-user-alt text-xl font-semibold text-gray-800"></span>
+                      )}
+                    </div>
                   )}
                 {/* <div className="absolute -top-2 -right-2 
                 h-4 w-4 bg-green-500 
@@ -246,12 +260,31 @@ const Navbar = ({mail}) => {
             </button>
 
             {/* User Profile Section */}
-           <div className="p-6 text-center border-b">
-              <img 
-                src={data.profile} 
-                alt={data.name ? `${data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'User Profile'}` : 'User Profile'} 
-                className="w-16 h-16 rounded-full mx-auto mb-3"
-              />
+            {data.profile ? (
+                <img
+                  src={data.profile}
+                  alt={data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
+                  className="w-16 h-16 rounded-full mx-auto mb-3"
+                />
+              ) : (
+                <div
+                  className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center 
+                    border-2 border-white/70 
+                    transform transition-all duration-300 
+                    group-hover:scale-110 
+                    group-hover:rotate-6 
+                    group-hover:shadow-lg 
+                    cursor-pointer mx-auto mb-3"
+                >
+                  {data.name && data.name.charAt(0) ? (
+                    <span className="text-xl font-semibold text-gray-800">
+                      {data.name.charAt(0).toUpperCase()}
+                    </span>
+                  ) : (
+                    <span className="fa fa-user-alt text-xl font-semibold text-gray-800"></span>
+                  )}
+                </div>
+              )}
               <h2 className="text-xl text-gray-100 font-semibold">{data.name}</h2>
               <p className="text-gray-100">{data.email}</p>
             </div>
