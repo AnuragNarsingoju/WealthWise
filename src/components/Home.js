@@ -327,7 +327,7 @@ const Home = ({ mail = 'User' }) => {
                           <p className="text-sm text-gray-300">{videoDetails[investment.id].views} views</p>
                         </div>
                       </div>
-                    ) : (
+                    ) : category.type === 'Mutual Funds' ?  (
                     <div 
                       key={investment.code || investment.name} 
                       className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
@@ -344,8 +344,24 @@ const Home = ({ mail = 'User' }) => {
                         
                       </div>
                     </div>
-                  );
-                })}
+                  )
+                 : (
+                    <div 
+                      key={investment.code || investment.name} 
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                        transform transition-all duration-300 
+                        hover:scale-105 hover:shadow-lg
+                        scroll-snap-align: start;`}
+                    >
+                      <div className="flex justify-between items-center mb-3">
+                        <div>
+                          <h4 className="font-bold text-lg">{investment.name}</h4>
+                          <p className="text-sm text-gray-400">{investment.code}</p>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  ); }) }
               </div>
             </div>
           ))}
