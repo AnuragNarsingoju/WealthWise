@@ -260,7 +260,11 @@ const Navbar = ({mail}) => {
             </button>
 
             {/* User Profile Section */}
-            {data.profile ? (
+
+            
+                  
+            <div className="p-6 text-center border-b">
+              {data.profile ? (
                 <img
                   src={data.profile}
                   alt={data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
