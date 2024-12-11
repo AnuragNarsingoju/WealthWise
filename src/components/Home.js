@@ -340,14 +340,7 @@ const Home = ({ mail = 'User' }) => {
                           <h4 className="font-bold text-lg">{investment.name}</h4>
                           <p className="text-sm text-gray-400">{investment.code}</p>
                         </div>
-                        <span className="text-green-500 font-bold text-xl">₹</span>
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <div className="bg-green-900 text-green-400 px-2 py-1 rounded-full text-sm">
-                          +{investment.return}%
-                        </div>
-                        <span className="text-sm text-white-500">Annual Return</span>
+                        
                       </div>
                     </div>
                   );
