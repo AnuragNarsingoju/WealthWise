@@ -196,7 +196,7 @@ const Navbar = ({mail}) => {
                  {data.profile ? (
                     <img
                       src={data.profile}
-                      alt={data.name ? data.name.charAt(0) : 'Profile'}
+                      alt={data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
                       className="w-12 h-12 rounded-full 
                         border-2 border-white/70 
                         object-cover 
@@ -208,7 +208,7 @@ const Navbar = ({mail}) => {
                     />
                   ) : (
                     <span className="text-xl font-bold text-gray-700">
-                      {data.name.charAt(0)}
+                      {data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
                     </span>
                   )}
                 {/* <div className="absolute -top-2 -right-2 
@@ -249,7 +249,7 @@ const Navbar = ({mail}) => {
            <div className="p-6 text-center border-b">
               <img 
                 src={data.profile} 
-                alt={data.name ? `${data.name.charAt(0)}` : 'User Profile'} 
+                alt={data.name ? `${data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'User Profile'}` : 'User Profile'} 
                 className="w-16 h-16 rounded-full mx-auto mb-3"
               />
               <h2 className="text-xl text-gray-100 font-semibold">{data.name}</h2>
