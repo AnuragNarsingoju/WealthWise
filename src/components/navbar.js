@@ -69,7 +69,6 @@ const Navbar = ({mail}) => {
   
 
   const handleLogout = () => {
-    // Implement logout logic here
     Cookies.remove('sessionToken');
     navigate('/',{ replace: true });
   };
@@ -81,10 +80,14 @@ const Navbar = ({mail}) => {
       label: 'Home', 
       key: 'home' 
     },
-    { 
-      icon: <Layout className="w-5 h-5" />, 
-      label: 'Dashboard', 
-      key: 'dashboard' 
+    {
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
+        </svg>
+      ),
+      label: 'ChatBot',
+      key: 'ChatBot'
     },
     { 
       icon: <Activity className="w-5 h-5" />, 
@@ -134,6 +137,9 @@ const Navbar = ({mail}) => {
                     if (item.key === 'home') {
                      navigate('/home',{ replace: true });
                     }
+                    if (item.key === 'ChatBot') {
+                      navigate('/chatbot',{ replace: true });
+                     }
                   }}
                   className={`
                     group relative flex items-center 
