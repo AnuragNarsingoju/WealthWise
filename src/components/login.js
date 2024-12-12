@@ -387,7 +387,7 @@ const Login = (log) => {
             const getCookie = Cookies.get('sessionToken');
             const findemail = await axios.get(
             `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
-            {
+             {
               headers: {
                 Authorization: `Bearer ${getCookie}`,
                 'Content-Type': 'application/json',
@@ -554,8 +554,9 @@ const Login = (log) => {
       toast.success('Login successful!');
       log.user1(true);
       clear();
-      try{
+       try{
           const getCookie = Cookies.get('sessionToken');
+          console.log(email);
           const findemail = await axios.get(
             `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
             {
@@ -568,8 +569,11 @@ const Login = (log) => {
           );
         findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
       }catch(e){
+         console.log(email);
+         console.log(e);
         navigate('/foam', { replace: true })
       }
+      
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
       toast.dismiss()
