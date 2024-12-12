@@ -442,7 +442,7 @@ const Psinfo = ({ mail }) => {
                       onClick={nextStep}
                       className="w-full px-4 py-2 rounded-lg transition-colors"
                       style={{ 
-                        backgroundColor: (!formData.income || !formData.city || !formData.age) ? "#81C784" : "#66BB6A",
+                        backgroundColor: (!formData.income || !formData.city || !formData.age) ? "#A5D6A7" : "#66BB6A",
                         color: 'white',
                         // opacity: formData.income ? 1 : 0.5
                       }}
@@ -504,7 +504,7 @@ const Psinfo = ({ mail }) => {
                               type="button"
                               onClick={nextStep}
                               className="w-full px-4 py-2 rounded-lg transition-colors"
-                              style={{ backgroundColor: (!formData.housing || !formData.transportation) ? "#81C784" : "#66BB6A", color: 'white' }}
+                              style={{ backgroundColor: (!formData.housing || !formData.transportation) ? "#A5D6A7" : "#66BB6A", color: 'white' }}
                               disabled={!formData.housing || !formData.transportation}
                             >
                               Next
@@ -575,7 +575,7 @@ const Psinfo = ({ mail }) => {
                               type="button"
                               onClick={nextStep}
                               className="w-full px-4 py-2 rounded-lg transition-colors"
-                              style={{ backgroundColor: (!formData.foodAtHome || !formData.foodAwayFromHome || !formData.alcoholicBeverages) ? "#81C784" : "#66BB6A", color: 'white' }}
+                              style={{ backgroundColor: (!formData.foodAtHome || !formData.foodAwayFromHome || !formData.alcoholicBeverages) ? "#A5D6A7" : "#66BB6A", color: 'white' }}
                               disabled={!formData.foodAtHome || !formData.foodAwayFromHome || !formData.alcoholicBeverages}
                             >
                               Next
@@ -649,7 +649,7 @@ const Psinfo = ({ mail }) => {
                         type="button"
                         onClick={nextStep}
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: (!formData.healthcare || !formData.education || !formData.entertainment) ? "#81C784" : "#66BB6A", color: 'white' }}
+                        style={{ backgroundColor: (!formData.healthcare || !formData.education || !formData.entertainment) ? "#A5D6A7" : "#66BB6A", color: 'white' }}
 
                         disabled={!formData.healthcare || !formData.education || !formData.entertainment}
 
@@ -721,7 +721,7 @@ const Psinfo = ({ mail }) => {
                         type="button"
                         onClick={nextStep}
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: (!formData.personalCare || !formData.apparelAndServices || !formData.tobaccoProducts) ? "#81C784" : "#66BB6A", color: 'white' }}
+                        style={{ backgroundColor: (!formData.personalCare || !formData.apparelAndServices || !formData.tobaccoProducts) ? "#A5D6A7" : "#66BB6A", color: 'white' }}
 
                         disabled={!formData.personalCare || !formData.apparelAndServices || !formData.tobaccoProducts}
 
@@ -794,7 +794,7 @@ const Psinfo = ({ mail }) => {
                       <button
                         type="submit"
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: (!formData.cashContributions || !formData.savings || !formData.others) ? "#81C784" : "#66BB6A", color: 'white' }}
+                        style={{ backgroundColor: (!formData.cashContributions || !formData.savings || !formData.others) ? "#A5D6A7" : "#66BB6A", color: 'white' }}
 
                         onClick={handleSubmit}
                         disabled={!formData.cashContributions || !formData.savings || !formData.others}
