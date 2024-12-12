@@ -148,16 +148,17 @@ const InvestmentRecommendationForm = ({mail}) => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         {[
-                            { 
+                             { 
                                 type:"text",
                                 name: 'user_age', 
                                 label: 'Age', 
                                 icon: <Users className="text-white/70" /> 
                             },
-                            { 
-                                type:"text",
+                             { 
                                 name: 'user_risk_appetite', 
                                 label: 'Risk Appetite', 
+                                type: 'select',
+                                options: ['Low', 'Moderate', 'High'],
                                 icon: <TrendingUp className="text-white/70" /> 
                             },
                             { 
@@ -172,12 +173,11 @@ const InvestmentRecommendationForm = ({mail}) => {
                                 label: 'Total Savings (₹)', 
                                 icon: <Coins className="text-white/70" /> 
                             },
-                             { 
-                                name: 'user_risk_appetite', 
-                                label: 'Risk Appetite', 
-                                type: 'select',
-                                options: ['Low', 'Moderate', 'High'],
-                                icon: <TrendingUp className="text-white/70" /> 
+                            { 
+				                type:"text",
+                                name: 'user_investment_amount', 
+                                label: 'Monthly Investment (₹)', 
+                                icon: <Coins className="text-white/70" /> 
                             }
                         ].map((field, index) => (
                             <motion.div 
