@@ -142,7 +142,7 @@ const Home = ({ mail }) => {
 
         useEffect(() => {
           if (activeButton === "Expense Tracker") {
-            navigate('/chatbot');
+            navigate('/expensetracker');
           }
           else if ( activeButton === "Personalized Mutual Funds"){
             navigate('/personal-MF');
