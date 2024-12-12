@@ -95,9 +95,10 @@ const Psinfo = ({ mail }) => {
     personalCare: '',
     apparelAndServices: '',
     tobaccoProducts: '',
-    cashContributions: '',
+    personalfinance: '',
     alcoholicBeverages: '',
-    savings: ''
+    savings: '',
+    others:'',
   });
   const [formStep, setFormStep] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -114,6 +115,7 @@ const Psinfo = ({ mail }) => {
       [name]: value,
        email:mail
     }));
+
   };
 
   const navigate = useNavigate();
@@ -210,9 +212,11 @@ const Psinfo = ({ mail }) => {
       personalCare: '',
       apparelAndServices: '',
       tobaccoProducts: '',
-      cashContributions: '',
+      personalfinance: '',
       alcoholicBeverages: '',
-      savings: ''})
+      savings: '',
+      others:''
+    })
   };
 
   const updateCount = async () => {
@@ -335,7 +339,7 @@ const Psinfo = ({ mail }) => {
             }}
           >
             <h1 className="text-2xl font-bold text-center">
-              {formStep < 3 ? "Personal Information" : "Expense Track"}
+              {formStep < 1 ? "Personal Information" : "Expense Track"}
             </h1>
           </div>
           <div className="p-6">
@@ -381,31 +385,6 @@ const Psinfo = ({ mail }) => {
                         required
                       />
                     </div>
-                    <button 
-                      type="button" 
-                      onClick={nextStep} 
-                      className="w-full px-4 py-2 rounded-lg transition-colors"
-                      style={{ 
-                        backgroundColor: "#90CC65",
-                        color: 'white',
-                        opacity: formData.income ? 1 : 0.5
-                      }}
-                      disabled={!formData.income}
-                    >
-                      Next
-                    </button>
-                  </motion.div>
-                )}
-
-                {formStep === 1 && (
-                  <motion.div
-                    key="age-step"
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    className="space-y-4"
-                  >
                     <div>
                       <label 
                         htmlFor="age" 
@@ -439,45 +418,7 @@ const Psinfo = ({ mail }) => {
                         autoFocus
                       />
                     </div>
-                    <div className="flex space-x-2">
-                      <button 
-                        type="button" 
-                        onClick={prevStep} 
-                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
-                        style={{
-                          borderColor: "#90CC65",
-                          color: "#90CC65",
-                          ':hover': { backgroundColor: "#90CC65" }
-                        }}
-                      >
-                        Back
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={nextStep} 
-                        className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ 
-                          backgroundColor: "#90CC65",
-                          color: 'white',
-                          opacity: formData.age ? 1 : 0.5
-                        }}
-                        disabled={!formData.age}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
 
-                {formStep === 2 && (
-                  <motion.div
-                    key="city-step"
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="hidden"
-                    className="space-y-4"
-                  >
                     <div>
                       <label 
                         className="block font-semibold mb-2"
@@ -506,93 +447,26 @@ const Psinfo = ({ mail }) => {
                         <option value="village">Village</option>
                       </select>
                     </div>
-                    <div className="flex space-x-2">
-                      <button 
-                        type="button" 
-                        onClick={prevStep} 
-                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
-                        style={{
-                          borderColor: "#90CC65",
-                          color: colors.text,
-                          ':hover': { backgroundColor: "#90CC65" }
-                        }}
-                      >
-                        Back
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={nextStep} 
-                        className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ 
-                          backgroundColor: "#90CC65",
-                          color: 'white',
-                          opacity: formData.age ? 1 : 0.5
-                        }}
-                        disabled={!formData.city}
-                      >
-                        Next
-                      </button>
-                    </div>
+                    <button 
+                      type="button" 
+                      onClick={nextStep} 
+                      className="w-full px-4 py-2 rounded-lg transition-colors"
+                      style={{ 
+                        backgroundColor: "#90CC65",
+                        color: 'white',
+                        opacity: formData.income ? 1 : 0.5
+                      }}
+                      disabled={!formData.income}
+                    >
+                      Next
+                    </button>
                   </motion.div>
                 )}
 
-                {formStep === 3 && (
-                        <motion.div
-                          key="expense-step-1"
-                          variants={itemVariants}
-                          initial="hidden"
-                          animate="visible"
-                          exit="hidden"
-                          className="space-y-4"
-                        >
-                          <div>
-                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
-                              Food at Home
-                            </label>
-                            <input
-                              type="number"
-                              name="foodAtHome"
-                              value={formData.foodAtHome}
-                              onChange={handleInputChange}
-                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
-                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
-                            />
-                          </div>
-                          <div>
-                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
-                              Food Away from Home
-                            </label>
-                            <input
-                              type="number"
-                              name="foodAwayFromHome"
-                              value={formData.foodAwayFromHome}
-                              onChange={handleInputChange}
-                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
-                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
-                            />
-                          </div>
-                          <div className="flex space-x-2">
-                            <button
-                              type="button"
-                              onClick={prevStep}
-                              className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
-                              style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
-                            >
-                              Back
-                            </button>
-                            <button
-                              type="button"
-                              onClick={nextStep}
-                              className="w-full px-4 py-2 rounded-lg transition-colors"
-                              style={{ backgroundColor: "#90CC65", color: 'white' }}
-                            >
-                              Next
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
+               
 
-                      {formStep === 4 && (
+          
+                {formStep === 1 && (
                         <motion.div
                           key="expense-step-2"
                           variants={itemVariants}
@@ -648,9 +522,81 @@ const Psinfo = ({ mail }) => {
                         </motion.div>
                       )}
 
+                {formStep === 2 && (
+                        <motion.div
+                          key="expense-step-1"
+                          variants={itemVariants}
+                          initial="hidden"
+                          animate="visible"
+                          exit="hidden"
+                          className="space-y-4"
+                        >
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Food at Home
+                            </label>
+                            <input
+                              type="number"
+                              name="foodAtHome"
+                              value={formData.foodAtHome}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Food Away from Home
+                            </label>
+                            <input
+                              type="number"
+                              name="foodAwayFromHome"
+                              value={formData.foodAwayFromHome}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                              Alcoholic Beverages
+                            </label>
+                            <input
+                              type="number"
+                              name="alcoholicBeverages"
+                              value={formData.alcoholicBeverages}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                              style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                            />
+                          </div>
+                          <div className="flex space-x-2">
+                            <button
+                              type="button"
+                              onClick={prevStep}
+                              className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                              style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                            >
+                              Back
+                            </button>
+                            <button
+                              type="button"
+                              onClick={nextStep}
+                              className="w-full px-4 py-2 rounded-lg transition-colors"
+                              style={{ backgroundColor: "#90CC65", color: 'white' }}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      
 
 
-                {formStep === 5 && (
+
+                {formStep === 3 && (
                   <motion.div
                     key="expense-step-3"
                     variants={itemVariants}
@@ -719,7 +665,7 @@ const Psinfo = ({ mail }) => {
                   </motion.div>
                 )}
 
-                {formStep === 6 && (
+                {formStep === 4 && (
                   <motion.div
                     key="expense-step-4"
                     variants={itemVariants}
@@ -788,7 +734,7 @@ const Psinfo = ({ mail }) => {
                   </motion.div>
                 )}
 
-                {formStep === 7 && (
+                {formStep === 5 && (
                   <motion.div
                     key="expense-step-5"
                     variants={itemVariants}
@@ -810,19 +756,7 @@ const Psinfo = ({ mail }) => {
                         style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
                       />
                     </div>
-                    <div>
-                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
-                        Alcoholic Beverages
-                      </label>
-                      <input
-                        type="number"
-                        name="alcoholicBeverages"
-                        value={formData.alcoholicBeverages}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
-                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
-                      />
-                    </div>
+                    
                     <div>
                       <label className="block font-semibold mb-2" style={{ color: colors.text }}>
                         Savings
@@ -836,6 +770,20 @@ const Psinfo = ({ mail }) => {
                         style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
                       />
                     </div>
+                    <div>
+                      <label className="block font-semibold mb-2" style={{ color: colors.text }}>
+                        Others
+                      </label>
+                      <input
+                        type="number"
+                        name="others"
+                        value={formData.others}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
+                        style={{ borderColor: "#90CC65", ':focus': { ringColor: "#90CC65" } }}
+                      />
+                    </div>
+                    
                     <div className="flex space-x-2">
                       <button
                         type="button"
