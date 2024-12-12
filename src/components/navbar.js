@@ -74,11 +74,6 @@ const Navbar = ({mail}) => {
     navigate('/',{ replace: true });
   };
 
-   useEffect(()=>{
-    if(activeTab==='home'){
-       navigate('/home',{ replace: true });
-    }
-  },[activeTab])
 
   const navItems = [
     { 
@@ -129,11 +124,17 @@ const Navbar = ({mail}) => {
             </div>
 
             {/* Desktop Navigation - Center */}
+  
             <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <button
-                  key={item.key}
-                  onClick={() => setActiveTab(item.key)}
+                  key={item.key} 
+                  onClick={() => {
+                    setActiveTab(item.key);
+                    if (activeTab === 'home') {
+                     navigate('/home',{ replace: true });
+                    }
+                  }}
                   className={`
                     group relative flex items-center 
                     transition-all duration-300 
