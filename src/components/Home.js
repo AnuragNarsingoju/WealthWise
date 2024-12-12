@@ -141,7 +141,7 @@ const Home = ({ mail }) => {
         const navigate = useNavigate();
 
         useEffect(() => {
-          if (activeButton === "Chat with Niveshak") {
+          if (activeButton === "Expense Tracker") {
             navigate('/chatbot');
           }
           else if ( activeButton === "Personalized Mutual Funds"){
@@ -179,12 +179,15 @@ const Home = ({ mail }) => {
               )
             },
             { 
-              name: 'Chat with Niveshak', 
+              name: 'Expense Tracker',
               icon: (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 6a2 2 0 00-2-2H5a2 2 0 00-2 2v9a2 2 0 002 2h7l4 4v-4h3a2 2 0 002-2V6z" />
+                  <circle cx="8" cy="10" r="1.5" />
+                  <circle cx="12" cy="10" r="1.5" />
+                  <circle cx="16" cy="10" r="1.5" />
                 </svg>
-              )
+            )
             }
           ];
         const investments = [
