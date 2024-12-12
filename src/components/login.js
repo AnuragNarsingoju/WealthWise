@@ -556,10 +556,8 @@ const Login = (log) => {
       clear();
        try{
           const getCookie = Cookies.get('sessionToken');
-          console.log("email of sigin : " ,email);
-          console.log("email of sigin2 : " ,user.email);
           const findemail = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
+            `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(user.email)}`,
             {
               headers: {
                 Authorization: `Bearer ${getCookie}`,
@@ -570,8 +568,6 @@ const Login = (log) => {
           );
         findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
       }catch(e){
-         console.log(email);
-         console.log(e);
         navigate('/foam', { replace: true })
       }
       
