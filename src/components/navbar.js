@@ -22,6 +22,8 @@ const Navbar = ({mail}) => {
   const [data, setData] = useState({});
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
+ 
+
   const handleProfile = async (e) => {
     try {
       const getCookie = Cookies.get('sessionToken');
@@ -64,11 +66,19 @@ const Navbar = ({mail}) => {
     }
   };
 
+  
+
   const handleLogout = () => {
     // Implement logout logic here
     Cookies.remove('sessionToken');
-    navigate('/login');
+    navigate('/',{ replace: true });
   };
+
+   useEffect(()=>{
+    if(activeTab==='home'){
+       navigate('/home',{ replace: true });
+    }
+  },[activeTab])
 
   const navItems = [
     { 
@@ -315,6 +325,7 @@ const Navbar = ({mail}) => {
                 rounded-full 
                 hover:bg-red-600 
                 transition-colors"
+                onClick={handleLogout}
               >
                 Logout
               </button>
