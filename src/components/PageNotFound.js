@@ -11,11 +11,11 @@ const PageNotFound = () => {
 
     console.log(locObj);
     let home= () =>{
-        navigate('/silver');
+        navigate('/home');
     }
 
     const click = () =>{
-        navigate('/silver');
+        navigate('/home');
     }
     return (
         
