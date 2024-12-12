@@ -319,9 +319,8 @@ const Navbar = ({mail}) => {
                   className={`
                     w-full px-6 py-3 flex items-center 
                     transition-colors text-gray-100
-                    ${activeTab === item.key 
-                      ? 'bg-blue-100 text-purple-500' 
-                      : 'hover:bg-blue-100 hover:text-purple-900 '}
+                    bg-blue-100 text-purple-500
+                      
                   `}
                 >
                   {item.icon}
