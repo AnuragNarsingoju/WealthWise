@@ -386,7 +386,7 @@ const Login = (log) => {
 
             const getCookie = Cookies.get('sessionToken');
             const findemail = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}findmail?email=${encodeURIComponent(email)}`,
+            `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
              {
               headers: {
                 Authorization: `Bearer ${getCookie}`,
@@ -395,9 +395,8 @@ const Login = (log) => {
               withCredentials: true,
             }
           );
-        
-          console.log(findemail.count);
-          findemail.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
+
+          findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
     
         
             
@@ -558,7 +557,7 @@ const Login = (log) => {
        try{
           const getCookie = Cookies.get('sessionToken');
           const findemail = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}findmail?email=${encodeURIComponent(user.email)}`,
+            `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(user.email)}`,
             {
               headers: {
                 Authorization: `Bearer ${getCookie}`,
@@ -567,8 +566,7 @@ const Login = (log) => {
               withCredentials: true,
             }
           );
-        console.log(findemail.count);
-        findemail.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
+        findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
       }catch(e){
         navigate('/foam', { replace: true })
       }
