@@ -556,7 +556,8 @@ const Login = (log) => {
       clear();
        try{
           const getCookie = Cookies.get('sessionToken');
-          console.log(email);
+          console.log("email of sigin : " ,email);
+          console.log("email of sigin2 : " ,user.email);
           const findemail = await axios.get(
             `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(email)}`,
             {
