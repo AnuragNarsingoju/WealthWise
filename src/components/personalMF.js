@@ -193,15 +193,34 @@ const InvestmentRecommendationForm = ({mail}) => {
                                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
                                     {field.icon}
                                 </div>
-                                <input
-                                    type={field.type}
-                                    name={field.name}
-                                    value={formData[field.name]}
-                                    onChange={handleChange}
-                                    placeholder={field.label}
-                                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
-                                    required
-                                />
+                               {field.type === 'select' ? (
+                                    <select
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleChange}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
+                                        required
+                                    >
+                                        <option value="" disabled>
+                                            {field.label}
+                                        </option>
+                                        {field.options.map((option, i) => (
+                                            <option key={i} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <input
+                                        type={field.type}
+                                        name={field.name}
+                                        value={formData[field.name]}
+                                        onChange={handleChange}
+                                        placeholder={field.label}
+                                        className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
+                                        required
+                                    />
+                                )}
                             </motion.div>
                         ))}
                     </div>
