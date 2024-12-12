@@ -668,13 +668,13 @@ const Login = (log) => {
       pauseOnHover
     />    
     <div className="min-h-screen relative bg-gradient-to-br from-blue-900 to-purple-900 flex flex-col items-center xl:items-end justify-center xl:pr-12  p-5 overflow-hidden">
-    <style>
-        {`
-          .grecaptcha-badge {
-            visibility: hidden;
-          }
-        `}
-      </style>
+    // <style>
+    //     {`
+    //       .grecaptcha-badge {
+    //         visibility: hidden;
+    //       }
+    //     `}
+    //   </style>
 
       <ReCAPTCHA
           ref={recaptchaRef} 
