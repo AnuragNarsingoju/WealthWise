@@ -183,6 +183,13 @@ const App = () => {
 
   return (
     <div className="App">
+      <style>
+        {`
+          .grecaptcha-badge {
+            visibility: ${location.pathname === "/login" ? "visible" : "hidden"};
+          }
+        `}
+      </style>
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
         <Route path="*" element={ <PageNotFound /> } />
