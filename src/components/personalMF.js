@@ -168,10 +168,12 @@ const InvestmentRecommendationForm = ({mail}) => {
                                 label: 'Total Savings (₹)', 
                                 icon: <Coins className="text-white/70" /> 
                             },
-                            { 
-                                name: 'user_investment_amount', 
-                                label: 'Monthly Investment (₹)', 
-                                icon: <Coins className="text-white/70" /> 
+                             { 
+                                name: 'user_risk_appetite', 
+                                label: 'Risk Appetite', 
+                                type: 'select',
+                                options: ['Low', 'Moderate', 'High'],
+                                icon: <TrendingUp className="text-white/70" /> 
                             }
                         ].map((field, index) => (
                             <motion.div 
