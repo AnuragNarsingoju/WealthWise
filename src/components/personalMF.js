@@ -135,6 +135,7 @@ const InvestmentRecommendationForm = ({mail}) => {
                     damping: 20
                 }}
                 className="w-full max-w-2xl bg-white/15 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20"
+		style={{marginTop:'90px'}}
             >
                 <motion.h2 
                     initial={{ opacity: 0, y: -20 }}
