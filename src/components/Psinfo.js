@@ -139,7 +139,7 @@ const Psinfo = ({ mail }) => {
 
   
   const nextStep = () => {
-    setFormStep(prev => Math.min(prev + 1, 7));
+    setFormStep(prev => Math.min(prev + 1, 5));
   };
 
   const prevStep = () => {
@@ -369,11 +369,6 @@ const Psinfo = ({ mail }) => {
                         placeholder="Enter your annual income"
                         value={formData.income}
                         onChange={handleInputChange}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            nextStep();
-                          }
-                        }} 
                         className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
                         style={{
                           borderColor: "#90CC65",
@@ -399,11 +394,6 @@ const Psinfo = ({ mail }) => {
                         name="age"
                         placeholder="Enter your age"
                         value={formData.age}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            nextStep();
-                          }
-                        }} 
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border-2 rounded-lg focus:outline-none focus:ring-2"
                         style={{
@@ -448,15 +438,15 @@ const Psinfo = ({ mail }) => {
                       </select>
                     </div>
                     <button 
-                      type="button" 
-                      onClick={nextStep} 
+                      type="button"
+                      onClick={nextStep}
                       className="w-full px-4 py-2 rounded-lg transition-colors"
                       style={{ 
-                        backgroundColor: "#90CC65",
+                        backgroundColor: (!formData.income || !formData.city || !formData.age) ? "#81C784" : "#66BB6A",
                         color: 'white',
-                        opacity: formData.income ? 1 : 0.5
+                        // opacity: formData.income ? 1 : 0.5
                       }}
-                      disabled={!formData.income}
+                      disabled={!formData.income || !formData.city || !formData.age}
                     >
                       Next
                     </button>
@@ -514,7 +504,8 @@ const Psinfo = ({ mail }) => {
                               type="button"
                               onClick={nextStep}
                               className="w-full px-4 py-2 rounded-lg transition-colors"
-                              style={{ backgroundColor: "#90CC65", color: 'white' }}
+                              style={{ backgroundColor: (!formData.housing || !formData.transportation) ? "#81C784" : "#66BB6A", color: 'white' }}
+                              disabled={!formData.housing || !formData.transportation}
                             >
                               Next
                             </button>
@@ -584,7 +575,8 @@ const Psinfo = ({ mail }) => {
                               type="button"
                               onClick={nextStep}
                               className="w-full px-4 py-2 rounded-lg transition-colors"
-                              style={{ backgroundColor: "#90CC65", color: 'white' }}
+                              style={{ backgroundColor: (!formData.foodAtHome || !formData.foodAwayFromHome || !formData.alcoholicBeverages) ? "#81C784" : "#66BB6A", color: 'white' }}
+                              disabled={!formData.foodAtHome || !formData.foodAwayFromHome || !formData.alcoholicBeverages}
                             >
                               Next
                             </button>
@@ -657,7 +649,10 @@ const Psinfo = ({ mail }) => {
                         type="button"
                         onClick={nextStep}
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                        style={{ backgroundColor: (!formData.healthcare || !formData.education || !formData.entertainment) ? "#81C784" : "#66BB6A", color: 'white' }}
+
+                        disabled={!formData.healthcare || !formData.education || !formData.entertainment}
+
                       >
                         Next
                       </button>
@@ -726,7 +721,10 @@ const Psinfo = ({ mail }) => {
                         type="button"
                         onClick={nextStep}
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                        style={{ backgroundColor: (!formData.personalCare || !formData.apparelAndServices || !formData.tobaccoProducts) ? "#81C784" : "#66BB6A", color: 'white' }}
+
+                        disabled={!formData.personalCare || !formData.apparelAndServices || !formData.tobaccoProducts}
+
                       >
                         Next
                       </button>
@@ -796,8 +794,11 @@ const Psinfo = ({ mail }) => {
                       <button
                         type="submit"
                         className="w-full px-4 py-2 rounded-lg transition-colors"
-                        style={{ backgroundColor: "#90CC65", color: 'white' }}
+                        style={{ backgroundColor: (!formData.cashContributions || !formData.savings || !formData.others) ? "#81C784" : "#66BB6A", color: 'white' }}
+
                         onClick={handleSubmit}
+                        disabled={!formData.cashContributions || !formData.savings || !formData.others}
+
                       >
                         Submit
                       </button>
