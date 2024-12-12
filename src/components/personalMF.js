@@ -149,21 +149,25 @@ const InvestmentRecommendationForm = ({mail}) => {
                     <div className="grid grid-cols-2 gap-4">
                         {[
                             { 
+                                type:"text",
                                 name: 'user_age', 
                                 label: 'Age', 
                                 icon: <Users className="text-white/70" /> 
                             },
                             { 
+                                type:"text",
                                 name: 'user_risk_appetite', 
                                 label: 'Risk Appetite', 
                                 icon: <TrendingUp className="text-white/70" /> 
                             },
                             { 
+                                type:"text",
                                 name: 'user_income', 
                                 label: 'Annual Income (₹)', 
                                 icon: <Wallet className="text-white/70" /> 
                             },
                             { 
+                                type:"text",
                                 name: 'user_savings', 
                                 label: 'Total Savings (₹)', 
                                 icon: <Coins className="text-white/70" /> 
@@ -190,7 +194,7 @@ const InvestmentRecommendationForm = ({mail}) => {
                                     {field.icon}
                                 </div>
                                 <input
-                                    type="text"
+                                    type={field.type}
                                     name={field.name}
                                     value={formData[field.name]}
                                     onChange={handleChange}
