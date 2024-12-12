@@ -12,6 +12,8 @@ import FileUpload from './components/FileUpload';
 import InvestmentRecommendationForm from './components/personalMF';
 import PageNotFound from './components/PageNotFound';
 import PersonalFDRecommendation from './components/personalFD';
+import ExpenseDate from './components/ExpenseDate';
+
 const App = () => {
   const [log, setLog] = useState(false);
   const [mail, setMail] = useState('');
@@ -199,6 +201,7 @@ const App = () => {
         <Route path="/fileupload" element={ <FileUpload mail={mail} /> } />
         <Route path="/personal-MF" element={ <InvestmentRecommendationForm mail={mail} /> } />
         <Route path="/fd-recommendations" element={ <PersonalFDRecommendation mail={mail} /> } />
+        <Route path="/expensedate" element={ <ExpenseDate mail={mail} /> } />
       </Routes>
     </div>
   );
