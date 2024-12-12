@@ -185,9 +185,9 @@ const App = () => {
     <div className="App">
       <style>
         {`
-          .grecaptcha-badge {
-            visibility: ${location.pathname === "/login" ? "visible" : "hidden"};
-          }
+            .grecaptcha-badge {
+            visibility: hidden;
+            }
         `}
       </style>
       <Routes>
