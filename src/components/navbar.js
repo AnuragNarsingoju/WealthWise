@@ -131,7 +131,7 @@ const Navbar = ({mail}) => {
                   key={item.key} 
                   onClick={() => {
                     setActiveTab(item.key);
-                    if (activeTab === 'home') {
+                    if (item.key === 'home') {
                      navigate('/home',{ replace: true });
                     }
                   }}
