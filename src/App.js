@@ -13,6 +13,7 @@ import InvestmentRecommendationForm from './components/personalMF';
 import PageNotFound from './components/PageNotFound';
 import PersonalFDRecommendation from './components/personalFD';
 import ExpenseDate from './components/ExpenseDate';
+import ExpenseTracker from './components/ExpenseTracker';
 
 const App = () => {
   const [log, setLog] = useState(false);
@@ -202,6 +203,8 @@ const App = () => {
         <Route path="/personal-MF" element={ <InvestmentRecommendationForm mail={mail} /> } />
         <Route path="/fd-recommendations" element={ <PersonalFDRecommendation mail={mail} /> } />
         <Route path="/expensedate" element={ <ExpenseDate mail={mail} /> } />
+        <Route path="/expenseTracker" element={ <ExpenseTracker mail={mail} /> } />
+
       </Routes>
     </div>
   );
