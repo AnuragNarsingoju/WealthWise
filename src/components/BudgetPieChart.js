@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
+
 import { 
     Wallet, 
     Home, 
@@ -15,48 +16,73 @@ import {
 
 const COLOR_PALETTE = [
     { 
-        fill: '#3C52F6', 
-        gradient: 'from-blue-500 to-blue-600',
-        icon: Wallet
-    },
-    { 
-        fill: '#10B981',
-        gradient: 'from-green-500 to-green-600',
-        icon: Home
-    },
-    { 
-        fill: 'yellow',
-        gradient: 'from-purple-500 to-purple-600',
-        icon: Car
-    },
-    { 
-        fill: '#F43F5E', 
-        gradient: 'from-pink-500 to-pink-600',
+        fill: '#FF5733',  
+        gradient: 'from-red-500 to-red-600',
         icon: Utensils
     },
     { 
-        fill: '#F59E0B',
+        fill: '#33FF57', 
+        gradient: 'from-green-500 to-green-600',
+        icon: ShoppingBag
+    },
+    { 
+        fill: '#3383FF', 
+        gradient: 'from-blue-500 to-blue-600',
+        icon: Home
+    },
+    { 
+        fill: '#FFC300', 
         gradient: 'from-yellow-500 to-yellow-600',
+        icon: Car
+    },
+    { 
+        fill: '#C70039', 
+        gradient: 'from-rose-500 to-rose-600',
         icon: Stethoscope
     },
     { 
-        fill: '#55D3EE',
+        fill: 'yellow',  
+        gradient: 'from-purple-500 to-purple-600',
+        icon: Wallet
+    },
+    { 
+        fill: '#1ABC9C',  
         gradient: 'from-teal-500 to-teal-600',
         icon: Lightbulb
     },
     { 
-        fill: '#DA66F1', 
-        gradient: 'from-indigo-500 to-indigo-600',
+        fill: '#F39C12', 
+        gradient: 'from-orange-500 to-orange-600',
         icon: BookOpen
     },
     { 
-        fill: '#EC4899',
-        gradient: 'from-rose-500 to-rose-600',
+        fill: '#2ECC71',  
+        gradient: 'from-emerald-500 to-emerald-600',
+        icon: MoreHorizontal
+    },
+    { 
+        fill: '#34495E',  
+        gradient: 'from-gray-500 to-gray-600',
+        icon: BookOpen
+    },
+    { 
+        fill: '#E67E22', 
+        gradient: 'from-orange-600 to-orange-700',
         icon: ShoppingBag
     },
     { 
-        fill: '#4BC6F1', 
-        gradient: 'from-gray-500 to-gray-600',
+        fill: '#7F8C8D',  
+        gradient: 'from-gray-400 to-gray-500',
+        icon: MoreHorizontal
+    },
+    { 
+        fill: '#BDC3C7',  
+        gradient: 'from-gray-200 to-gray-300',
+        icon: MoreHorizontal
+    },
+    { 
+        fill: 'pink',  
+        gradient: 'from-blue-gray-500 to-blue-gray-600',
         icon: MoreHorizontal
     }
 ];
@@ -79,27 +105,35 @@ const CATEGORY_DESCRIPTIONS = {
 };
 
 
-const defaultExpenses = [
-    { name: 'Food at Home', value: 10000 },
-    { name: 'Food Away From Home', value: 8500 },
-    { name: 'Housing', value: 11000 },
-    { name: 'Transportation', value: 6000 },
-    { name: 'Healthcare', value: 5000 },
-    { name: 'Personal Finance', value: 3000 },
-    { name: 'Savings', value: 1500 },
-    { name: 'Entertainment', value: 2000 },
-    { name: 'Personal Care', value: 500 },
-    { name: 'Education', value: 450 },
-    { name: 'Apparel and Services', value: 700 },
-    { name: 'Tobacco Products', value: 700 },
-    { name: 'Alcoholic Beverages', value: 700 },
-    { name: 'Other Expenses', value: 700 },
-];
+const categoryMapping = {
+    foodAtHome: "Food at Home",
+    foodAwayFromHome: "Food Away From Home",
+    housing: "Housing",
+    transportation: "Transportation",
+    healthcare: "Healthcare",
+    personalfinance: "Personal Finance",
+    savings: "Savings",
+    entertainment: "Entertainment",
+    personalCare: "Personal Care",
+    education: "Education",
+    apparelAndServices: "Apparel and Services",
+    tobaccoProducts: "Tobacco Products",
+    alcoholicBeverages: "Alcoholic Beverages",
+    others: "Other Expenses",
+  };
 
 const BudgetPieChart = ({ 
-    expenses = defaultExpenses,
-    title = "Monthly Budget Breakdown"
+    expenses ,
+    title = "Monthly Budget Breakdown",
+    data
 }) => {
+    const defaultExpenses = Object.keys(categoryMapping).map((key) => ({
+        name: categoryMapping[key],
+        value: parseFloat(data[key]) || 0,
+      }));
+      expenses= defaultExpenses;
+    console.log("data pie chart : ",data);
+
     const [activeIndex, setActiveIndex] = useState(null);
 
     const processedData = useMemo(() => {
