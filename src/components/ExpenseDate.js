@@ -3,11 +3,14 @@ import Navbar from './navbar';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { PlusIcon } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
 const ExpenseDate = ({ mail }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [count, setCount] = useState();
+
 
   const fetchData = async () => {
     try {
@@ -23,9 +26,18 @@ const ExpenseDate = ({ mail }) => {
           withCredentials: true,
         }
       );
+      const findemail = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}findmail?email=${encodeURIComponent(mail)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
 
-
-
+      setCount(findemail.count)
       setData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -39,6 +51,11 @@ const ExpenseDate = ({ mail }) => {
       fetchData();
     }
   }, [mail]);
+
+  // Handle routing to foam when plus button is clicked
+  const handlePlusClick = () => {
+    navigate('/foam');
+  };
 
   // Loading state
   if (isLoading) {
@@ -64,6 +81,7 @@ const ExpenseDate = ({ mail }) => {
       </>
     );
   }
+
   return (
     <>
       <Navbar />
@@ -77,6 +95,7 @@ const ExpenseDate = ({ mail }) => {
         flex 
         items-center 
         justify-center
+        relative
       ">
         <div 
           className="
@@ -125,7 +144,6 @@ const ExpenseDate = ({ mail }) => {
                   "
                   onClick={() => {navigate('/expenseTracker',{state: {data: dateItem, mail: mail}}) }}
                 >
-                  {/* Rest of your existing render code remains the same */}
                   <div className="
                     text-4xl 
                     md:text-5xl 
@@ -178,6 +196,32 @@ const ExpenseDate = ({ mail }) => {
             })}
           </div>
         </div>
+
+        {count === 0 && (
+          <button 
+            onClick={handlePlusClick}
+            className="
+              fixed 
+              bottom-8 
+              right-8 
+              bg-blue-500 
+              text-white 
+              rounded-full 
+              w-16 
+              h-16 
+              flex 
+              items-center 
+              justify-center 
+              shadow-2xl 
+              hover:bg-blue-600 
+              transition-all 
+              duration-300 
+              z-50
+            "
+          >
+            <PlusIcon size={32} />
+          </button>
+        )}
       </div>
     </>
   );
