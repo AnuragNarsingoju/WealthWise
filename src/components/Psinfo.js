@@ -438,19 +438,28 @@ const Psinfo = ({ mail }) => {
                         <option value="rural">Village</option>
                       </select>
                     </div>
-                    <button 
-                      type="button"
-                      onClick={nextStep}
-                      className="w-full px-4 py-2 rounded-lg transition-colors"
-                      style={{ 
-                        backgroundColor: (!formData.income || !formData.city || !formData.age) ? "#A5D6A7" : "#66BB6A",
-                        color: 'white',
-                        // opacity: formData.income ? 1 : 0.5
-                      }}
-                      disabled={!formData.income || !formData.city || !formData.age}
-                    >
-                      Next
-                    </button>
+                    <div className="flex space-x-2">
+                      <button
+                        type="button"
+                        onClick={() => navigate('/home')}
+                        className="w-full px-4 py-2 border-2 rounded-lg transition-colors"
+                        style={{ borderColor: "#90CC65", color: colors.text, ':hover': { backgroundColor: "#90CC65" } }}
+                      >
+                        Skip
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={nextStep}
+                        className="w-full px-4 py-2 rounded-lg transition-colors"
+                        style={{ 
+                          backgroundColor: (!formData.income || !formData.city || !formData.age) ? "#A5D6A7" : "#66BB6A",
+                          color: 'white',
+                        }}
+                        disabled={!formData.income || !formData.city || !formData.age}
+                      >
+                        Next
+                      </button>
+                    </div>
                   </motion.div>
                 )}
 
