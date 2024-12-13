@@ -430,11 +430,12 @@ const Psinfo = ({ mail }) => {
                           }
                         }}
                       >
+
                         <option value="">Select city type</option>
-                        <option value="metropolitan">Metropolitan</option>
-                        <option value="city">City</option>
-                        <option value="town">Town</option>
-                        <option value="village">Village</option>
+                        <option value="metro">Metropolitan</option>
+                        <option value="tier1">City</option>
+                        <option value="tier2">Town</option>
+                        <option value="rural">Village</option>
                       </select>
                     </div>
                     <button 
