@@ -89,17 +89,10 @@ const ExpenseDate = ({ mail }) => {
           "
           style={{ marginTop: data.length > 6 ? '90px' : '0px' }}
         >
-          <div className="
-            grid 
-            grid-cols-2 
-            sm:grid-cols-3 
-            md:grid-cols-4 
-            lg:grid-cols-5 
-            xl:grid-cols-6 
-            gap-4 
-            md:gap-6 
-            lg:gap-8
-          ">
+          <div className={data.length < 6 && window.innerWidth > 600
+          ? "flex flex-row justify-center items-center gap-4 md:gap-6 lg:gap-8"
+          : "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 lg:gap-8"
+        }>
             {data.map((dateItem, index) => {
               const date = new Date(dateItem.date.slice(0,10));         
               return (
