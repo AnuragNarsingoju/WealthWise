@@ -3,25 +3,38 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
 
-const ExpenseComparison = () => {
+
+const ExpenseComparison = ({data}) => {
+
+  console.log("ExpenseComparison : ",data )
+
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const expenses = [
-    { category: 'Food at Home', amount: 10000 },
-    { category: 'Food Away From Home', amount: 8500 },
-    { category: 'Housing', amount: 11000 },
-    { category: 'Transportation', amount: 6000 },
-    { category: 'Healthcare', amount: 5000 },
-    { category: 'Personal Finance', amount: 3000 },
-    { category: 'Savings', amount: 1500 },
-    { category: 'Entertainment', amount: 2000 },
-    { category: 'Personal Care', amount: 5040 },
-    { category: 'Education', amount: 4540 },
-    { category: 'Apparel and Services', amount: 7040 },
-    { category: 'Tobacco Products', amount: 7540 },
-    { category: 'Alcoholic Beverages', amount: 7040 },
-    { category: 'Other Expenses', amount: 7020 },
-  ];
+  const categoryMapping = {
+    foodAtHome: "Food at Home",
+    foodAwayFromHome: "Food Away From Home",
+    housing: "Housing",
+    transportation: "Transportation",
+    healthcare: "Healthcare",
+    personalfinance: "Personal Finance",
+    savings: "Savings",
+    entertainment: "Entertainment",
+    personalCare: "Personal Care",
+    education: "Education",
+    apparelAndServices: "Apparel and Services",
+    tobaccoProducts: "Tobacco Products",
+    alcoholicBeverages: "Alcoholic Beverages",
+    others: "Other Expenses",
+  };
+
+
+  const expenses = Object.keys(categoryMapping).map((key) => ({
+    category: categoryMapping[key],
+    amount: parseFloat(data[key]) || 0,
+  }));
+
+
+
 
   const averageExpenses = {
     "Food at Home": 9985,
@@ -40,12 +53,21 @@ const ExpenseComparison = () => {
     "Other Expenses": 700, 
 };
 
+// const averageExpenses = Object.entries(categoryMapping).reduce((acc, [key, category]) => {
+//   acc[category] = parseFloat(data[key]) || 0; 
+//   return acc;
+// }, {});
+
+
+
+  console.log("averageExpenses : ",averageExpenses)
+
   const userExpensesByCategory = {};
   expenses.forEach(expense => {
     userExpensesByCategory[expense.category] = (userExpensesByCategory[expense.category] || 0) + expense.amount;
   });
 
-  const data = Object.keys(averageExpenses).map(category => ({
+  const data1 = Object.keys(averageExpenses).map(category => ({
     category,
     'Your Expenses': userExpensesByCategory[category] || 0,
     'Average Expenses': averageExpenses[category],
@@ -56,7 +78,7 @@ const ExpenseComparison = () => {
     if (window.innerWidth < 600) {
       return `${(value / 1000).toFixed(1)}K`;
     } else {
-      return `$${value.toLocaleString()}`;
+      return `Rs.${value.toLocaleString()}`;
     }
   };
   
@@ -98,12 +120,12 @@ const ExpenseComparison = () => {
           <div className="md:col-span-2 min-h-[500px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={data}
+                data={data1}
                 margin={{ top: 20, right: 10, left: 10, bottom: 40 }} 
                 onMouseMove={(state) => {
                   if (state.isTooltipActive) {
                     const categoryIndex = state.activeTooltipIndex;
-                    setSelectedCategory(data[categoryIndex]?.category);
+                    setSelectedCategory(data1[categoryIndex]?.category);
                   }
                 }}
                 onMouseLeave={() => setSelectedCategory(null)}
@@ -178,7 +200,7 @@ const ExpenseComparison = () => {
               Key Insights
             </motion.h2>
             <AnimatePresence>
-              {data.map((item, index) => {
+              {data1.map((item, index) => {
                 const difference = item['Your Expenses'] - item['Average Expenses'];
                 const percentDiff = ((difference / item['Average Expenses']) * 100).toFixed(1);
                 const isHigher = difference > 0;
