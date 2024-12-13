@@ -17,7 +17,7 @@ const ExpenseDate = ({ mail }) => {
       const getCookie = Cookies.get('sessionToken');
       
       if (!getCookie) {
-        throw new Error('No session token found');
+        navigate('/');
       }
 
       const [responseData, findEmailResponse] = await Promise.all([
