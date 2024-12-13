@@ -37,7 +37,7 @@ const ExpenseDate = ({ mail }) => {
         }
       );
 
-      setCount(findemail.count)
+      setCount(findemail.data.count)
       setData(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -61,7 +61,7 @@ const ExpenseDate = ({ mail }) => {
   if (isLoading) {
     return (
       <>
-        <Navbar />
+         <Navbar mail={mail}/>
         <div className="
           min-h-screen 
           w-full 
@@ -84,7 +84,7 @@ const ExpenseDate = ({ mail }) => {
 
   return (
     <>
-      <Navbar />
+       <Navbar mail={mail}/>
       <div className="
         min-h-screen 
         w-full 
