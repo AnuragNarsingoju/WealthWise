@@ -3,46 +3,49 @@ import Navbar from './navbar';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { PlusIcon } from 'lucide-react'; // Assuming you're using lucide-react for icons
+import { PlusIcon } from 'lucide-react';
 
 const ExpenseDate = ({ mail }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [count, setCount] = useState(0); 
   const navigate = useNavigate();
-  const [count, setCount] = useState();
-
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const getCookie = Cookies.get('sessionToken');
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}getData`, 
-        { 
+      
+      if (!getCookie) {
+        throw new Error('No session token found');
+      }
+
+      const [responseData, findEmailResponse] = await Promise.all([
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}getData`, { 
           params: { "email": mail },
           headers: {
             Authorization: `Bearer ${getCookie}`,
             'Content-Type': 'application/json',
           },
           withCredentials: true,
-        }
-      );
-      const findemail = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}findmail?email=${encodeURIComponent(mail)}`,
-        {
+        }),
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}findmail?email=${encodeURIComponent(mail)}`, {
           headers: {
             Authorization: `Bearer ${getCookie}`,
             'Content-Type': 'application/json',
           },
           withCredentials: true,
-        }
-      );
+        })
+      ]);
 
-      setCount(findemail.data.count)
-      setData(response.data);
+      setCount(findEmailResponse.data.count || 0);
+      setData(responseData.data || []);
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsLoading(false);
+      setCount(0);
+      setData([]);
     }
   };
 
@@ -52,16 +55,14 @@ const ExpenseDate = ({ mail }) => {
     }
   }, [mail]);
 
-  // Handle routing to foam when plus button is clicked
   const handlePlusClick = () => {
     navigate('/foam');
   };
 
-  // Loading state
   if (isLoading) {
     return (
       <>
-         <Navbar mail={mail}/>
+        <Navbar mail={mail}/>
         <div className="
           min-h-screen 
           w-full 
@@ -84,7 +85,7 @@ const ExpenseDate = ({ mail }) => {
 
   return (
     <>
-       <Navbar mail={mail}/>
+      <Navbar mail={mail}/>
       <div className="
         min-h-screen 
         w-full 
@@ -95,6 +96,7 @@ const ExpenseDate = ({ mail }) => {
         flex 
         items-center 
         justify-center
+        relative
       ">
         <div 
           className="
