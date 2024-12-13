@@ -5,7 +5,7 @@ import BudgetPieChart from "./BudgetPieChart";
 import { useLocation } from 'react-router-dom';
 
 
-const ExpenseTracker = ({mail}) => {
+const ExpenseTracker = () => {
     const location = useLocation();
     const { data, mail } = location.state || {}; 
 
