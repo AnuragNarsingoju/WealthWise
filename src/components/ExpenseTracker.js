@@ -5,7 +5,7 @@ import BudgetPieChart from "./BudgetPieChart";
 import { useLocation } from 'react-router-dom';
 
 
-const ExpenseTracker = () => {
+const ExpenseTracker = ({mail}) => {
     const location = useLocation();
     const { data, mail } = location.state || {}; 
 
@@ -14,7 +14,7 @@ const ExpenseTracker = () => {
         <div className="relative bg-gradient-to-br 
                 from-blue-600/90 
                 to-purple-600/90 
-                "><Navbar/></div>
+                "> <Navbar mail={mail}/></div>
         
         <div className="
             min-h-screen 
