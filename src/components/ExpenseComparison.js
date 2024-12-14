@@ -39,8 +39,7 @@ const ExpenseComparison = ({ data, mail }) => {
           withCredentials: true,
         }
       );
-      console.log(resdata.data)
-      setAnalysisdata(resdata.data);
+      setAnalysisdata(resdata.data.resopnse);
 
       // Set average expenses after fetching analysis data
       const report = resdata.data.report.expensesComparison;
