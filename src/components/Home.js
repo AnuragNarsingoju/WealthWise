@@ -211,11 +211,11 @@ const Home = ({ mail }) => {
           {
             type: 'Fixed Deposits',
             items: [
-              { name: 'ICICI Bank', code: 'ICICI FD', return: 7.5, icon: '₹', link : 'https://www.etmoney.com/fixed-deposit/icici-bank-fd-rates/5', image: 'icici_gg55gq' },
-              { name: 'HDFC Bank', code: 'HDFC FD', return: 7.2, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/hdfc-bank-fd-rates/4', image: 'hdfc_jwnres' },
-              { name: 'RBL Bank', code: 'RBL FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/rbl-bank-fd-rates/16', image: 'rbl_bi4ksw' },
-              { name: 'Bank of Baroda', code: 'BOB FD', return: 7.9, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bank-of-baroda-fd-rates/6', image: 'bob_dkr6sm' },
-              { name: 'Bajaj Finance Ltd.', code: 'Bajaj FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bajaj-finance-ltd-fd-rates/1', image: 'bajaj_lb6zg6' },
+              { name: 'ICICI Bank', code: 'ICICI FD', return: 7.5, icon: '₹', link : 'https://www.etmoney.com/fixed-deposit/icici-bank-fd-rates/5', image: 'icici_yzot5k' },
+              { name: 'HDFC Bank', code: 'HDFC FD', return: 7.2, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/hdfc-bank-fd-rates/4', image: 'hdfv_jl9z3y' },
+              { name: 'RBL Bank', code: 'RBL FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/rbl-bank-fd-rates/16', image: 'bank_RBL_u7p6jc' },
+              { name: 'Bank of Baroda', code: 'BOB FD', return: 7.9, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bank-of-baroda-fd-rates/6', image: 'bob-Photoroom_oqoj67' },
+              { name: 'Bajaj Finance Ltd.', code: 'Bajaj FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bajaj-finance-ltd-fd-rates/1', image: 'fd_partner_bajaj_new_uiiysp' },
               { name: 'State Bank of India', code: 'SBI FD', return: 5.6, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/sbi-bank-fd-rates/2', image: 'sbi_wugpsu' }
             ]
           },
@@ -225,7 +225,7 @@ const Home = ({ mail }) => {
               { name: 'HDFC Bluechip', code: 'Direct-Growth', return: 15.82, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622', image: 'hdfc_mf_ixtwmi' },
               { name: 'Aditya Birla Sun Life', code: 'Direct-Growth', return: 9.58, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477', image: 'aditya_birla_arlswk' },
               { name: 'Quant Multi Asset', code: 'Direct-Growth', return: 16.25, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918', image: 'quant_hcnfdx' },
-              { name: 'ICICI Prudential', code: 'Direct-Growth', return: 18.3, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416', image: 'icici_gg55gq' },
+              { name: 'ICICI Prudential', code: 'Direct-Growth', return: 18.3, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416', image: 'icici_yzot5k' },
               { name: 'HSBC Value Fund', code: 'Direct-Growth', return: 21.28, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hsbc-value-fund-direct-growth/15836', image: 'hsbc_ffoui0' },
               { name: 'UTI Short Duration', code: 'Direct-Growth', return: 7.42, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/uti-short-duration-direct-growth/16611', image: 'uti_n4psc1' },
               { name: 'LIC Arbitrage Fund', code: 'Direct-Growth', return: 5.71, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/lic-mf-arbitrage-fund-direct-growth/39181', image: 'lic_rp71bg' },
@@ -436,10 +436,10 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.icon}{investment.price} )</p>
                           </div>
                       </div>
-                      <AdvancedImage 
-                            className="w-11 h-11 rounded-full object-contain" 
-                            cldImg={img} 
-                          />
+                      <AdvancedImage
+                        className="w-11 h-11 rounded-full object-cover"
+                        cldImg={img}
+                      />
                   </div>
               </div>; }) }
               </div>
