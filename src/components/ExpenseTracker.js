@@ -35,7 +35,7 @@ const ExpenseTracker = () => {
             justify-center
             "
         >
-            <ExpenseComparison data={data} />
+            <ExpenseComparison data={data} mail={mail} props ={srtrecommendation}/>
             <BudgetPieChart data={data}/>
                 {recommendation && (
                     <motion.div 
