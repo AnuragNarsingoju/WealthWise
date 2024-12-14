@@ -3,6 +3,7 @@ import Navbar from "./navbar";
 import ExpenseComparison from "./ExpenseComparison";
 import BudgetPieChart from "./BudgetPieChart";
 import { useLocation } from 'react-router-dom';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 
 const ExpenseTracker = () => {
