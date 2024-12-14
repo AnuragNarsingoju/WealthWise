@@ -16,72 +16,72 @@ import {
 
 const COLOR_PALETTE = [
     { 
-        fill: '#FF5733',  
+        fill: '#FFD700',  
         gradient: 'from-red-500 to-red-600',
         icon: Utensils
     },
     { 
-        fill: '#33FF57', 
+        fill: '#E08B00', 
         gradient: 'from-green-500 to-green-600',
         icon: ShoppingBag
     },
     { 
-        fill: '#3383FF', 
+        fill: '#00A8E7', 
         gradient: 'from-blue-500 to-blue-600',
         icon: Home
     },
     { 
-        fill: '#FFC300', 
+        fill: '#0073DC', 
         gradient: 'from-yellow-500 to-yellow-600',
         icon: Car
     },
     { 
-        fill: '#C70039', 
+        fill: '#EF6D6E', 
         gradient: 'from-rose-500 to-rose-600',
         icon: Stethoscope
     },
     { 
-        fill: 'yellow',  
+        fill: '#A680E7',  
         gradient: 'from-purple-500 to-purple-600',
         icon: Wallet
     },
     { 
-        fill: '#1ABC9C',  
+        fill: '#B06D00',  
         gradient: 'from-teal-500 to-teal-600',
         icon: Lightbulb
     },
     { 
-        fill: '#F39C12', 
+        fill: '#CDBBFF', 
         gradient: 'from-orange-500 to-orange-600',
         icon: BookOpen
     },
     { 
-        fill: '#2ECC71',  
+        fill: '#EC3B91',  
         gradient: 'from-emerald-500 to-emerald-600',
         icon: MoreHorizontal
     },
     { 
-        fill: '#34495E',  
+        fill: '#FFA9C6',  
         gradient: 'from-gray-500 to-gray-600',
         icon: BookOpen
     },
     { 
-        fill: '#E67E22', 
+        fill: '#FF9875', 
         gradient: 'from-orange-600 to-orange-700',
         icon: ShoppingBag
     },
     { 
-        fill: '#7F8C8D',  
+        fill: '#CB763C',  
         gradient: 'from-gray-400 to-gray-500',
         icon: MoreHorizontal
     },
     { 
-        fill: '#BDC3C7',  
+        fill: '#A2D39C',  
         gradient: 'from-gray-200 to-gray-300',
         icon: MoreHorizontal
     },
     { 
-        fill: 'pink',  
+        fill: '#8FA3BF',  
         gradient: 'from-blue-gray-500 to-blue-gray-600',
         icon: MoreHorizontal
     }
