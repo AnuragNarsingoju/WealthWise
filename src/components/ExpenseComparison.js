@@ -7,7 +7,7 @@ import Navbar from './navbar';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const ExpenseComparison = ({ data, mail }) => {
+const ExpenseComparison = ({ data, mail,props }) => {
   const [analysisdata, setAnalysisdata] = useState(null);
   const [averageExpenses, setAverageExpenses] = useState({});
   const [userExpenses, setUserExpenses] = useState({});
@@ -40,6 +40,7 @@ const ExpenseComparison = ({ data, mail }) => {
         }
       );
       setAnalysisdata(resdata.data.resopnse);
+      props(resdata.data.resopnse);
 
       // Set average expenses after fetching analysis data
       const report = resdata.data.resopnse.report.expensesComparison;
