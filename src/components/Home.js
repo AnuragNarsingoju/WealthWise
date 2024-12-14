@@ -286,8 +286,10 @@ const Home = ({ mail }) => {
                                 {button.icon}&nbsp;&nbsp;{button.name}
                             </span>
                         </span>
-                        <div className="w-full text-white text-xs text-center opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300 z-20 absolute bottom-0 left-0 pb-2">
-                            {button.title}
+                        <div 
+                          className="w-full text-white text-xs text-center opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300 z-20 absolute bottom-0 left-0 pb-2 hidden lg:block"
+                        >
+                          {button.title}
                         </div>
                     </button>
                 </div>
