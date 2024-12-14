@@ -29,6 +29,7 @@ const ExpenseComparison = ({ data, mail }) => {
           age: data.age,
           cityType: data.city,
           userExpenses: expenses,
+          data:data
         },
         {
           headers: {
