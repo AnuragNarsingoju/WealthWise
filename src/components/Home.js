@@ -389,7 +389,10 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.return}% )</p>
                             </div>
                         </div>
-                        <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
+                          <AdvancedImage 
+                            className="w-11 h-11 rounded-full object-cover" 
+                            cldImg={img} 
+                          />
                         
                       </div>
                     </div>
@@ -411,7 +414,10 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.return}% )</p>
                             </div>
                         </div>
-                        <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
+                        <AdvancedImage 
+                            className="w-11 h-11 rounded-full object-cover" 
+                            cldImg={img} 
+                          />
                       </div>
                     </div>
                   ) : <div 
@@ -430,7 +436,10 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.icon}{investment.price} )</p>
                           </div>
                       </div>
-                      <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
+                      <AdvancedImage 
+                            className="w-11 h-11 rounded-full object-contain" 
+                            cldImg={img} 
+                          />
                   </div>
               </div>; }) }
               </div>
