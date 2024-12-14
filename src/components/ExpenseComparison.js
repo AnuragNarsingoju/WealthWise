@@ -117,7 +117,7 @@ const ExpenseComparison = ({data}) => {
         {/* Content */}
         <div className="grid md:grid-cols-3 gap-8 p-8">
           {/* Bar Chart */}
-          <div className="md:col-span-2 min-h-[500px]">
+           <div className="md:col-span-2 min-h-[450px] max-h-[740px] flex items-center justify-center md:mt-[220px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={data1}
