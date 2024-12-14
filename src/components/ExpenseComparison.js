@@ -42,7 +42,7 @@ const ExpenseComparison = ({ data, mail }) => {
       setAnalysisdata(resdata.data.resopnse);
 
       // Set average expenses after fetching analysis data
-      const report = resdata.data.report.expensesComparison;
+      const report = resdata.data.resopnse.report.expensesComparison;
       setAverageExpenses({
         "Food at Home": report.foodAtHome.benchmark,
         "Food Away From Home": report.foodAwayFromHome.benchmark,
