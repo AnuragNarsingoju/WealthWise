@@ -4,6 +4,10 @@ import { Send } from 'lucide-react';
 import 'font-awesome/css/font-awesome.min.css';
 import Navbar from './navbar.js'
 import { useNavigate } from 'react-router-dom';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react'
 
 
 
@@ -79,12 +83,14 @@ async function fetchYouTubeVideoDetails(link) {
 
 
 const Home = ({ mail }) => {
+  const cld = new Cloudinary({ cloud: { cloudName: 'djlgmbop9' } });
 
-
-   const [videoDetails, setVideoDetails] = useState([]);
+  const [videoDetails, setVideoDetails] = useState([]);
 
   const videoLinks = [
+    'https://www.youtube.com/watch?v=lqk2LppTl84&t=228s',
     'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
+    'https://youtu.be/Q0uXGQu55GM?si=B15Ob4M-WdtP0Sag',
     'https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA',
     'https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b',
     'https://youtu.be/7jvTrxh0kGc?si=xOKMXSjHdb-oaw-X',
@@ -191,32 +197,38 @@ const Home = ({ mail }) => {
         {
             type: 'Stocks',
             items: [
-              { name: 'Reliance Industries', code: 'RELIANCE', return: 12.5, icon: '₹' },
-              { name: 'HDFC Bank', code: 'HDFCBANK', return: 15.3, icon: '₹' },
-              { name: 'TCS', code: 'TCS', return: 10.2, icon: '₹' },
-              { name: 'Infosys', code: 'INFY', return: 11.8, icon: '₹' },
-              { name: 'ICICI Bank', code: 'ICICIBANK', return: 13.6, icon: '₹' },
-              { name: 'TCS', code: 'TCS', return: 10.2, icon: '₹' },
-              { name: 'Infosys', code: 'INFY', return: 11.8, icon: '₹' },
-              { name: 'ICICI Bank', code: 'ICICIBANK', return: 13.6, icon: '₹' }
+              { name: 'ITC Ltd.', code: 'ITC', price: 470, icon: '₹', link: 'https://www.etmoney.com/stocks/itc-ltd/1353', image: 'itc_ktdtqa' },
+              { name: 'Ramco Cements Ltd', code: 'RAMCOCEM', price: 1040.70, icon: '₹', link: 'https://www.etmoney.com/stocks/the-ramco-cements-ltd/2753', image: 'ramco_tcob7p' },
+              { name: 'Lorenzini Apparels Ltd', code: 'LAL', price: 24.21, icon: '₹', link: 'https://www.etmoney.com/stocks/lorenzini-apparels-ltd/4352', image: 'Lorenzini_d2xax6' },
+              { name: 'Tata Power Company', code: 'TATAPOWER', price: 428.45, icon: '₹', link: 'https://www.etmoney.com/stocks/tata-power-company-ltd/2418', image: 'tata_bdich9' },
+              { name: 'Darshan Orna Ltd', code: 'DARSHANORNA', price: 6.05, icon: '₹', link: 'https://www.moneycontrol.com/india/stockpricequote/diamond-cuttingjewelleryprecious-metals/darshanorna/DO04', image: 'darshan_nhfscr' },
+              { name: 'Titan Company Ltd', code: 'TITAN', price: 3508.85, icon: '₹', link: 'https://www.etmoney.com/stocks/titan-company-ltd/55', image: 'titan_arreis' },
+              { name: 'Trent Ltd', code: 'TRENT', price: 7000.25, icon: '₹', link: 'https://www.etmoney.com/stocks/trent-ltd/844', image: 'trent_djzlq8' },
+              { name: 'Bosch Ltd', code: 'BOSCHLTD', price: 36469.60, icon: '₹', link: 'https://www.etmoney.com/stocks/bosch-ltd/1150', image: 'bosch_ilhkn0' }
               
             ]
           },
           {
             type: 'Fixed Deposits',
             items: [
-              { name: 'SBI FD', code: 'SBIFD', return: 7.5, icon: '₹' },
-              { name: 'HDFC FD', code: 'HDFCFD', return: 7.2, icon: '₹' },
-              { name: 'ICICI FD', code: 'ICICFD', return: 7.8, icon: '₹' }
+              { name: 'ICICI Bank', code: 'ICICI FD', return: 7.5, icon: '₹', link : 'https://www.etmoney.com/fixed-deposit/icici-bank-fd-rates/5', image: 'icici_gg55gq' },
+              { name: 'HDFC Bank', code: 'HDFC FD', return: 7.2, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/hdfc-bank-fd-rates/4', image: 'hdfc_jwnres' },
+              { name: 'RBL Bank', code: 'RBL FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/rbl-bank-fd-rates/16', image: 'rbl_bi4ksw' },
+              { name: 'Bank of Baroda', code: 'BOB FD', return: 7.9, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bank-of-baroda-fd-rates/6', image: 'bob_dkr6sm' },
+              { name: 'Bajaj Finance Ltd.', code: 'Bajaj FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bajaj-finance-ltd-fd-rates/1', image: 'bajaj_lb6zg6' },
+              { name: 'State Bank of India', code: 'SBI FD', return: 5.6, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/sbi-bank-fd-rates/2', image: 'sbi_wugpsu' }
             ]
           },
           {
             type: 'Mutual Funds',
             items: [
-              { name: 'HDFC Bluechip', code: 'HDFCBLUE', return: 16.5, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622' },
-              { name: 'Axis Midcap', code: 'AXISMID', return: 18.3, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477' },
-              { name: 'SBI Largecap', code: 'SBILARGE', return: 15.2, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918' },
-              { name: 'ICICI Prudential', code: 'ICICIPRu', return: 17.1, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416' }
+              { name: 'HDFC Bluechip', code: 'Direct-Growth', return: 15.82, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622', image: 'hdfc_mf_ixtwmi' },
+              { name: 'Aditya Birla Sun Life', code: 'Direct-Growth', return: 9.58, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477', image: 'aditya_birla_arlswk' },
+              { name: 'Quant Multi Asset', code: 'Direct-Growth', return: 16.25, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918', image: 'quant_hcnfdx' },
+              { name: 'ICICI Prudential', code: 'Direct-Growth', return: 18.3, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416', image: 'icici_gg55gq' },
+              { name: 'HSBC Value Fund', code: 'Direct-Growth', return: 21.28, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/hsbc-value-fund-direct-growth/15836', image: 'hsbc_ffoui0' },
+              { name: 'UTI Short Duration', code: 'Direct-Growth', return: 7.42, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/uti-short-duration-direct-growth/16611', image: 'uti_n4psc1' },
+              { name: 'LIC Arbitrage Fund', code: 'Direct-Growth', return: 5.71, icon: '₹',link : 'https://www.etmoney.com/mutual-funds/lic-mf-arbitrage-fund-direct-growth/39181', image: 'lic_rp71bg' },
             ]
           },
           {
@@ -226,22 +238,24 @@ const Home = ({ mail }) => {
               { 
                 id : 0,
                 details : ('https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP')
-              },
-              { 
+              },{ 
                 id : 1,
                 details : ('https://youtu.be/7c4ZJ-ljRMw?si=RfoeTdPrI1xqrSTA')
-              },
-              {
+              },{
                 id : 2,
                 details : ('https://youtu.be/-FP7IVNN4bI?si=tF6yy1r7ZsyAxd5b')
-              },
-              { 
+              },{ 
                 id : 3,
                 details : ('https://youtu.be/7jvTrxh0kGc?si=xOKMXSjHdb-oaw-X')
-              },
-              {
+              },{
                 id : 4,
                 details : ('https://youtu.be/raW2FIPnqIc?si=yGUBkLsnZgYuByhu')
+              },{
+                id : 5,
+                details: ('https://www.youtube.com/watch?v=lqk2LppTl84&t=228s')
+              },{
+                id : 6,
+                details: ('https://youtu.be/Q0uXGQu55GM?si=B15Ob4M-WdtP0Sag')
               }
             ]
           }
@@ -328,6 +342,11 @@ const Home = ({ mail }) => {
                 {category.items.map((investment, index) => {
 
                   const bgIntensity = Math.max(700 - (index * 50), 800);
+
+                  const img = cld.image(investment.image)
+                    .format('auto')
+                    .quality('auto')
+                    .resize(auto().gravity(autoGravity()).width(500).height(500));
                   
                   return category.type === 'Investment Videos' && videoDetails && videoDetails[investment.id] ? (
                       <div
@@ -354,6 +373,28 @@ const Home = ({ mail }) => {
                         </div>
                       </div>
                     ) : category.type === 'Mutual Funds' ?  (
+                      <div 
+                      key={investment.code || investment.name} 
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                        transform transition-all duration-300 
+                        hover:scale-105 hover:shadow-lg
+                        scroll-snap-align: start;`}
+                        onClick={() => window.open(investment.link, '_blank')}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                            <h4 className="font-bold text-lg">{investment.name}</h4>
+                            <div className="flex space-x-2">
+                              <p className="text-sm text-gray-400">{investment.code}</p>
+                              <p className="text-sm text-gray-400">( {investment.return}% )</p>
+                            </div>
+                        </div>
+                        <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
+                        
+                      </div>
+                    </div>
+                  )
+                 : category.type === 'Fixed Deposits' ?  (
                     <div 
                       key={investment.code || investment.name} 
                       className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
@@ -362,32 +403,36 @@ const Home = ({ mail }) => {
                         scroll-snap-align: start;`}
                         onClick={() => window.open(investment.link, '_blank')}
                     >
-                      <div className="flex justify-between items-center mb-3">
+                      <div className="flex justify-between items-center">
                         <div>
-                          <h4 className="font-bold text-lg">{investment.name}</h4>
-                          <p className="text-sm text-gray-400">{investment.code}</p>
+                            <h4 className="font-bold text-lg">{investment.name}</h4>
+                            <div className="flex space-x-2">
+                              <p className="text-sm text-gray-400">{investment.code}</p>
+                              <p className="text-sm text-gray-400">( {investment.return}% )</p>
+                            </div>
                         </div>
-                        
+                        <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
                       </div>
                     </div>
-                  )
-                 : (
-                    <div 
-                      key={investment.code || investment.name} 
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                        transform transition-all duration-300 
-                        hover:scale-105 hover:shadow-lg
-                        scroll-snap-align: start;`}
-                    >
-                      <div className="flex justify-between items-center mb-3">
-                        <div>
-                          <h4 className="font-bold text-lg">{investment.name}</h4>
-                          <p className="text-sm text-gray-400">{investment.code}</p>
-                        </div>
-                        
+                  ) : <div 
+                  key={investment.code || investment.name} 
+                  className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                    transform transition-all duration-300 
+                    hover:scale-105 hover:shadow-lg
+                    scroll-snap-align: start;`}
+                  onClick={() => window.open(investment.link, '_blank')}
+              >
+                  <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                          <h4 className="font-bold text-lg leading-tight">{investment.name}</h4>
+                          <div className="flex space-x-2">
+                              <p className="text-sm text-gray-400">{investment.code}</p>
+                              <p className="text-sm text-gray-400">( {investment.icon}{investment.price} )</p>
+                          </div>
                       </div>
-                    </div>
-                  ); }) }
+                      <AdvancedImage className='w-12 h-12 rounded' cldImg={img} />
+                  </div>
+              </div>; }) }
               </div>
             </div>
           ))}
