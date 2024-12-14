@@ -166,7 +166,8 @@ const Home = ({ mail }) => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1116.5 16h-11z" />
                 </svg>
-              )
+              ),
+              title:"🌟 Receive AI-driven stock suggestions crafted for your goals and risk preferences, making smart investing easier than ever! 💼"
             },
             { 
               name: 'Personalized FD', 
@@ -174,7 +175,8 @@ const Home = ({ mail }) => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm4-1a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1z" clipRule="evenodd" />
                 </svg>
-              )
+              ),
+              title:"🤖 Get AI-driven mutual fund suggestions tailored to your financial goals, risk appetite, and investment amount. Start building a stronger portfolio today! 💼"
             },
             { 
               name: 'Personalized Mutual Funds', 
@@ -182,7 +184,9 @@ const Home = ({ mail }) => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                 </svg>
-              )
+              ),
+              title:"🔍 Find the best-fixed deposit options tailored to your age, investment amount, risk level, and tenure. Secure your future with smart choices! 🏦"
+
             },
             { 
               name: 'Expense Tracker',
@@ -190,9 +194,13 @@ const Home = ({ mail }) => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 512 512" fill="white">
                     <path d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64L0 400c0 44.2 35.8 80 80 80l400 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L80 416c-8.8 0-16-7.2-16-16L64 64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/>
                 </svg>
-              )
+              ),
+              title:"📊 Track your income and expenses, get AI insights, and discover strategies to boost savings and financial strength! 💰"
             }
           ];
+
+      
+        
         const investments = [
         {
             type: 'Stocks',
@@ -271,29 +279,20 @@ const Home = ({ mail }) => {
             className="grid grid-cols-2 gap-4 mb-6 pb-2 overflow-hidden" style={{marginTop:'90px',marginBottom:'40px'}}
             >
             {personalizeButtons.map((button) => (
-                <button 
-                key={button.name}
-                onClick={() => setActiveButton(button.name)}
-                className={`
-                    flex items-center space-x-2 px-4 py-2 
-                    transform transition-all duration-300
-                    
-                    ${activeButton === button.name 
-                    ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/90  text-white scale-105 shadow-lg' 
-                    : 'bg-gradient-to-br from-blue-900/90 to-purple-900/50 text-gray-300 hover:bg-gray-700'}
-                `}
-
-                style={{margin:'10px',height:'90px',borderRadius:'15px'}}
-                >
-                
-                <span 
-                    className="flex items-center justify-center text-sm font-medium mx-auto"
-                    >
-                    {button.icon}&nbsp;&nbsp;{button.name}
-                </span>
-                </button>
+                <div key={button.name} className="relative group transform transition-all duration-500 hover:scale-100">
+                    <button onClick={() => setActiveButton(button.name)} className={`w-full bg-white/15 backdrop-blur-lg rounded-2xl p-2 md:p-6 flex flex-col justify-center items-center text-center relative z-10 overflow-hidden min-h-[90px] hover:h-[80px] ${activeButton === button.name ? 'bg-gradient-to-br from-blue-900/50 to-purple-900/90 text-white' : 'bg-gradient-to-br from-blue-900/90 to-purple-900/50 text-gray-300'}`}>
+                        <span className="flex items-center justify-center text-sm font-medium mx-auto relative z-10 transition-all duration-300 mb-2">
+                            <span className="flex transition-transform duration-300 group-hover:scale-125 inline-block mr-2">
+                                {button.icon}&nbsp;&nbsp;{button.name}
+                            </span>
+                        </span>
+                        <div className="w-full text-white text-xs text-center opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-full transition-all duration-300 z-20 absolute bottom-0 left-0 pb-2">
+                            {button.title}
+                        </div>
+                    </button>
+                </div>
             ))}
-            </div>
+          </div>
     
           <h2 className="text-2xl font-bold mb-4 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
