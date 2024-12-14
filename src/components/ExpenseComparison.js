@@ -1,12 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from './navbar';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
+const ExpenseComparison = ({ data, mail }) => {
+  const [analysisdata, setAnalysisdata] = useState(null);
+  const [averageExpenses, setAverageExpenses] = useState({});
+  const [userExpenses, setUserExpenses] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-const ExpenseComparison = ({data}) => {
+  const fetchData = async (expenses) => {
+    try {
+      setIsLoading(true);
+      const getCookie = Cookies.get('sessionToken');
+      if (!getCookie) {
+        return navigate('/');
+      }
 
-  console.log("ExpenseComparison : ",data )
+      const resdata = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}getAnalysis`,
+        {
+          salary: data.income,
+          age: data.age,
+          cityType: data.city,
+          userExpenses: expenses,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(resdata.data)
+      setAnalysisdata(resdata.data);
+
+      // Set average expenses after fetching analysis data
+      const report = resdata.data.report.expensesComparison;
+      setAverageExpenses({
+        "Food at Home": report.foodAtHome.benchmark,
+        "Food Away From Home": report.foodAwayFromHome.benchmark,
+        "Housing": report.housing.benchmark,
+        "Transportation": report.transportation.benchmark,
+        "Healthcare": report.healthCare.benchmark,
+        "Education": report.education.benchmark,
+        "Entertainment": report.entertainment.benchmark,
+        "Personal Care": report.personalCare.benchmark,
+        "Alcoholic Beverages": report.alcoholicBeverages.benchmark,
+        "Tobacco Products": report.tobacco.benchmark,
+        "Personal Finance": report.personalCare.benchmark,
+        "Savings": report.savings.benchmark,
+        "Apparel and Services": report.apparelAndServices.benchmark,
+        "Other Expenses": report.other.benchmark,
+      });
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (data) {
+      const expenses = {
+        foodAtHome: parseInt(data.foodAtHome, 10),
+        foodAwayFromHome: parseInt(data.foodAwayFromHome, 10),
+        alcoholicBeverages: parseInt(data.alcoholicBeverages, 10),
+        housing: parseInt(data.housing, 10),
+        apparelAndServices: parseInt(data.apparelAndServices, 10),
+        transportation: parseInt(data.transportation, 10),
+        healthCare: parseInt(data.healthcare, 10),
+        entertainment: parseInt(data.entertainment, 10),
+        personalCare: parseInt(data.personalCare, 10),
+        education: parseInt(data.education, 10),
+        tobacco: parseInt(data.tobaccoProducts, 10),
+        other: parseInt(data.others, 10),
+        personalFinanceAndPensions: parseInt(data.personalfinance, 10),
+        savings: parseInt(data.savings, 10),
+      };
+      setUserExpenses(expenses);
+      fetchData(expenses);
+    }
+  }, [data]); 
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -34,33 +116,6 @@ const ExpenseComparison = ({data}) => {
   }));
 
 
-
-
-  const averageExpenses = {
-    "Food at Home": 9985,
-    "Food Away From Home": 8500,  
-    "Housing": 2436,
-    "Transportation": 13174,
-    "Healthcare": 6159,
-    "Education": 1656,
-    "Entertainment": 3635,
-    "Personal Care": 950,  
-    "Alcoholic Beverages": 637,  
-    "Tobacco Products": 370, 
-    "Personal Finance": 3000, 
-    "Savings": 1500, 
-    "Apparel and Services": 700,  
-    "Other Expenses": 700, 
-};
-
-// const averageExpenses = Object.entries(categoryMapping).reduce((acc, [key, category]) => {
-//   acc[category] = parseFloat(data[key]) || 0; 
-//   return acc;
-// }, {});
-
-
-
-  console.log("averageExpenses : ",averageExpenses)
 
   const userExpensesByCategory = {};
   expenses.forEach(expense => {
@@ -90,6 +145,30 @@ const ExpenseComparison = ({data}) => {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Navbar mail={mail}/>
+        <div className="
+          min-h-screen 
+          w-full 
+          bg-gradient-to-br 
+          from-blue-600/90 
+          to-purple-600/90 
+          overflow-x-hidden
+          flex 
+          items-center 
+          justify-center
+        ">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin w-16 h-16 border-4 border-white border-t-transparent border-opacity-50 rounded-full">
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className='w-full max-w-6xl mx-auto p-4' style={{marginTop:'90px',marginBottom:'30px'}}>
