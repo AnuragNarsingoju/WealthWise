@@ -53,7 +53,7 @@ const PersonalizedStocks = ({mail}) => {
 
         try {
             // const getCookie = Cookies.get('sessionToken');
-            const url = 'https://f955-52-8-83-38.ngrok-free.app/stockRecommandation';
+            const url = 'https://f955-52-8-83-38.ngrok-free.app/stockRecommandation/stockRecommandation';
             const response = await axios.post(url, formData);
             setRecommendation(response.received);
 
