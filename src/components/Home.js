@@ -156,6 +156,9 @@ const Home = ({ mail }) => {
           else if ( activeButton === "Personalized FD"){
             navigate('/fd-recommendations');
           }
+          else if ( activeButton === "Personalized Stocks"){
+            navigate('/PersonalizedStocks');
+          }
 
         }, [activeButton, navigate]);
 
