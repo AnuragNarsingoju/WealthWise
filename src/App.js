@@ -14,6 +14,7 @@ import PageNotFound from './components/PageNotFound';
 import PersonalFDRecommendation from './components/personalFD';
 import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
+import PersonalizedStocks from './components/PersonalizedStocks';
 
 const App = () => {
   const [log, setLog] = useState(false);
@@ -204,6 +205,8 @@ const App = () => {
         <Route path="/fd-recommendations" element={ <PersonalFDRecommendation mail={mail} /> } />
         <Route path="/expensedate" element={ <ExpenseDate mail={mail} /> } />
         <Route path="/expenseTracker" element={ <ExpenseTracker mail={mail} /> } />
+        <Route path="/PersonalizedStocks" element={ <PersonalizedStocks mail={mail} /> } />
+
 
       </Routes>
     </div>
