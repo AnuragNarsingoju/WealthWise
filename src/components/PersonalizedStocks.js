@@ -20,7 +20,7 @@ const PersonalizedStocks = ({mail}) => {
 
     const [formData, setFormData] = useState({
         initial_capital : '',
-        risk_appetite: '',
+        risk_tolerance: '',
         trading_strategy_preference: ''
     });
     const [recommendation, setRecommendation] = useState(null);
@@ -53,20 +53,9 @@ const PersonalizedStocks = ({mail}) => {
 
         try {
             // const getCookie = Cookies.get('sessionToken');
-            const response = axios.post(
-                "https://d8f6-52-8-83-38.ngrok-free.app/stockRecommendation",
-                {
-                  'initial_capital': '100000',
-                  'risk_tolerance': 'Medium',
-                  'trading_strategy_preference': 'Day Trading',
-                },
-                {
-                  headers: {
-                    "ngrok-skip-browser-warning": "true",
-                    "Content-Type": "application/json", 
-                  },
-                }
-              );
+            const url = 'https://f955-52-8-83-38.ngrok-free.app/stockRecommandation';
+            const response = await axios.post(url, formData);
+            setRecommendation(response.received);
 
 
             setRecommendation(response.received);
@@ -165,7 +154,7 @@ const PersonalizedStocks = ({mail}) => {
                                 icon: <TrendingUp className="text-white/70" /> 
                             },
                              { 
-                                name: 'risk_appetite', 
+                                name: 'risk_tolerance', 
                                 label: 'Select Risk Tolerance', 
                                 type: 'select',
                                 options: ['Low', 'Moderate', 'High'],
