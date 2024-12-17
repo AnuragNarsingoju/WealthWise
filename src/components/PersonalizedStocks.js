@@ -147,7 +147,7 @@ const PersonalizedStocks = ({mail}) => {
                     transition={{ duration: 0.5 }}
                     className="text-3xl font-bold mb-6 text-white text-center"
                 >
-                    Investment Recommendation
+                    Personalized Stock Recommendation
                 </motion.h2>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -242,7 +242,7 @@ const PersonalizedStocks = ({mail}) => {
                                 Generating Recommendation...
                             </div>
                         ) : (
-                            <>Get Recommendation <ChevronRight className="ml-2" /></>
+                            <>Get Stock Recommendation <ChevronRight className="ml-2" /></>
                         )}
                     </motion.button>
                 </form>
@@ -264,7 +264,7 @@ const PersonalizedStocks = ({mail}) => {
                             animate={{ opacity: 1, x: 0 }}
                             className="text-2xl font-bold mb-4"
                         >
-                            Personalized Recommendation
+                            Personalized Stock Recommendation
                         </motion.h3>
                         <motion.p 
                             initial={{ opacity: 0 }}
