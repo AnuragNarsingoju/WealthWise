@@ -64,7 +64,7 @@ const PersonalizedStocks = ({mail}) => {
                     withCredentials: true,
                 }
             );
-            setRecommendation(response.answer.received);
+            setRecommendation(response.received);
             
             setTimeout(() => {
                 const recommendationElement = document.getElementById('recommendation-section');
