@@ -52,12 +52,18 @@ const PersonalizedStocks = ({mail}) => {
         setRecommendation(null);
 
         try {
-            // const getCookie = Cookies.get('sessionToken');
-            const url = 'https://f955-52-8-83-38.ngrok-free.app/stockRecommandation';
-            const response = await axios.post(url, formData);
-            setRecommendation(response.received);
-
-
+            const getCookie = Cookies.get('sessionToken');
+            const response = await axios.post(
+                `${process.env.REACT_APP_BACKEND_URL}PersonalizedStocks`, 
+                {"formData":formData},
+                {
+                    headers: {
+                        Authorization: `Bearer ${getCookie}`,
+                        'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                }
+            );
             setRecommendation(response.received);
             
             setTimeout(() => {
