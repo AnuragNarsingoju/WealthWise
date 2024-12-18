@@ -18,12 +18,9 @@ import PersonalizedStocks from './components/PersonalizedStocks';
 
 const App = () => {
   const [log, setLog] = useState(false);
-  const [mail, setMail] = useState('');
+  const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-
-
   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     try {
