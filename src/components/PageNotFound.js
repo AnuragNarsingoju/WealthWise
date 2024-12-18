@@ -1,10 +1,9 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from 'framer-motion';
+
 const PageNotFound = () => {
   const navigate = useNavigate();
-  const locObj = useLocation();
-  const [isHovered, setIsHovered] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
@@ -142,7 +141,7 @@ const PageNotFound = () => {
         </div>
       </motion.div>
       
-      <style>{`
+      <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
 
         * {
