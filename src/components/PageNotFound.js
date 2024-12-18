@@ -299,8 +299,6 @@ const PageNotFound = () => {
       `}</style>
     </motion.div>
   );
-  );
-   
 };
 
 export default PageNotFound;
