@@ -23,6 +23,28 @@ const App = () => {
 
   const navigate = useNavigate();
 
+
+   useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      try {
+        setLoading(true); 
+        if (user) {
+          setMail(user.email);
+        } else {
+          setMail('');
+          await auth.signOut();
+        }
+  
+        setLoading(false);
+      } catch (error) {
+        console.error('Error during authentication state change:', error);
+        setLoading(false); 
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+
   const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -72,29 +94,6 @@ const App = () => {
 
 
 
-
- useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      console.log(user.email);
-      try {
-        setLoading(true); 
-        if (user) {
-          setMail(user.email);
-          console.log("AFADF : ",auth.currentUser);
-        } else {
-          // setMail('');
-          // await auth.signOut();
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error during authentication state change:', error);
-        setLoading(false); 
-      }
-    });
-  
-    return () => unsubscribe(); 
-  }, []);
-  
 
   if (loading) {
     
@@ -196,16 +195,16 @@ const App = () => {
       </style>
       <Routes>
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
-        <Route path="*" element={ <PageNotFound /> } />
-        <Route path="/home" element={ <Home mail={mail} /> } />
-        <Route path="/foam" element={ <Psinfo mail={mail} />} />
-        <Route path="/chatbot" element={<ChatBot mail={mail} /> } />
-        <Route path="/fileupload" element={ <FileUpload mail={mail} /> } />
-        <Route path="/personal-MF" element={ <InvestmentRecommendationForm mail={mail} /> } />
-        <Route path="/fd-recommendations" element={ <PersonalFDRecommendation mail={mail} /> } />
-        <Route path="/expensedate" element={ <ExpenseDate mail={mail} /> } />
-        <Route path="/expenseTracker" element={ <ExpenseTracker mail={mail} /> } />
-        <Route path="/PersonalizedStocks" element={ <PersonalizedStocks mail={mail} /> } />
+        <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
+        <Route path="/foam" element={  mail!=='' ?<Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/chatbot" element={ mail!=='' ?<ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fileupload" element={ mail!=='' ? <FileUpload mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/personal-MF" element={  mail!=='' ?<InvestmentRecommendationForm mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fd-recommendations" element={ mail!=='' ? <PersonalFDRecommendation mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/expensedate" element={ mail!=='' ? <ExpenseDate mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/expenseTracker" element={ mail!=='' ? <ExpenseTracker mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/PersonalizedStocks" element={ mail!=='' ? <PersonalizedStocks mail={mail} /> : <Login user1={setLog} email={setMail} />} />
 
 
       </Routes>
