@@ -204,7 +204,7 @@ const App = () => {
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
         <Route path="/foam" element={  mail!=='' ?<Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/chatbot" element={ mail!=='' ?<ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
-        <Route path="/fileupload" element={ mail!=='' ? <FileUpload mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/fileupload" element={ mail!=='' && (mail === 'anuragnarsingoju@gmail.com' || mail === 'nagasaipraneeth5@gmail.com' || mail === 'aashish17405@gmail.com' || mail === 'abhigxtheupm@gmail.com' ) ? <FileUpload mail={mail} /> : <PageNotFound />} />
         <Route path="/personal-MF" element={  mail!=='' ?<InvestmentRecommendationForm mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/fd-recommendations" element={ mail!=='' ? <PersonalFDRecommendation mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/expensedate" element={ mail!=='' ? <ExpenseDate mail={mail} /> : <Login user1={setLog} email={setMail} />} />
