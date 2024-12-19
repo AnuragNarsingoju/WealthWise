@@ -237,6 +237,7 @@ const Login = (log) => {
   const signUp = async (email, password, phone, name) => {
     try {
 
+      toast.dismiss();
       toast(
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div
