@@ -407,7 +407,7 @@ const Login = (log) => {
       console.error(error);
       setLoading(false);
       settoken(null);
-      toast.dismiss()
+      toast.dismiss();
       toast.error('Invalid email or password. If You are a New User Please Signup');
       recaptchaRef.current.reset();
       setshouldHaveRainbowEffect(true);
@@ -425,7 +425,7 @@ const Login = (log) => {
       setIsLoggedIn(false);
       // googleuser1(false);
       settoken(null);
-      toast.dismiss()
+      toast.dismiss();
 
       toast.success('Logout successful!');
       recaptchaRef.current.reset();
@@ -440,7 +440,7 @@ const Login = (log) => {
 
     } catch (error) {
       console.error(error);
-      toast.dismiss()
+      toast.dismiss();
       recaptchaRef.current.reset();
       toast.error('Error occurred during logout. Please try again.');
      
@@ -574,7 +574,7 @@ const Login = (log) => {
       
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
-      toast.dismiss()
+      toast.dismiss();
     }
   };
 
