@@ -360,7 +360,7 @@ const Psinfo = ({ mail }) => {
                         className="block font-semibold mb-2"
                         style={{ color: colors.text }}
                       >
-                        Annual Income
+                        Monthly Income
                       </label>
                       <input 
                         type="number" 
