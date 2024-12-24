@@ -306,13 +306,13 @@ const ExpenseComparison = ({ data, mail,props }) => {
                       </span>
                       <div className="flex items-center space-x-2">
                         {isHigher ? (
-                          <TrendingUpIcon className="w-5 h-5 text-red-500" />
+                          <TrendingUpIcon className="w-5 h-5 text-green-500" />
                         ) : (
-                          <TrendingDownIcon className="w-5 h-5 text-green-400" />
+                          <TrendingDownIcon className="w-5 h-5 text-red-400" />
                         )}
                         <span 
                           className={`font-bold ${
-                            isHigher ? 'text-red-500' : 'text-green-400'
+                            isHigher ? 'text-green-500' : 'text-red-400'
                           }`}
                         >
                           {isHigher ? '+' : '-'}{Math.abs(percentDiff)}%
