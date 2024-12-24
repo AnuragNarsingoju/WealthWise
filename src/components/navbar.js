@@ -89,16 +89,16 @@ const Navbar = ({mail}) => {
       label: 'Chat With Niveshak',
       key: 'Chat With Niveshak'
     },
-    { 
-      icon: <Activity className="w-5 h-5" />, 
-      label: 'Analytics', 
-      key: 'analytics' 
-    },
-    { 
-      icon: <Settings className="w-5 h-5" />, 
-      label: 'Settings', 
-      key: 'settings' 
-    }
+    // { 
+    //   icon: <Activity className="w-5 h-5" />, 
+    //   label: 'Analytics', 
+    //   key: 'analytics' 
+    // },
+    // { 
+    //   icon: <Settings className="w-5 h-5" />, 
+    //   label: 'Settings', 
+    //   key: 'settings' 
+    // }
   ];
 
   return (
