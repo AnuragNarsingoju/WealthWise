@@ -700,7 +700,7 @@ const Login = (log) => {
               animation: 'typing 1s steps(30) 1s 1 normal both, no-blink 0s 1.4s forwards',
             }}
           >
-            {isLogin ? 'Welcome back' : 'Create account'}
+            {isLogin ? 'WealthWise' : 'Create account'}
           </h1>
         </div>
         <style>
