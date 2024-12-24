@@ -142,10 +142,13 @@ const BudgetPieChart = ({
             .sort((a, b) => b.value - a.value);
     }, [expenses]);
 
-    const totalExpenses = useMemo(() => 
+    const adjustedExpenses = useMemo(() => 
         processedData.reduce((sum, item) => sum + item.value, 0),
         [processedData]
     );
+    
+    const totalExpenses = adjustedExpenses - parseFloat(data[savings] || 0);
+    
 
     const chartData = processedData.length > 0 ? processedData : defaultExpenses;
 
