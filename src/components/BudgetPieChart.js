@@ -112,7 +112,6 @@ const categoryMapping = {
     transportation: "Transportation",
     healthcare: "Healthcare",
     personalfinance: "Personal Finance",
-    savings: "Savings",
     entertainment: "Entertainment",
     personalCare: "Personal Care",
     education: "Education",
@@ -142,12 +141,10 @@ const BudgetPieChart = ({
             .sort((a, b) => b.value - a.value);
     }, [expenses]);
 
-    const adjustedExpenses = useMemo(() => 
+    const totalExpenses = useMemo(() => 
         processedData.reduce((sum, item) => sum + item.value, 0),
         [processedData]
     );
-    
-    const totalExpenses = adjustedExpenses - parseFloat(data["Savings"] || 0);
     
 
     const chartData = processedData.length > 0 ? processedData : defaultExpenses;
