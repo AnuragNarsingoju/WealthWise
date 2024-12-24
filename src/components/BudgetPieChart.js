@@ -147,7 +147,7 @@ const BudgetPieChart = ({
         [processedData]
     );
     
-    const totalExpenses = adjustedExpenses - parseFloat(data[savings] || 0);
+    const totalExpenses = adjustedExpenses - parseFloat(data["Savings"] || 0);
     
 
     const chartData = processedData.length > 0 ? processedData : defaultExpenses;
