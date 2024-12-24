@@ -251,7 +251,7 @@ const ExpenseComparison = ({ data, mail,props }) => {
                 />
                 <Bar 
                   dataKey="Your Expenses"
-                  fill="#F43F5E"
+                  fill="#10B981"
        
                   barSize={40}
                   opacity={selectedCategory === null ? 1 : 0.3}
@@ -260,7 +260,7 @@ const ExpenseComparison = ({ data, mail,props }) => {
                 />
                 <Bar 
                   dataKey="Average Expenses" 
-                  fill="#10B981"
+                  fill="#F43F5E"
                   barSize={40}
                   opacity={selectedCategory === null ? 1 : 0.3}
                   animationBegin={500}
