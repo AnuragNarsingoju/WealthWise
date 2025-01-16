@@ -373,7 +373,7 @@ const Home = ({ mail }) => {
                         </div>
                         <div>
                           <h4 className="font-bold text-lg line-clamp-2">{videoDetails[investment.id].name}</h4>
-                          <p className="text-sm text-gray-300">{videoDetails[investment.id].views} views</p>
+                          <p className="text-sm text-gray-300">{videoDetails[investment.id].views}</p>
                         </div>
                       </div>
                     ) : category.type === 'Mutual Funds' ?  (
