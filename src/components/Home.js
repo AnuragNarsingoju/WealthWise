@@ -274,7 +274,7 @@ const Home = ({ mail }) => {
       
     return  (
         <div 
-        className="inset-0 bg-gradient-to-br from-blue-600/90 to-purple-600/90 text-white p-4 overflow-hidden w-full " 
+        className="inset-0 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90 text-white p-4 overflow-hidden w-full " 
         style={{ justifyContent: 'center', alignItems: 'center', margin: 'auto' }}
         >
           
@@ -379,7 +379,7 @@ const Home = ({ mail }) => {
                     ) : category.type === 'Mutual Funds' ?  (
                       <div 
                       key={investment.code || investment.name} 
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-600/90 to-purple-600/90${bgIntensity} rounded-lg p-4 
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
                         transform transition-all duration-300 
                         hover:scale-105 hover:shadow-lg
                         scroll-snap-align: start;`}
@@ -404,7 +404,7 @@ const Home = ({ mail }) => {
                  : category.type === 'Fixed Deposits' ?  (
                     <div 
                       key={investment.code || investment.name} 
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-600/90 to-purple-600/90${bgIntensity} rounded-lg p-4 
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
                         transform transition-all duration-300 
                         hover:scale-105 hover:shadow-lg
                         scroll-snap-align: start;`}
@@ -426,7 +426,7 @@ const Home = ({ mail }) => {
                     </div>
                   ) : <div 
                   key={investment.code || investment.name} 
-                  className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-600/90 to-purple-600/90${bgIntensity} rounded-lg p-4 
+                  className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
                     transform transition-all duration-300 
                     hover:scale-105 hover:shadow-lg
                     scroll-snap-align: start;`}
