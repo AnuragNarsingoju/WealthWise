@@ -152,7 +152,7 @@ const ExpenseComparison = ({ data, mail, props }) => {
     return (
       <>
         <Navbar mail={mail} />
-        <div className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4">
+        <div className="min-h-screen  bg-gradient-to-br from-indigo-900/70 to-purple-900/70  flex items-center justify-center p-4">
           <div className="flex items-center justify-center">
             <div className="animate-spin w-16 h-16 border-4 border-white border-t-transparent border-opacity-50 rounded-full">
             </div>
