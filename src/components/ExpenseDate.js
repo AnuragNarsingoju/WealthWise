@@ -89,9 +89,7 @@ const ExpenseDate = ({ mail }) => {
       <div className="
         min-h-screen 
         w-full 
-        bg-gradient-to-br 
-        from-blue-600/90 
-        to-purple-600/90 
+        bg-gradient-to-br from-indigo-900/70 to-purple-900/70
         overflow-x-hidden
         flex 
         items-center 
