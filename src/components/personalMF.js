@@ -13,11 +13,12 @@ const InvestmentRecommendationForm = ({mail}) => {
     }
 
     const [formData, setFormData] = useState({
-        user_age: '',
-        user_risk_appetite: '',
         user_income: '',
+        user_expenses: '',
         user_savings: '',
-        user_investment_amount: ''
+        user_investment_amount: '',
+        user_risk_tolerance: '',
+        user_strategy: ''
     });
     const [recommendation, setRecommendation] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -47,11 +48,22 @@ const InvestmentRecommendationForm = ({mail}) => {
         setLoading(true);
         setRecommendation(null);
 
+	const sendData={
+                "input":{
+                  "income": formData.user_income,
+                  "expenses": formData.user_expenses,
+                  "savings": formData.user_savings,
+                  "investment_amount": formData.user_investment_amount,
+                  "risk_tolerance": formData.user_risk_tolerance,
+                  "strategy":formData.user_strategy
+              }
+        }
+
         try {
             const getCookie = Cookies.get('sessionToken');
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}recommend-mutual-funds`, 
-                formData,
+                sendData,
                 {
                     headers: {
                       Authorization: `Bearer ${getCookie}`,
