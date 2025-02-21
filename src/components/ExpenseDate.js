@@ -194,8 +194,7 @@ const ExpenseDate = ({ mail }) => {
           </div>
         </div>
 
-        {count === 0 && (
-          <button 
+        <button 
             onClick={handlePlusClick}
             className="
               fixed 
@@ -218,7 +217,6 @@ const ExpenseDate = ({ mail }) => {
           >
             <PlusIcon size={32} />
           </button>
-        )}
       </div>
     </>
   );
