@@ -143,32 +143,7 @@ const Home = ({ mail }) => {
     const StocksData = () => {  
         const [activeButton, setActiveButton] = useState(null);
         const [handleErr,sethandleErr]=useState(false);
-        const navigate = useNavigate();
-
-        const fetchData = async () => {
-          const getCookie = Cookies.get('sessionToken');
-          try {
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}nifty`,{ count: 10 }, 
-                {
-                  headers: {
-                    Authorization: `Bearer ${getCookie}`,
-                    "Content-Type": "application/json",
-                  },
-                  withCredentials: true,
-                }
-              );
-            const data = response.data
-            console.log(data);
-            sethandleErr(false);
-          } catch (error) {
-            console.error("Failed to fetch advice", error);
-            sethandleErr(true);
-          }
-        };
-        useEffect(() => {
-      
-          fetchData();
-        }, []);
+        const navigate = useNavigate();       
 
         useEffect(() => {
           if (activeButton === "Expense Tracker") {
@@ -232,16 +207,21 @@ const Home = ({ mail }) => {
         {
             type: 'Stocks',
             items: [
-              { name: 'ITC Ltd.', code: 'ITC', price: 470, icon: '₹', link: 'https://www.etmoney.com/stocks/itc-ltd/1353', image: 'itc_ktdtqa' },
-              { name: 'Ramco Cements Ltd', code: 'RAMCOCEM', price: 1040.70, icon: '₹', link: 'https://www.etmoney.com/stocks/the-ramco-cements-ltd/2753', image: 'ramco_tcob7p' },
-              { name: 'Lorenzini Apparels Ltd', code: 'LAL', price: 24.21, icon: '₹', link: 'https://www.etmoney.com/stocks/lorenzini-apparels-ltd/4352', image: 'Lorenzini_d2xax6' },
-              { name: 'Tata Power Company', code: 'TATAPOWER', price: 428.45, icon: '₹', link: 'https://www.etmoney.com/stocks/tata-power-company-ltd/2418', image: 'tata_bdich9' },
-              { name: 'Darshan Orna Ltd', code: 'DARSHANORNA', price: 6.05, icon: '₹', link: 'https://www.moneycontrol.com/india/stockpricequote/diamond-cuttingjewelleryprecious-metals/darshanorna/DO04', image: 'darshan_nhfscr' },
-              { name: 'Titan Company Ltd', code: 'TITAN', price: 3508.85, icon: '₹', link: 'https://www.etmoney.com/stocks/titan-company-ltd/55', image: 'titan_arreis' },
-              { name: 'Trent Ltd', code: 'TRENT', price: 7000.25, icon: '₹', link: 'https://www.etmoney.com/stocks/trent-ltd/844', image: 'trent_djzlq8' },
-              { name: 'Bosch Ltd', code: 'BOSCHLTD', price: 36469.60, icon: '₹', link: 'https://www.etmoney.com/stocks/bosch-ltd/1150', image: 'bosch_ilhkn0' }
               
-            ]
+                { "name": "Hindalco Industries Ltd", "code": "HINDALCO", "price": 652.15, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hindalco-industries-ltd/666", "image": "hindalco" },
+                { "name": "Tata Steel Ltd", "code": "TATASTEEL", "price": 140.6, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/tata-steel-ltd/868", "image": "tatasteel" },
+                { "name": "Eicher Motors Ltd", "code": "EICHERMOT", "price": 4968, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/eicher-motors-ltd/1323", "image": "eicher" },
+                { "name": "Larsen & Toubro Ltd", "code": "LT", "price": 3315.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/larsen-and-toubro-ltd/943", "image": "larsentoubro" },
+                { "name": "SBI Life Insurance Company Ltd", "code": "SBILIFE", "price": 1480.55, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/sbi-life-insurance-company-ltd/2522", "image": "sbilife" },
+                { "name": "HCL Technologies Ltd", "code": "HCLTECH", "price": 1695.65, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hcl-technologies-ltd/1399", "image": "hcltech" },
+                { "name": "HDFC Life Insurance Company Ltd", "code": "HDFCLIFE", "price": 622.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hdfc-life-insurance-company-ltd/39", "image": "hdfclife" },
+                { "name": "Coal India Ltd", "code": "COALINDIA", "price": 369, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/coal-india-ltd/1527", "image": "coalindia" },
+                { "name": "Tata Consultancy Services Ltd", "code": "TCS", "price": 3789.9, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/tata-consultancy-services-ltd/1937", "image": "tcs" },
+                { "name": "Asian Paints Ltd", "code": "ASIANPAINT", "price": 2254, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/asian-paints-ltd/944", "image": "asianpaints" },
+                { "name": "Nestle India Ltd", "code": "NESTLEIND", "price": 2211, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/nestle-india-ltd/378", "image": "nestle" },
+                { "name": "HDFC Bank Ltd", "code": "HDFCBANK", "price": 1690, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hdfc-bank-ltd/2705", "image": "hdfcbank" },
+                { "name": "Shriram Finance Ltd", "code": "SHRIRAMFIN", "price": 581.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/shriram-finance-ltd/1141", "image": "shriramfin" }
+             ]
           },
           {
             type: 'Fixed Deposits',
