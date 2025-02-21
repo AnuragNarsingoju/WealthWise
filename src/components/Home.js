@@ -8,8 +8,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react'
-
-
+import Cookies from 'js-cookie';
 
 function extractVideoId(url) {
   const regex = /(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|(?:https?:\/\/(?:www\.)?youtu\.be\/))([a-zA-Z0-9_-]{11})/;
@@ -145,6 +144,32 @@ const Home = ({ mail }) => {
         const [activeButton, setActiveButton] = useState(null);
 
         const navigate = useNavigate();
+
+        const fetchData = async () => {
+          try {
+            const getCookie = Cookies.get('sessionToken');
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/nifty`,{ count: 10 }, // Sending count as request body
+                {
+                  headers: {
+                    Authorization: `Bearer ${getCookie}`,
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                }
+              );
+            const data = response.data
+            console.log(data);
+            setNiftyData(data);
+            sethandleErr(false);
+          } catch (error) {
+            console.error("Failed to fetch advice", error);
+            sethandleErr(true);
+          }
+        };
+        useEffect(() => {
+      
+          fetchData();
+        }, []);
 
         useEffect(() => {
           if (activeButton === "Expense Tracker") {
