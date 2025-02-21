@@ -142,7 +142,7 @@ const Home = ({ mail }) => {
 
     const StocksData = () => {  
         const [activeButton, setActiveButton] = useState(null);
-
+        const [handleErr,sethandleErr]=useState(false);
         const navigate = useNavigate();
 
         const fetchData = async () => {
@@ -159,7 +159,6 @@ const Home = ({ mail }) => {
               );
             const data = response.data
             console.log(data);
-            setNiftyData(data);
             sethandleErr(false);
           } catch (error) {
             console.error("Failed to fetch advice", error);
