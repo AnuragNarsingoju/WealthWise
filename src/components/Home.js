@@ -119,6 +119,7 @@ const Home = ({ mail }) => {
       "BEL": "bharat_electronics_zxumwt",
       "ONGC": "ongc_rhnlhf",
       "INFY": "infosys_snkmv3",
+    "SBILIFE": "sbi_wugpsu",
       "HDFCBANK": "hdfc_fyw4ru",
       "LT": "l_and_t_rtm0rc",
       "GRASIM": "grasim_abc_qajyxk",
