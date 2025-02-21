@@ -86,6 +86,126 @@ const Home = ({ mail }) => {
 
   const [videoDetails, setVideoDetails] = useState([]);
 
+  const [niftyData, setNiftyData] = useState([
+    {
+      "symbol": "HINDALCO",
+      "open_price": 639.2,
+      "high_price": 656.2,
+      "low_price": 637.95,
+      "ltp": 652.15,
+      "prev_price": 638.8,
+      "link": "https://www.etmoney.com/stocks/hindalco-industries-ltd/666"
+    },
+    {
+      "symbol": "TATASTEEL",
+      "open_price": 137.91,
+      "high_price": 141.6,
+      "low_price": 137.15,
+      "ltp": 140.6,
+      "prev_price": 138.04,
+      "link": "https://www.etmoney.com/stocks/tata-steel-ltd/868"
+    },
+    {
+      "symbol": "EICHERMOT",
+      "open_price": 4888,
+      "high_price": 4982.9,
+      "low_price": 4855,
+      "ltp": 4968,
+      "prev_price": 4888.4,
+      "link": "https://www.etmoney.com/stocks/eicher-motors-ltd/1323"
+    },
+    {
+      "symbol": "LT",
+      "open_price": 3275.8,
+      "high_price": 3324.9,
+      "low_price": 3270.9,
+      "ltp": 3315.5,
+      "prev_price": 3275.8,
+      "link": "https://www.etmoney.com/stocks/larsen-and-toubro-ltd/943"
+    },
+    {
+      "symbol": "SBILIFE",
+      "open_price": 1469.7,
+      "high_price": 1501.4,
+      "low_price": 1461.7,
+      "ltp": 1480.55,
+      "prev_price": 1469.8,
+      "link": "https://www.etmoney.com/stocks/sbi-life-insurance-company-ltd/2522"
+    },
+    {
+      "symbol": "HCLTECH",
+      "open_price": 1690,
+      "high_price": 1704.15,
+      "low_price": 1685.15,
+      "ltp": 1695.65,
+      "prev_price": 1687.55,
+      "link": "https://www.etmoney.com/stocks/hcl-technologies-ltd/1399"
+    },
+    {
+      "symbol": "HDFCLIFE",
+      "open_price": 617.8,
+      "high_price": 623.9,
+      "low_price": 613.45,
+      "ltp": 622.5,
+      "prev_price": 620,
+      "link": "https://www.etmoney.com/stocks/hdfc-life-insurance-company-ltd/39"
+    },
+    {
+      "symbol": "COALINDIA",
+      "open_price": 367.55,
+      "high_price": 371.2,
+      "low_price": 365.3,
+      "ltp": 369,
+      "prev_price": 367.95,
+      "link": "https://www.etmoney.com/stocks/coal-india-ltd/1527"
+    },
+    {
+      "symbol": "TCS",
+      "open_price": 3776.1,
+      "high_price": 3817,
+      "low_price": 3775,
+      "ltp": 3789.9,
+      "prev_price": 3779.4,
+      "link": "https://www.etmoney.com/stocks/tata-consultancy-services-ltd/1937"
+    },
+    {
+      "symbol": "ASIANPAINT",
+      "open_price": 2249.05,
+      "high_price": 2265.8,
+      "low_price": 2237,
+      "ltp": 2254,
+      "prev_price": 2249.05,
+      "link": "https://www.etmoney.com/stocks/asian-paints-ltd/944"
+    },
+    {
+      "symbol": "NESTLEIND",
+      "open_price": 2216.95,
+      "high_price": 2218.1,
+      "low_price": 2189.3,
+      "ltp": 2211,
+      "prev_price": 2206.75,
+      "link": "https://www.etmoney.com/stocks/nestle-india-ltd/378"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "open_price": 1680.9,
+      "high_price": 1694.95,
+      "low_price": 1677.25,
+      "ltp": 1690,
+      "prev_price": 1687.1,
+      "link": "https://www.etmoney.com/stocks/hdfc-bank-ltd/2705"
+    },
+    {
+      "symbol": "SHRIRAMFIN",
+      "open_price": 580.85,
+      "high_price": 594.7,
+      "low_price": 576.7,
+      "ltp": 581.5,
+      "prev_price": 580.85,
+      "link": "https://www.etmoney.com/stocks/shriram-finance-ltd/1141"
+    }
+  ]);
+
   const stockImages = {
       "TATASTEEL": "tata_bdich9",
       "ITCHOTELS": "itc_hotels_jworgh",
@@ -482,28 +602,57 @@ const Home = ({ mail }) => {
                           />
                       </div>
                     </div>
-                  ) : <div 
-                  key={investment.code || investment.name} 
-                  className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                  ) : 
+                    
+                    null
+                    }) }
+
+{category.type === "Stocks" &&
+                niftyData.map((stock, index) => {
+                  const bgIntensity = Math.max(700 - index * 50, 800);
+                  const img = cld
+                    .image(stockImages[stock.symbol])
+                    .format("auto")
+                    .quality("auto")
+                    .resize(
+                      auto()
+                        .gravity(autoGravity())
+                        .width(500)
+                        .height(500)
+                    );
+  
+                  return (
+                    <div
+                      key={stock.symbol}
+                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
                     transform transition-all duration-300 
                     hover:scale-105 hover:shadow-lg
                     scroll-snap-align: start;`}
-                  onClick={() => window.open(investment.link, '_blank')}
-              >
-                  <div className="flex justify-between items-center">
-                      <div className="flex flex-col">
-                          <h4 className="font-bold text-lg leading-tight">{investment.name}</h4>
+                      style={{ scrollSnapAlign: "start" }}
+                      onClick={() => window.open(stock.link, "_blank")}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col">
+                          <h4 className="font-bold text-lg leading-tight">
+                            {stock.symbol}
+                          </h4>
                           <div className="flex space-x-2">
-                              <p className="text-sm text-gray-400">{investment.code}</p>
-                              <p className="text-sm text-gray-400">( {investment.icon}{investment.price} )</p>
+                            <p className="text-sm text-gray-400">
+                              ₹{stock.ltp}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              ( +{(stock.ltp - stock.prev_price).toFixed(2)} )
+                            </p>
                           </div>
+                        </div>
+                        <AdvancedImage
+                          className="w-11 h-11 rounded-full object-cover"
+                          cldImg={img}
+                        />
                       </div>
-                      <AdvancedImage
-                        className="w-11 h-11 rounded-full object-cover"
-                        cldImg={img}
-                      />
-                  </div>
-              </div>; }) }
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
