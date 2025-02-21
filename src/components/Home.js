@@ -361,12 +361,12 @@ const Home = ({ mail }) => {
                           scroll-snap-align: start;`}
                       >
                         <div className="relative mb-3">
-                          <img
-                            src={videoDetails[investment.id].thumbnail}
-                            alt={videoDetails[investment.id].name}
-                            onClick={() => window.open(videoDetails[investment.id].videoUrl, '_blank')}
-                            className="w-full h-40 object-cover rounded-md"
-                          />
+                          //<img
+                           // src={videoDetails[investment.id].thumbnail}
+                           // alt={videoDetails[investment.id].name}
+                           // onClick={() => window.open(videoDetails[investment.id].videoUrl, '_blank')}
+                           // className="w-full h-40 object-cover rounded-md"
+                          ///>
                           <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 rounded">
                             {videoDetails[investment.id].duration}
                           </div>
@@ -395,7 +395,7 @@ const Home = ({ mail }) => {
                         </div>
                           <AdvancedImage 
                             className="w-11 h-11 rounded-full object-cover" 
-                            cldImg={img} 
+                            //cldImg={img} 
                           />
                         
                       </div>
@@ -420,7 +420,7 @@ const Home = ({ mail }) => {
                         </div>
                         <AdvancedImage 
                             className="w-11 h-11 rounded-full object-cover" 
-                            cldImg={img} 
+                            //cldImg={img} 
                           />
                       </div>
                     </div>
@@ -442,7 +442,7 @@ const Home = ({ mail }) => {
                       </div>
                       <AdvancedImage
                         className="w-11 h-11 rounded-full object-cover"
-                        cldImg={img}
+                        //cldImg={img}
                       />
                   </div>
               </div>; }) }
