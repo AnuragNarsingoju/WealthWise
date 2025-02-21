@@ -13,12 +13,11 @@ const InvestmentRecommendationForm = ({mail}) => {
     }
 
     const [formData, setFormData] = useState({
+        user_age: '',
+        user_risk_appetite: '',
         user_income: '',
-        user_expenses: '',
         user_savings: '',
-        user_investment_amount: '',
-        user_risk_tolerance: '',
-        user_strategy: ''
+        user_investment_amount: ''
     });
     const [recommendation, setRecommendation] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -48,22 +47,11 @@ const InvestmentRecommendationForm = ({mail}) => {
         setLoading(true);
         setRecommendation(null);
 
-	const sendData={
-                "input":{
-                  "income": formData.user_income,
-                  "expenses": formData.user_expenses,
-                  "savings": formData.user_savings,
-                  "investment_amount": formData.user_investment_amount,
-                  "risk_tolerance": formData.user_risk_tolerance,
-                  "strategy":formData.user_strategy
-              }
-        }
-
         try {
             const getCookie = Cookies.get('sessionToken');
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}recommend-mutual-funds`, 
-                sendData,
+                formData,
                 {
                     headers: {
                       Authorization: `Bearer ${getCookie}`,
@@ -163,40 +151,33 @@ const InvestmentRecommendationForm = ({mail}) => {
                         {[
                              { 
                                 type:"text",
-                                name: 'user_income', 
-                                label: 'Income', 
+                                name: 'user_age', 
+                                label: 'Age', 
                                 icon: <Users className="text-white/70" /> 
                             },
                              { 
-                                type:"text",
-                                name: 'user_expenses', 
-                                label: 'Total Expenses',
+                                name: 'user_risk_appetite', 
+                                label: 'Risk Appetite', 
+                                type: 'select',
+                                options: ['Low', 'Moderate', 'High'],
                                 icon: <TrendingUp className="text-white/70" /> 
                             },
                             { 
                                 type:"text",
-                                name: 'user_savings', 
-                                label: 'Savings (₹)', 
+                                name: 'user_income', 
+                                label: 'Annual Income (₹)', 
                                 icon: <Wallet className="text-white/70" /> 
                             },
                             { 
                                 type:"text",
+                                name: 'user_savings', 
+                                label: 'Total Savings (₹)', 
+                                icon: <Coins className="text-white/70" /> 
+                            },
+                            { 
+				                type:"text",
                                 name: 'user_investment_amount', 
-                                label: 'Investment Amount (₹)', 
-                                icon: <Coins className="text-white/70" /> 
-                            },
-                            { 
-                                name: 'user_risk_tolerance', 
-                                label: 'Risk Tolerance', 
-                                type: 'select',
-                                options: ['Low', 'Middle', 'High'],
-                                icon: <Coins className="text-white/70" /> 
-                            },
-                            { 
-                                name: 'user_strategy', 
-                                label: 'Strategy', 
-                                type: 'select',
-                                options: ['Day-trading','swing-trading','Scalping','Momentum-Trading','Long-term-investment'],
+                                label: 'Monthly Investment (₹)', 
                                 icon: <Coins className="text-white/70" /> 
                             }
                         ].map((field, index) => (
