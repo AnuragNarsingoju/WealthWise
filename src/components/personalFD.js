@@ -127,7 +127,7 @@ const PersonalFDRecommendation = ({mail}) => {
         <Navbar mail={mail}/>
         <div 
             ref={scrollRef}
-            className="min-h-screen bg-gradient-to-br from-blue-900/70 to-indigo-900/70 flex items-center justify-center p-4"
+            className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4"
         >
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
