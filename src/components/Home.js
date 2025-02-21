@@ -146,9 +146,9 @@ const Home = ({ mail }) => {
         const navigate = useNavigate();
 
         const fetchData = async () => {
+          const getCookie = Cookies.get('sessionToken');
           try {
-            const getCookie = Cookies.get('sessionToken');
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}nifty`,{ count: 10 }, // Sending count as request body
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}nifty`,{ count: 10 }, 
                 {
                   headers: {
                     Authorization: `Bearer ${getCookie}`,
