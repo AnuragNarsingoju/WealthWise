@@ -19,9 +19,12 @@ const PersonalizedStocks = ({mail}) => {
     }
 
     const [formData, setFormData] = useState({
-        initial_capital : '',
-        risk_tolerance: '',
-        trading_strategy_preference: ''
+        user_income: '',
+        user_expenses: '',
+        user_savings: '',
+        user_investment_amount: '',
+        user_risk_tolerance: '',
+        user_strategy: ''
     });
     const [recommendation, setRecommendation] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -50,12 +53,21 @@ const PersonalizedStocks = ({mail}) => {
         e.preventDefault();
         setLoading(true);
         setRecommendation(null);
-
+	const sendData={
+                "input":{
+                  "income": formData.user_income,
+                  "expenses": formData.user_expenses,
+                  "savings": formData.user_savings,
+                  "investment_amount": formData.user_investment_amount,
+                  "risk_tolerance": formData.user_risk_tolerance,
+                  "strategy":formData.user_strategy
+              }
+        }
         try {
             const getCookie = Cookies.get('sessionToken');
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND_URL}PersonalizedStocks`, 
-                {"formData":formData},
+                {"formData":sendData},
                 {
                     headers: {
                         Authorization: `Bearer ${getCookie}`,
@@ -155,25 +167,42 @@ const PersonalizedStocks = ({mail}) => {
                         {[
                              { 
                                 type:"text",
-                                name: 'initial_capital', 
-                                label: 'Initial Capital', 
-                                icon: <TrendingUp className="text-white/70" /> 
+                                name: 'user_income', 
+                                label: 'Income', 
+                                icon: <Users className="text-white/70" /> 
                             },
                              { 
-                                name: 'risk_tolerance', 
-                                label: 'Select Risk Tolerance', 
-                                type: 'select',
-                                options: ['Low', 'Moderate', 'High'],
-                                icon: <ShieldAlert className="text-white/70" /> 
+                                type:"text",
+                                name: 'user_expenses', 
+                                label: 'Total Expenses',
+                                icon: <TrendingUp className="text-white/70" /> 
                             },
                             { 
-                               
-                                name: 'trading_strategy_preference', 
-                                label: 'Select Trading Preference', 
-                                type: 'select',
-                                options: ['Day Trading', 'Swing Trading', 'Position Trading','Scalping','Momentum Trading'],
-                                icon: <Clock className="text-white/70" /> 
+                                type:"text",
+                                name: 'user_savings', 
+                                label: 'Savings (₹)', 
+                                icon: <Wallet className="text-white/70" /> 
                             },
+                            { 
+                                type:"text",
+                                name: 'user_investment_amount', 
+                                label: 'Investment Amount (₹)', 
+                                icon: <Coins className="text-white/70" /> 
+                            },
+                            { 
+                                name: 'user_risk_tolerance', 
+                                label: 'Risk Tolerance', 
+                                type: 'select',
+                                options: ['Low', 'Middle', 'High'],
+                                icon: <Coins className="text-white/70" /> 
+                            },
+                            { 
+                                name: 'user_strategy', 
+                                label: 'Strategy', 
+                                type: 'select',
+                                options: ['Day-trading','swing-trading','Scalping','Momentum-Trading','Long-term-investment'],
+                                icon: <Coins className="text-white/70" /> 
+                            }
                            
                         ].map((field, index) => (
                             <motion.div 
