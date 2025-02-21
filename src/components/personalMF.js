@@ -199,7 +199,7 @@ const InvestmentRecommendationForm = ({mail}) => {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
+                                        className="w-full pl-12 pr-4 py-3 bg-black/10 border border-white/30 rounded-xl text-black placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
                                         required
                                     >
                                         <option value="" disabled>
