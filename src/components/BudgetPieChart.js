@@ -177,7 +177,7 @@ const BudgetPieChart = ({
                 transition={{ duration: 0.3 }}
                 className=" rounded-2xl shadow-2xl overflow-hidden"
             >
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-700 p-6">
+                <div className="bg-gradient-to-br from-indigo-900/70 to-purple-900/70 p-6">
                     <h2 className="text-2xl font-bold text-white text-center">
                         {title}
                     </h2>
