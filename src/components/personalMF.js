@@ -151,33 +151,40 @@ const InvestmentRecommendationForm = ({mail}) => {
                         {[
                              { 
                                 type:"text",
-                                name: 'user_age', 
-                                label: 'Age', 
+                                name: 'user_income', 
+                                label: 'Income', 
                                 icon: <Users className="text-white/70" /> 
                             },
                              { 
-                                name: 'user_risk_appetite', 
-                                label: 'Risk Appetite', 
-                                type: 'select',
-                                options: ['Low', 'Moderate', 'High'],
+                                type:"text",
+                                name: 'user_expenses', 
+                                label: 'Total Expenses',
                                 icon: <TrendingUp className="text-white/70" /> 
                             },
                             { 
                                 type:"text",
-                                name: 'user_income', 
-                                label: 'Annual Income (₹)', 
+                                name: 'user_savings', 
+                                label: 'Savings (₹)', 
                                 icon: <Wallet className="text-white/70" /> 
                             },
                             { 
                                 type:"text",
-                                name: 'user_savings', 
-                                label: 'Total Savings (₹)', 
+                                name: 'user_investment_amount', 
+                                label: 'Investment Amount (₹)', 
                                 icon: <Coins className="text-white/70" /> 
                             },
                             { 
-				                type:"text",
-                                name: 'user_investment_amount', 
-                                label: 'Monthly Investment (₹)', 
+                                name: 'user_risk_tolerance', 
+                                label: 'Risk Tolerance', 
+                                type: 'select',
+                                options: ['Low', 'Middle', 'High'],
+                                icon: <Coins className="text-white/70" /> 
+                            },
+                            { 
+                                name: 'user_strategy', 
+                                label: 'Strategy', 
+                                type: 'select',
+                                options: ['Day-trading','swing-trading','Scalping','Momentum-Trading','Long-term-investment'],
                                 icon: <Coins className="text-white/70" /> 
                             }
                         ].map((field, index) => (
