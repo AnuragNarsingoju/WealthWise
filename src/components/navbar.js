@@ -121,9 +121,10 @@ const Navbar = ({mail}) => {
               <img 
                 src="/navlogo1.png" 
                 alt="App Logo" 
-                className="w-10 h-10 rounded-full"
+                className="w-12 h-12 rounded-full"
+                style={{marginRight:'0px'}}
               />
-              <span className="text-xl font-bold text-white">WealthWise</span>
+              <span style={{marginLeft:'11px'}}className="text-xl font-bold text-white">WealthWise</span>
             </div>
 
             {/* Desktop Navigation - Center */}
