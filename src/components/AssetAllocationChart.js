@@ -19,14 +19,17 @@ const AssetAllocationChart = ({ userId }) => {
       setError(null);
       
       try {
+
+       
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getstocks`, {
-          params: { id: userId },
+          params: { email: userId },
           headers: {
             Authorization: `Bearer ${getCookie}`,
             'Content-Type': 'application/json',
           },
         });
-        setStockData(response.data.stocks);
+        setStockData(JSON.parse(JSON.stringify(response.data))); 
+        console.log("Anurag test",JSON.parse(JSON.stringify(response.data)));
       } catch (error) {
         setError('Failed to fetch stock data. Please try again later.');
         console.error('Error fetching stock data:', error);
@@ -58,6 +61,7 @@ const AssetAllocationChart = ({ userId }) => {
   }
 
   if (!stockData || stockData.length === 0) {
+    
     return (
       <div className="flex items-center justify-center h-64 text-white/80">
         <p className="text-sm font-medium">No asset allocation data available</p>
@@ -65,8 +69,8 @@ const AssetAllocationChart = ({ userId }) => {
     );
   }
 
-  const labels = stockData.map(stock => stock.symbol);
-  const values = stockData.map(stock => stock.boughtPrice);
+  const labels = stockData?.stocks?.map(stock => stock.symbol) || [];
+  const values = stockData?.stocks?.map(stock => stock.boughtPrice) || [];
   
   // Calculate percentages for the tooltip
   const total = values.reduce((acc, val) => acc + val, 0);
