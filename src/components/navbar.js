@@ -7,7 +7,8 @@ import {
   Search, 
   Activity,
   X,
-  LogOut
+  LogOut,
+  Wallet
 } from 'lucide-react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -21,8 +22,6 @@ const Navbar = ({mail}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [data, setData] = useState({});
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
- 
 
   const handleProfile = async (e) => {
     try {
@@ -66,13 +65,10 @@ const Navbar = ({mail}) => {
     }
   };
 
-  
-
   const handleLogout = () => {
     Cookies.remove('sessionToken');
     navigate('/',{ replace: true });
   };
-
 
   const navItems = [
     { 
@@ -89,33 +85,20 @@ const Navbar = ({mail}) => {
       label: 'Chat With Niveshak',
       key: 'Chat With Niveshak'
     },
-    // { 
-    //   icon: <Activity className="w-5 h-5" />, 
-    //   label: 'Analytics', 
-    //   key: 'analytics' 
-    // },
-    // { 
-    //   icon: <Settings className="w-5 h-5" />, 
-    //   label: 'Settings', 
-    //   key: 'settings' 
-    // }
   ];
 
   return (
     <>
-      {/* Main Navbar */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 
+      <nav className={`fixed top-0 left-0 right-0 z-50 
           shadow-lg transform transition-all duration-300
           ${
             isMobileMenuOpen
             ? 'bg-gradient-to-br from-purple-800/75 to-blue-900/75'
             : 'bg-gradient-to-br from-white-600/80 to-blue-800/40'
           }
-        `}
-      >
+        `}>
         <div className="mx-auto py-3 px-8">
-          <div className="flex items-center justify-between ">
+          <div className="flex items-center justify-between">
             {/* Left Side - Logo */}
             <div className="flex items-center space-x-4" onClick={() => navigate('/home')} style={{cursor:'pointer'}}>
               <img 
@@ -124,11 +107,10 @@ const Navbar = ({mail}) => {
                 className="w-12 h-12 rounded-full"
                 style={{marginRight:'0px'}}
               />
-              <span style={{marginLeft:'11px'}}className="text-xl font-bold text-white">WealthWise</span>
+              <span style={{marginLeft:'11px'}} className="text-xl font-bold text-white">WealthWise</span>
             </div>
 
             {/* Desktop Navigation - Center */}
-  
             <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <button
@@ -140,7 +122,7 @@ const Navbar = ({mail}) => {
                     }
                     if (item.key === 'Chat With Niveshak') {
                       navigate('/chatbot',{ replace: true });
-                     }
+                    }
                   }}
                   className={`
                     group relative flex items-center 
@@ -152,21 +134,17 @@ const Navbar = ({mail}) => {
                 >
                   {item.icon}
                   {activeTab === item.key && (
-                    <span 
-                      className="absolute -bottom-2 left-1/2 
-                      -translate-x-1/2 
-                      h-1 w-1 bg-white 
-                      rounded-full 
-                      animate"
-                    />
+                    <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1 w-1 bg-white rounded-full animate"/>
                   )}
                 </button>
               ))}
+              
+              {/* WealthWise Balance Button */}
+              
             </div>
 
             {/* Right Side - Profile and Interactions */}
             <div className="flex items-center space-x-4 relative">
-              {/* Profile Photo */}
               <div 
                 className="relative"
                 onClick={handleClick}
@@ -184,27 +162,18 @@ const Navbar = ({mail}) => {
                     <img
                       src={data.profile}
                       alt={data.name && data.name.charAt(0) ? data.name.charAt(0).toUpperCase() : 'Profile'}
-                      className="w-12 h-12 rounded-full 
-                        border-2 border-white/70 
-                        object-cover 
-                        transform transition-all duration-300 
-                        group-hover:scale-110 
-                        group-hover:rotate-6 
-                        group-hover:shadow-lg"
+                      className="w-12 h-12 rounded-full border-2 border-white/70 object-cover transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg"
                     />
                   ) : (
-                    <div
-                      className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center 
-                        border-2 border-white/70 
-                        transform transition-all duration-300 
-                        group-hover:scale-110 
-                        group-hover:rotate-6 
-                        group-hover:shadow-lg"
-                    >
+                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white/70 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg">
                       {data.name && data.name.charAt(0) ? (
+                        
+                        
+                        
                         <span className="text-xl font-semibold text-gray-800">
                           {data.name.charAt(0).toUpperCase()}
                         </span>
+                        
                       ) : (
                         <span className="fa fa-user-alt text-xl font-semibold text-gray-800"></span>
                       )}
@@ -212,31 +181,29 @@ const Navbar = ({mail}) => {
                   )}
                 </div>
 
-                
                 {!isMobile && isProfileDropdownOpen && (
-                  <div 
-                  className="absolute right-0 top-full mt-2 w-80 h-50
-                    bg-gradient-to-br from-white-600/80 to-blue-800/40 shadow-lg rounded-lg 
-                    border border-red-500 
-                    z-50 flex flex-col items-center justify-center"
-                >
-                  <div className="p-4 border-b border-red-500 text-center w-full">
-                    <p className="text-sm font-semibold text-gray-200 whitespace-normal">
-                      {data.name}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-200 mt-2 whitespace-normal">{data.email}</p>
-                  </div>
-                  <button 
-                    onClick={handleLogout}
-                    className="w-full px-4 py-2 flex items-center justify-center 
-                   
-                    flex items-center 
-                    text-red-500 hover:text-red-600"
-                  >
-                    <button className="w-4 h-4 "/>
+                  <div className="absolute right-0 top-full mt-2 w-80 h-50 bg-gradient-to-br from-white-600/80 to-blue-800/40 shadow-lg rounded-lg border border-red-500 z-50 flex flex-col items-center justify-center">
+                    <div className="p-4 border-b border-red-500 text-center w-full">
+                      <p className="text-sm font-semibold text-gray-200 whitespace-normal">{data.name}</p>
+                      <p className="text-sm font-semibold text-gray-200 mt-2 whitespace-normal">{data.email}</p>
+                      <button
+                            onClick={() => navigate('/portfolio', { replace: true })}
+                            className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-all duration-300"
+                            style={{marginLeft:'25%'}}
+                          >
+                            <Wallet className="w-5 h-5 text-white" />
+                            <span className="text-white font-medium">Rs. {data.balance || "0"}</span>
+                          </button>
+                    </div>
+                    
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 flex items-center justify-center text-red-500 hover:text-red-600"
+                    >
+                      <button className="w-4 h-4"/>
                       Logout
                     </button>
-                </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -244,34 +211,23 @@ const Navbar = ({mail}) => {
         </div>
       </nav>
 
-
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black/50 
-          md:hidden " 
+          className="fixed inset-0 z-40 bg-black/50 md:hidden" 
           onClick={() => setIsMobileMenuOpen(false)}
         >
           <div 
-            className="absolute bottom-0 left-0 right-0 
-            bg-gradient-to-br from-purple-800/75 to-blue-900/75 shadow-lg rounded-t-3xl 
-            animate-slide-in-up"
+            className="absolute bottom-0 left-0 right-0 bg-gradient-to-br from-purple-800/75 to-blue-900/75 shadow-lg rounded-t-3xl animate-slide-in-up"
             onClick={(e) => e.stopPropagation()}
           >
-
-            {/* Close Button */}
             <button 
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute top-4 right-4 
-              text-red-500 hover:text-red-700"
+              className="absolute top-4 right-4 text-red-500 hover:text-red-700"
             >
               <X className="w-6 h-6" />
             </button>
 
-            {/* User Profile Section */}
-
-            
-                  
             <div className="p-6 text-center border-b">
               {data.profile ? (
                 <img
@@ -280,15 +236,7 @@ const Navbar = ({mail}) => {
                   className="w-16 h-16 rounded-full mx-auto mb-3"
                 />
               ) : (
-                <div
-                  className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center 
-                    border-2 border-white/70 
-                    transform transition-all duration-300 
-                    group-hover:scale-110 
-                    group-hover:rotate-6 
-                    group-hover:shadow-lg 
-                    cursor-pointer mx-auto mb-3"
-                >
+                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white/70 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg cursor-pointer mx-auto mb-3">
                   {data.name && data.name.charAt(0) ? (
                     <span className="text-xl font-semibold text-gray-800">
                       {data.name.charAt(0).toUpperCase()}
@@ -300,9 +248,20 @@ const Navbar = ({mail}) => {
               )}
               <h2 className="text-xl text-gray-100 font-semibold">{data.name}</h2>
               <p className="text-gray-100">{data.email}</p>
+              
+              {/* WealthWise Balance for Mobile */}
+              <button
+                onClick={() => {
+                  navigate('/portfolio', { replace: true });
+                  setIsMobileMenuOpen(false);
+                }}
+                className="mt-4 flex items-center justify-center space-x-2 bg-white/10 px-4 py-2 rounded-lg w-full hover:bg-white/20 transition-all duration-300"
+              >
+                <Wallet className="w-5 h-5 text-white" />
+                <span className="text-white font-medium">Rs. {data.balance || "0"}</span>
+              </button>
             </div>
 
-            {/* Mobile Navigation Items */}
             <div className="py-4">
               {navItems.map((item) => (
                 <button
@@ -314,16 +273,10 @@ const Navbar = ({mail}) => {
                     }
                     if (item.key === 'Chat With Niveshak') {
                       navigate('/chatbot',{ replace: true });
-                     }
+                    }
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`
-                    w-full px-6 py-3 flex items-center 
-                    transition-colors text-gray-100
-                    hover:bg-blue-100 hover:text-purple-900
-
-                      
-                  `}
+                  className="w-full px-6 py-3 flex items-center transition-colors text-gray-100 hover:bg-blue-100 hover:text-purple-900"
                 >
                   {item.icon}
                   <span className="ml-3">{item.label}</span>
@@ -331,14 +284,9 @@ const Navbar = ({mail}) => {
               ))}
             </div>
 
-            {/* Additional Actions */}
             <div className="p-4 border-t">
               <button 
-                className="w-full py-2 
-                bg-red-500 text-white 
-                rounded-full 
-                hover:bg-red-600 
-                transition-colors"
+                className="w-full py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
                 onClick={handleLogout}
               >
                 Logout
