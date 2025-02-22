@@ -9,7 +9,7 @@ import Navbar from './navbar';
 import { motion } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 
-const Portfolio = () => {
+const Portfolio = ({mail}) => {
   const [balanceData, setBalanceData] = useState(null);
   const [holdingsData, setHoldingsData] = useState([]);
   const [transactionsData, setTransactionsData] = useState([]);
@@ -92,7 +92,7 @@ const Portfolio = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar mail={mail}/>
       <div className="bg-gradient-to-br from-indigo-900/70 to-purple-900/70">
         <div className="w-full px-4 sm:px-6 md:px-8 py-20 sm:py-24">
           {showScrollButton && (
