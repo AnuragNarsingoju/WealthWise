@@ -1,64 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import Balance from '../components/Balance';
-import Holdings from '../components/Holdings';
-import AssetAllocationChart from '../components/AssetAllocationChart';
-import ConfirmationModal from './ConfirmationModal'; // Make sure path is correct
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import Navbar from './navbar';
-import { motion } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import Balance from "../components/Balance";
+import Holdings from "../components/Holdings";
+import AssetAllocationChart from "../components/AssetAllocationChart";
+import ConfirmationModal from "./ConfirmationModal"; // Make sure path is correct
+import axios from "axios";
+import Cookies from "js-cookie";
+import Navbar from "./navbar";
+import { motion } from "framer-motion";
+import { ArrowUp } from "lucide-react";
 
-const Portfolio = ({mail}) => {
+const Portfolio = ({ mail }) => {
   const [balanceData, setBalanceData] = useState(null);
   const [holdingsData, setHoldingsData] = useState([]);
   const [transactionsData, setTransactionsData] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
   const [allocationData, setAllocationData] = useState([]);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  
+
   // Add modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState(null);
 
-  const userId = "67b8f409f32e294c52ec60d5";
+  const userId = "aashishkumar@example.com";
 
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollButton(window.scrollY > 300);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const getCookie = Cookies.get('sessionToken');
+      const getCookie = Cookies.get("sessionToken");
       try {
-        const endpoints = ['balance', 'holdings', 'transactions', 'performance', 'allocation'];
-        const requests = endpoints.map(endpoint => 
-          axios.get(`${process.env.REACT_APP_BACKEND_URL}${endpoint}?id=${userId}`, {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}getbalance`,
+          {
+            params: { userId: userId },
             headers: {
               Authorization: `Bearer ${getCookie}`,
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-          })
+          }
         );
 
-        const [
-          balanceRes,
-          holdingsRes,
-          transactionsRes,
-          performanceRes,
-          allocationRes
-        ] = await Promise.all(requests);
-
-        setBalanceData(balanceRes.data);
-        setHoldingsData(holdingsRes.data);
-        setTransactionsData(transactionsRes.data);
-        setPerformanceData(performanceRes.data);
-        setAllocationData(allocationRes.data);
+        // console.log(response);
+        console.log(response.data);
+        setBalanceData(response.data.user.balance);
+        setHoldingsData(response.data.user.stocks);
+        console.log(response.data.user.stocks);
+        // setTransactionsData(response.data.);
+        // setPerformanceData(performanceRes.data);
+        // setAllocationData(allocationRes.data);
       } catch (error) {
         console.error("Error fetching portfolio data:", error);
       }
@@ -70,7 +66,7 @@ const Portfolio = ({mail}) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
@@ -83,16 +79,16 @@ const Portfolio = ({mail}) => {
   const handleConfirmPurchase = async () => {
     try {
       // Add your purchase logic here
-      console.log('Purchase confirmed:', selectedStock);
+      console.log("Purchase confirmed:", selectedStock);
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error during purchase:', error);
+      console.error("Error during purchase:", error);
     }
   };
 
   return (
     <>
-      <Navbar mail={mail}/>
+      <Navbar mail={mail} />
       <div className="bg-gradient-to-br from-indigo-900/70 to-purple-900/70">
         <div className="w-full px-4 sm:px-6 md:px-8 py-20 sm:py-24">
           {showScrollButton && (
@@ -109,7 +105,7 @@ const Portfolio = ({mail}) => {
           )}
 
           <div className="max-w-4xl mx-auto">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12"
@@ -117,44 +113,28 @@ const Portfolio = ({mail}) => {
               My Portfolio
             </motion.h1>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="space-y-6 sm:space-y-8"
             >
+
+                
               {/* Balance Section */}
               <div className="bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 md:p-8 border border-white/20">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6">
-                  Portfolio Performance 
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6">
+                  Portfolio Performance
                 </h2>
 
                 <div className="w-full max-w-2xl mx-auto">
                   <div className="aspect-square sm:aspect-[4/3] md:aspect-[16/9]">
-                  <Balance data={balanceData} />
+                    <Balance userId={userId} />
                   </div>
                 </div>
-               
-                
               </div>
 
-              {/* Asset Allocation Section */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 md:p-8 border border-white/20"
-              >
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6">
-                  Asset Allocation 
-                </h2>
-                <div className="w-full max-w-2xl mx-auto">
-                  <div className="aspect-square sm:aspect-[4/3] md:aspect-[16/9]">
-                    <AssetAllocationChart userId={userId} />
-                  </div>
-                </div>
-              </motion.div>
 
-              {/* Holdings Section */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 md:p-8 border border-white/20"
@@ -164,14 +144,33 @@ const Portfolio = ({mail}) => {
                 </h2>
                 <div className="overflow-x-auto h-160">
                   <div className="min-w-full">
-                    <Holdings 
-                      className="bg-white/15 backdrop-blur-xl w-full" 
+                    <Holdings
+                      className="bg-white/15 backdrop-blur-xl w-full"
                       data={holdingsData}
                       onStockSelect={handleStockSelect}
                     />
                   </div>
                 </div>
               </motion.div>
+
+              {/* Asset Allocation Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white/15 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-1 sm:p-2 md:p-3 border border-white/20"
+                >
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white mb-4 sm:mb-6">
+                  Asset Allocation
+                </h2>
+                <div className="w-full max-w-2xl mx-auto">
+                <div className="aspect-[3/2] sm:aspect-[5/3] md:aspect-[16/7]">
+                    <AssetAllocationChart userId={userId} />;
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Holdings Section */}
+              
             </motion.div>
           </div>
 
