@@ -15,7 +15,7 @@ import PersonalFDRecommendation from './components/personalFD';
 import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
-
+import Portfolio from './components/Portfolio';
 
 const App = () => {
   const [log, setLog] = useState(false);
@@ -211,6 +211,7 @@ const App = () => {
         <Route path="/expensedate" element={ mail!=='' ? <ExpenseDate mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/expenseTracker" element={ mail!=='' ? <ExpenseTracker mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/PersonalizedStocks" element={ mail!=='' ? <PersonalizedStocks mail={mail} /> : <Login user1={setLog} email={setMail} />} />
+        <Route path="/Portfolio" element={ mail!=='' ? <Portfolio mail={mail} /> : <Login user1={setLog} email={setMail} />} />
 
 
       </Routes>
