@@ -7,6 +7,7 @@ import { Loader2, Wallet, PiggyBank, LineChart } from 'lucide-react';
 const Balance = ({ userId }) => {
   const [balanceData, setBalanceData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [investedAmount, setInvestedAmount] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -17,16 +18,21 @@ const Balance = ({ userId }) => {
 
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getbalance`, {
-          params: { id: userId },
+          params: { userId: userId },
           headers: {
             Authorization: `Bearer ${getCookie}`,
             'Content-Type': 'application/json',
           },
         });
-        setBalanceData(response.data);
+        setBalanceData(response.data.user);
+        let temp = 0;
+        const stocks = response.data.user.stocks;
+        for(let i=0; i<stocks.length; i++){
+          temp += stocks[i].boughtPrice;
+        }
+        setInvestedAmount(temp);
       } catch (error) {
         setError('Failed to fetch balance data. Please try again later.');
-        console.error('Error fetching balance data:', error);
       } finally {
         setLoading(false);
       }
@@ -62,7 +68,8 @@ const Balance = ({ userId }) => {
     );
   }
 
-  const { totalBalance, availableCash, investedAmount } = balanceData;
+  const { balance, pvalue } = balanceData;
+  const totalBalance = balance + pvalue;
   const investedPercentage = (investedAmount / totalBalance) * 100;
 
   return (
@@ -77,7 +84,6 @@ const Balance = ({ userId }) => {
       </h2>
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
-        {/* Total Balance Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -88,11 +94,10 @@ const Balance = ({ userId }) => {
             <span className="text-sm">Total Balance</span>
           </div>
           <div className="text-2xl font-bold text-white">
-            ₹{totalBalance.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+            ₹{totalBalance && totalBalance.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
           </div>
         </motion.div>
 
-        {/* Available Cash Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -104,11 +109,10 @@ const Balance = ({ userId }) => {
             <span className="text-sm">Available Cash</span>
           </div>
           <div className="text-2xl font-bold text-white">
-            ₹{availableCash.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+            ₹{balance.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
           </div>
         </motion.div>
 
-        {/* Invested Amount Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -125,7 +129,6 @@ const Balance = ({ userId }) => {
         </motion.div>
       </div>
 
-      {/* Progress Bar Section */}
       <div className="space-y-4">
         <div className="h-2 bg-white/5 rounded-full overflow-hidden">
           <motion.div
