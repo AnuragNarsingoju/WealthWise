@@ -74,14 +74,13 @@ const Holdings = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-1">
-                    <DollarSign className="w-4 h-4 text-white/60" />
-                    <span className="text-white font-medium">{holding.price.toFixed(2)}</span>
+                    <span className="text-white font-medium">₹ {holding.price.toFixed(2)}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-1">
-                    <DollarSign className="w-4 h-4 text-white/60" />
-                    <span className="text-white font-medium">{holding.value.toFixed(2)}</span>
+                    
+                    <span className="text-white font-medium">₹ {holding.value.toFixed(2)}</span>
                     <ArrowUpRight className="w-4 h-4 text-green-400" />
                   </div>
                 </td>
