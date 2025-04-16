@@ -16,6 +16,8 @@ import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const App = () => {
   const [log, setLog] = useState(false);
