@@ -9,13 +9,14 @@ const ExpenseDate = ({ mail }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [count, setCount] = useState(0); 
+  const [showPlusButton, setShowPlusButton] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
       const getCookie = Cookies.get('sessionToken');
-      
+
       if (!getCookie) {
         navigate('/');
       }
@@ -38,14 +39,28 @@ const ExpenseDate = ({ mail }) => {
         })
       ]);
 
+      const fetchedData = responseData.data || [];
       setCount(findEmailResponse.data.count || 0);
-      setData(responseData.data || []);
+      setData(fetchedData);
       setIsLoading(false);
+
+      // Check if current month/year exists
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+
+      const hasCurrentMonth = fetchedData.some(item => {
+        const date = new Date(item.date.slice(0, 10));
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+      });
+
+      setShowPlusButton(!hasCurrentMonth); // Show plus if current month not present
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsLoading(false);
       setCount(0);
       setData([]);
+      setShowPlusButton(true); // Show plus if fetch fails
     }
   };
 
@@ -66,7 +81,7 @@ const ExpenseDate = ({ mail }) => {
         <div className="
           min-h-screen 
           w-full 
-           bg-gradient-to-br from-indigo-900/70 to-purple-900/70 
+          bg-gradient-to-br from-indigo-900/70 to-purple-900/70 
           overflow-x-hidden
           flex 
           items-center 
@@ -194,7 +209,8 @@ const ExpenseDate = ({ mail }) => {
           </div>
         </div>
 
-        <button 
+        {showPlusButton && (
+          <button 
             onClick={handlePlusClick}
             className="
               fixed 
@@ -217,6 +233,7 @@ const ExpenseDate = ({ mail }) => {
           >
             <PlusIcon size={32} />
           </button>
+        )}
       </div>
     </>
   );
