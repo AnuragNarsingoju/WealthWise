@@ -16,66 +16,12 @@ import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const App = () => {
   const [log, setLog] = useState(false);
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const [isAllowed, setIsAllowed] = useState(true);
-
-const [loading1, setLoading1] = useState(true);
-
-useEffect(() => {
-  const checkAccess = async () => {
-    if (!mail) {
-      setIsAllowed(false);
-      setLoading1(false);
-      return;
-    }
-
-    try {
-      const token = Cookies.get('sessionToken');
-      if (!token) {
-        setIsAllowed(false);
-        setLoading1(false);
-        return;
-      }
-
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getData`, {
-        params: { email: mail },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
-
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      const hasCurrentMonth = res.data.some(item => {
-        const date = new Date(item.date.slice(0, 10));
-        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-      });
-
-      setIsAllowed(!hasCurrentMonth);
-    } catch (err) {
-      console.error("Error during foam route check:", err);
-      setIsAllowed(false);
-    } finally {
-      setLoading1(false); // mark loading as done regardless
-    }
-  };
-
-  checkAccess();
-}, [mail]);
-
-
-
-  
   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     try {
@@ -155,7 +101,7 @@ useEffect(() => {
 
 
 
-  if (loading || loading1) {
+  if (loading) {
     
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4">
@@ -257,14 +203,7 @@ useEffect(() => {
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
         <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
-        {!loading1 && (
-          isAllowed && (
-            <Route 
-              path="/foam" 
-              element={mail !== '' ? <Psinfo mail={mail} /> :  <Login user1={setLog} email={setMail} />} 
-            />
-          )
-        )}
+        <Route path="/foam" element={  mail!=='' ?<Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/chatbot" element={ mail!=='' ?<ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/fileupload" element={ mail!=='' && (mail === 'anuragnarsingoju@gmail.com' || mail === 'nagasaipraneeth5@gmail.com' || mail === 'aashish17405@gmail.com' || mail === 'abhigxtheupm@gmail.com' ) ? <FileUpload mail={mail} /> : <PageNotFound />} />
         <Route path="/personal-MF" element={  mail!=='' ?<InvestmentRecommendationForm mail={mail} /> : <Login user1={setLog} email={setMail} />} />
