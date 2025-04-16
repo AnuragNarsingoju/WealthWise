@@ -25,7 +25,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [isAllowed, setIsAllowed] = useState(null);
+  const [isAllowed, setIsAllowed] = useState(true);
 
 const [loading1, setLoading1] = useState(true);
 
