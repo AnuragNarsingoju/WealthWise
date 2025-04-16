@@ -26,44 +26,53 @@ const App = () => {
   const navigate = useNavigate();
 
   const [isAllowed, setIsAllowed] = useState(null);
-  
-  useEffect(() => {
-    const checkAccess = async () => {
-      if (!mail) {
+
+  const [isAllowed, setIsAllowed] = useState(false);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const checkAccess = async () => {
+    if (!mail) {
+      setIsAllowed(false);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const token = Cookies.get('sessionToken');
+      if (!token) {
         setIsAllowed(false);
+        setLoading(false);
         return;
       }
 
-      try {
-        const token = Cookies.get('sessionToken');
-        if (!token) {
-          setIsAllowed(false);
-          return;
-        }
-        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getData`, {
-          params: { email: mail },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        });
-        const currentMonth = new Date().getMonth();
-        const currentYear = new Date().getFullYear();
-        const hasCurrentMonth = res.data.some(item => {
-          const date = new Date(item.date.slice(0, 10));
-          return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-        });
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getData`, {
+        params: { email: mail },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
 
-        setIsAllowed(!hasCurrentMonth);
-      } catch (err) {
-        console.error("Error during foam route check:", err);
-        setIsAllowed(false);
-      }
-    };
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const hasCurrentMonth = res.data.some(item => {
+        const date = new Date(item.date.slice(0, 10));
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+      });
 
-    checkAccess();
-  }, [mail]);
+      setIsAllowed(!hasCurrentMonth);
+    } catch (err) {
+      console.error("Error during foam route check:", err);
+      setIsAllowed(false);
+    } finally {
+      setLoading(false); // mark loading as done regardless
+    }
+  };
+
+  checkAccess();
+}, [mail]);
 
 
 
@@ -249,11 +258,13 @@ const App = () => {
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
         <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
-        {isAllowed && (
-          <Route 
-            path="/foam" 
-            element={mail !== '' ? <Psinfo mail={mail} /> :  <Login user1={setLog} email={setMail} />} 
-          />
+        {!loading && (
+          isAllowed && (
+            <Route 
+              path="/foam" 
+              element={mail !== '' ? <Psinfo mail={mail} /> :  <Login user1={setLog} email={setMail} />} 
+            />
+          )
         )}
         <Route path="/chatbot" element={ mail!=='' ?<ChatBot mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/fileupload" element={ mail!=='' && (mail === 'anuragnarsingoju@gmail.com' || mail === 'nagasaipraneeth5@gmail.com' || mail === 'aashish17405@gmail.com' || mail === 'abhigxtheupm@gmail.com' ) ? <FileUpload mail={mail} /> : <PageNotFound />} />
