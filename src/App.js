@@ -27,14 +27,13 @@ const App = () => {
 
   const [isAllowed, setIsAllowed] = useState(null);
 
-  const [isAllowed, setIsAllowed] = useState(false);
-const [loading, setLoading] = useState(true);
+const [loading1, setLoading1] = useState(true);
 
 useEffect(() => {
   const checkAccess = async () => {
     if (!mail) {
       setIsAllowed(false);
-      setLoading(false);
+      setLoading1(false);
       return;
     }
 
@@ -42,7 +41,7 @@ useEffect(() => {
       const token = Cookies.get('sessionToken');
       if (!token) {
         setIsAllowed(false);
-        setLoading(false);
+        setLoading1(false);
         return;
       }
 
@@ -67,7 +66,7 @@ useEffect(() => {
       console.error("Error during foam route check:", err);
       setIsAllowed(false);
     } finally {
-      setLoading(false); // mark loading as done regardless
+      setLoading1(false); // mark loading as done regardless
     }
   };
 
@@ -156,7 +155,7 @@ useEffect(() => {
 
 
 
-  if (loading) {
+  if (loading || loading1) {
     
     return (
         <div className="min-h-screen bg-gradient-to-br from-indigo-900/70 to-purple-900/70 flex items-center justify-center p-4">
@@ -258,7 +257,7 @@ useEffect(() => {
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
         <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
-        {!loading && (
+        {!loading1 && (
           isAllowed && (
             <Route 
               path="/foam" 
