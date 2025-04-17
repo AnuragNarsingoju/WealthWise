@@ -37,43 +37,55 @@ const StockMarketPattern = React.memo(() => (
         left: 0;
         width: 100vw;
         height: 100vh;
-        z-index: -1; /* Keep the video in the background */
+        z-index: -1;
+        overflow: hidden;
       }
       .video-container video {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Ensures the video covers the screen properly */
+        object-fit: cover;
+        transform: scale(1.1);
+        transition: transform 0.3s ease-out;
+      }
+      
+      @media (max-width: 768px) {
+        .video-container video {
+          transform: scale(1.3);
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .video-container video {
+          transform: scale(1.5);
+        }
+      }
+      
+      .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to bottom right,
+          rgba(30, 58, 138, 0.7),
+          rgba(88, 28, 135, 0.7)
+        );
+        z-index: 1;
       }
     `}
-  </style>
-    <defs>
-      <pattern
-        id="stock-pattern"
-        x="0"
-        y="0"
-        width="100%"
-        height="100%"
-        patternUnits="userSpaceOnUse"
-      >
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid slice"
-          autoPlay
-          loop
-          muted
-          
-        >
-          
-          <source src="/stockvideo.mp4" type="video/mp4" />
-        </video>
-      </pattern>
-    </defs>
+    </style>
     <div className="video-container">
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#stock-pattern)" />
+      <div className="video-overlay"></div>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="video-background"
+      >
+        <source src="/stockvideo.mp4" type="video/mp4" />
+      </video>
     </div>
   </>
 ));
@@ -668,25 +680,15 @@ const Login = (log) => {
       pauseOnFocusLoss
       pauseOnHover
     />    
-    <div className="min-h-screen relative bg-gradient-to-br from-blue-900 to-purple-900 flex flex-col items-center xl:items-end justify-center xl:pr-12  p-5 overflow-hidden">
-    // <style>
-    //     {`
-    //       .grecaptcha-badge {
-    //         visibility: hidden;
-    //       }
-    //     `}
-    //   </style>
-
+    <div className="min-h-screen relative flex flex-col items-center xl:items-end justify-center xl:pr-12 p-5 overflow-hidden">
       <ReCAPTCHA
           ref={recaptchaRef} 
           sitekey={siteKey}
           onChange={handleRecaptcha}
           size="invisible"
-            
-        />
-    <StockMarketPattern />
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-purple-900/50"></div> 
-      <div className="relative bg-white/95 backdrop-blur-sm rounded-xl shadow-xl w-full max-w-md p-6">
+      />
+      <StockMarketPattern />
+      <div className="relative bg-white/95 backdrop-blur-sm rounded-xl shadow-xl w-full max-w-md p-6 md:p-8">
      
         <div className="text-center mb-3 " >
           <h1
