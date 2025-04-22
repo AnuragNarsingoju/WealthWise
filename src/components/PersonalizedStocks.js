@@ -276,8 +276,16 @@ const PersonalizedStocks = ({mail}) => {
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
-                                        className="w-full pl-12 pr-4 py-3 border rounded-xl transition-all duration-300 bg-white/15 text-white/70 border-gray-300 hover:bg-black/5 focus:bg-white/15 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/50 [&>option]:bg-indigo-900/55 [&:focus]:bg-transparent [&:focus-visible]:bg-transparent"
+                                        className="w-full h-[50px] min-h-[50px] pl-12 pr-4 py-3 border rounded-xl transition-all duration-300 bg-white/15 text-white/70 border-gray-300 hover:bg-black/5 focus:bg-white/15 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/50 [&>option]:bg-indigo-900/55 [&:focus]:bg-transparent [&:focus-visible]:bg-transparent appearance-none"
                                         required
+                                        style={{ 
+                                            WebkitAppearance: "none", 
+                                            MozAppearance: "none",
+                                            backgroundImage: "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundPosition: "right 1rem center",
+                                            backgroundSize: "1.5em 1.5em"
+                                        }}
                                     >
                                         <option value="" disabled>
                                             {field.label}
@@ -295,7 +303,7 @@ const PersonalizedStocks = ({mail}) => {
                                         value={formData[field.name]}
                                         onChange={handleChange}
                                         placeholder={field.label}
-                                        className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
+                                        className="w-full h-[50px] min-h-[50px] pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
                                         required
                                     />
                                 )}
