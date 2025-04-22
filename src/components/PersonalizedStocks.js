@@ -8,7 +8,8 @@ import {
     ShieldAlert, 
     ChevronRight, 
     ArrowUp, 
-    Clock 
+    Clock,
+    XCircle 
 } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import Cookies from 'js-cookie';
@@ -31,6 +32,7 @@ const PersonalizedStocks = ({mail}) => {
     });
     const [recommendation, setRecommendation] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const scrollRef = useRef(null);
 
     const { scrollYProgress } = useScroll({
@@ -56,6 +58,7 @@ const PersonalizedStocks = ({mail}) => {
         e.preventDefault();
         setLoading(true);
         setRecommendation(null);
+        setError(null);
 	const sendData={
                 "input":{
                   "income": formData.user_income,
@@ -92,6 +95,17 @@ const PersonalizedStocks = ({mail}) => {
             }, 500);
         } catch (error) {
             console.error('Error fetching recommendation:', error);
+            setError(`🔒 Stock Recommendation Feature – Available via Offline Access Only
+
+                Thank you for your interest in our AI-powered stock recommendation system. This feature utilizes Large Language Models (LLMs), advanced machine learning classification algorithms, and pulls real-time financial data from multiple search engine APIs to generate intelligent, data-backed investment insights.
+
+                Due to the high computational demands and security considerations, this system currently operates on offline servers and is not accessible through our live online platform.
+
+                However, we're actively working on optimizing this feature for online deployment. In future releases, we aim to make it available directly through the platform, bringing seamless, real-time recommendations to your fingertips.
+
+                If you want to explore how it works, want a technical demo, or would like to discuss the system in more detail —
+                📬 Feel free to reach out at nagasaipraneeththipparthi@gmail.com — we'd love to connect and share the innovation behind the scenes.`);
+                setTimeout(() => setError(null), 20000);
         } finally {
             setLoading(false);
         }
@@ -120,6 +134,42 @@ const PersonalizedStocks = ({mail}) => {
 
     return (
     <>
+        {error && (
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm p-4"
+            >
+                <motion.div 
+                    initial={{ y: 20 }}
+                    animate={{ y: 0 }}
+                    className="bg-gradient-to-br from-indigo-800 to-purple-900 text-white p-6 rounded-xl max-w-xl shadow-2xl border border-white/20 relative"
+                >
+                    <div className="absolute top-3 right-3">
+                        <button 
+                            onClick={() => setError(null)}
+                            className="text-white/70 hover:text-white transition-colors"
+                        >
+                            <XCircle size={24} />
+                        </button>
+                    </div>
+                    
+                    <div className="flex items-start space-x-4 mb-4">
+                        <div className="bg-white/10 p-2 rounded-full">
+                            <ShieldAlert size={28} className="text-amber-300" />
+                        </div>
+                        <h3 className="text-xl font-bold text-amber-300">Stock Recommendation Feature</h3>
+                    </div>
+                    
+                    <div className="prose prose-invert max-w-full">
+                        <div className="whitespace-pre-line text-white/90 text-sm leading-relaxed">
+                            {error}
+                        </div>
+                    </div>
+                </motion.div>
+            </motion.div>
+        )}
 
         <motion.div 
             className="fixed top-0 left-0 right-0 h-1 z-50 bg-green-500/30"
