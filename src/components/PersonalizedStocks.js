@@ -139,35 +139,37 @@ const PersonalizedStocks = ({mail}) => {
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.7 }}
-                className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm p-4"
+                className="fixed inset-0 flex items-center justify-center z-50 bg-black/60 backdrop-blur-sm  overflow-y-auto"
             >
-                <motion.div 
-                    initial={{ y: 20 }}
-                    animate={{ y: 0 }}
-                    className="bg-gradient-to-br from-indigo-800 to-purple-900 text-white p-6 rounded-xl max-w-xl shadow-2xl border border-white/20 relative"
-                >
-                    <div className="absolute top-3 right-3">
-                        <button 
-                            onClick={() => setError(null)}
-                            className="text-white/70 hover:text-white transition-colors"
-                        >
-                            <XCircle size={24} />
-                        </button>
-                    </div>
-                    
-                    <div className="flex items-start space-x-4 mb-4">
-                        <div className="bg-white/10 p-2 rounded-full">
-                            <ShieldAlert size={28} className="text-amber-300" />
+                <div className="min-h-screen py-[50px] flex items-center justify-center w-full">
+                    <motion.div 
+                        initial={{ y: 20 }}
+                        animate={{ y: 0 }}
+                        className="bg-gradient-to-br from-indigo-800 to-purple-900 text-white p-6 rounded-xl max-w-xl shadow-2xl border border-white/20 relative"
+                    >
+                        <div className="absolute top-3 right-3" >
+                            <button 
+                                onClick={() => setError(null)}
+                                className="text-white/70 hover:text-white transition-colors"
+                            >
+                                <XCircle size={24} />
+                            </button>
                         </div>
-                        <h3 className="text-xl font-bold text-amber-300">Stock Recommendation Feature</h3>
-                    </div>
-                    
-                    <div className="prose prose-invert max-w-full">
-                        <div className="whitespace-pre-line text-white/90 text-sm leading-relaxed">
-                            {error}
+                        
+                        <div className="flex items-start space-x-4 mb-4">
+                            <div className="bg-white/10 p-2 rounded-full">
+                                <ShieldAlert size={28} className="text-amber-300" />
+                            </div>
+                            <h3 className="text-xl font-bold text-amber-300">Stock Recommendation Feature</h3>
                         </div>
-                    </div>
-                </motion.div>
+                        
+                        <div className="prose prose-invert max-w-full">
+                            <div className="whitespace-pre-line text-white/90 text-sm leading-relaxed max-h-[50vh] sm:max-h-[70vh] overflow-y-auto pr-2">
+                                {error}
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
             </motion.div>
         )}
 
@@ -268,7 +270,7 @@ const PersonalizedStocks = ({mail}) => {
                                 transition={{ duration: 0.2 }}
                                 className="relative"
                             >
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-6">
                                     {field.icon}
                                 </div>
                                {field.type === 'select' ? (
