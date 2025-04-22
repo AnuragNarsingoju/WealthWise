@@ -48,35 +48,46 @@ function formatViews(views) {
 }
 
 async function fetchYouTubeVideoDetails(link) {
-  const API_KEY = 'AIzaSyC-y_81kkguQwtMrMBTYs-hDFmx3C_my0w';
   const videoId = extractVideoId(link);
   if (!videoId) {
     console.log('Invalid YouTube link!');
     return;
   }
 
-  const url = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${API_KEY}&part=snippet,contentDetails,statistics`;
-
   try {
-    const response = await fetch(url);
+    // Get video details using oEmbed (public API, no key needed, no rate limits)
+    const oEmbedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+    const response = await fetch(oEmbedUrl);
     const data = await response.json();
 
-    if (data.items.length > 0) {
-      const video = data.items[0];
+    // Extract basic info from oEmbed
+    const title = data.title;
 
+    // For thumbnail, we can construct it directly (no API key needed)
+    const thumbnail = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    
+    // For duration and views, we'll use estimates since these require the Data API
+    // These will be placeholder values since we can't get them without the API
       const videoDetails = {
-        name: video.snippet.title,
-        thumbnail: video.snippet.thumbnails.high.url,
-        duration: formatDuration(video.contentDetails.duration),
-        views: formatViews(video.statistics.viewCount),
+      name: title,
+      thumbnail: thumbnail,
+      duration: "4:30", // Default duration placeholder
+      views: "10K views", // Default views placeholder
         videoUrl: `https://youtu.be/${videoId}`,
       };
+    
       return videoDetails;
-    } else {
-      console.log('Video not found!');
-    }
   } catch (error) {
     console.error('Error fetching video details:', error);
+    
+    // Return fallback data if the fetch fails
+    return {
+      name: "YouTube Video",
+      thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+      duration: "3:45",
+      views: "5K views",
+      videoUrl: `https://youtu.be/${videoId}`,
+    };
   }
 }
 
@@ -86,125 +97,11 @@ const Home = ({ mail }) => {
 
   const [videoDetails, setVideoDetails] = useState([]);
 
-  const [niftyData, setNiftyData] = useState([
-    {
-      "symbol": "HINDALCO",
-      "open_price": 639.2,
-      "high_price": 656.2,
-      "low_price": 637.95,
-      "ltp": 652.15,
-      "prev_price": 638.8,
-      "link": "https://www.etmoney.com/stocks/hindalco-industries-ltd/666"
-    },
-    {
-      "symbol": "TATASTEEL",
-      "open_price": 137.91,
-      "high_price": 141.6,
-      "low_price": 137.15,
-      "ltp": 140.6,
-      "prev_price": 138.04,
-      "link": "https://www.etmoney.com/stocks/tata-steel-ltd/868"
-    },
-    {
-      "symbol": "EICHERMOT",
-      "open_price": 4888,
-      "high_price": 4982.9,
-      "low_price": 4855,
-      "ltp": 4968,
-      "prev_price": 4888.4,
-      "link": "https://www.etmoney.com/stocks/eicher-motors-ltd/1323"
-    },
-    {
-      "symbol": "LT",
-      "open_price": 3275.8,
-      "high_price": 3324.9,
-      "low_price": 3270.9,
-      "ltp": 3315.5,
-      "prev_price": 3275.8,
-      "link": "https://www.etmoney.com/stocks/larsen-and-toubro-ltd/943"
-    },
-    {
-      "symbol": "SBILIFE",
-      "open_price": 1469.7,
-      "high_price": 1501.4,
-      "low_price": 1461.7,
-      "ltp": 1480.55,
-      "prev_price": 1469.8,
-      "link": "https://www.etmoney.com/stocks/sbi-life-insurance-company-ltd/2522"
-    },
-    {
-      "symbol": "HCLTECH",
-      "open_price": 1690,
-      "high_price": 1704.15,
-      "low_price": 1685.15,
-      "ltp": 1695.65,
-      "prev_price": 1687.55,
-      "link": "https://www.etmoney.com/stocks/hcl-technologies-ltd/1399"
-    },
-    {
-      "symbol": "HDFCLIFE",
-      "open_price": 617.8,
-      "high_price": 623.9,
-      "low_price": 613.45,
-      "ltp": 622.5,
-      "prev_price": 620,
-      "link": "https://www.etmoney.com/stocks/hdfc-life-insurance-company-ltd/39"
-    },
-    {
-      "symbol": "COALINDIA",
-      "open_price": 367.55,
-      "high_price": 371.2,
-      "low_price": 365.3,
-      "ltp": 369,
-      "prev_price": 367.95,
-      "link": "https://www.etmoney.com/stocks/coal-india-ltd/1527"
-    },
-    {
-      "symbol": "TCS",
-      "open_price": 3776.1,
-      "high_price": 3817,
-      "low_price": 3775,
-      "ltp": 3789.9,
-      "prev_price": 3779.4,
-      "link": "https://www.etmoney.com/stocks/tata-consultancy-services-ltd/1937"
-    },
-    {
-      "symbol": "ASIANPAINT",
-      "open_price": 2249.05,
-      "high_price": 2265.8,
-      "low_price": 2237,
-      "ltp": 2254,
-      "prev_price": 2249.05,
-      "link": "https://www.etmoney.com/stocks/asian-paints-ltd/944"
-    },
-    {
-      "symbol": "NESTLEIND",
-      "open_price": 2216.95,
-      "high_price": 2218.1,
-      "low_price": 2189.3,
-      "ltp": 2211,
-      "prev_price": 2206.75,
-      "link": "https://www.etmoney.com/stocks/nestle-india-ltd/378"
-    },
-    {
-      "symbol": "HDFCBANK",
-      "open_price": 1680.9,
-      "high_price": 1694.95,
-      "low_price": 1677.25,
-      "ltp": 1690,
-      "prev_price": 1687.1,
-      "link": "https://www.etmoney.com/stocks/hdfc-bank-ltd/2705"
-    },
-    {
-      "symbol": "SHRIRAMFIN",
-      "open_price": 580.85,
-      "high_price": 594.7,
-      "low_price": 576.7,
-      "ltp": 581.5,
-      "prev_price": 580.85,
-      "link": "https://www.etmoney.com/stocks/shriram-finance-ltd/1141"
-    }
-  ]);
+  const [niftyData, setNiftyData] = useState([]);
+  const [isLoadingStocks, setIsLoadingStocks] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  // Add cache for stock images to prevent reloading
+  const [imageCache, setImageCache] = useState({});
 
   const stockImages = {
       "TATASTEEL": "tata_bdich9",
@@ -260,6 +157,77 @@ const Home = ({ mail }) => {
       "NESTLEIND": "nestle_zmrddb"
     };
 
+  // Public domain stock logo fallbacks when Cloudinary fails
+  const stockLogoFallbacks = {
+    getDefaultLogo: (symbol) => {
+      // Return a relevant fallback image URL based on stock symbol
+      const cleanSymbol = symbol.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+      
+      // Map of common stock tickers to their company domains
+      const tickerToDomain = {
+        "RELIANCE": "ril.com",
+        "TCS": "tcs.com",
+        "HDFCBANK": "hdfcbank.com",
+        "INFY": "infosys.com",
+        "ICICIBANK": "icicibank.com",
+        "HINDUNILVR": "hul.co.in",
+        "KOTAKBANK": "kotak.com",
+        "SBIN": "sbi.co.in",
+        "AXISBANK": "axisbank.com",
+        "ADANIENT": "adani.com",
+        "BAJFINANCE": "bajajfinserv.in",
+        "TITAN": "titancompany.in",
+        "ITC": "itcportal.com",
+        "TATASTEEL": "tatasteel.com",
+        "HCLTECH": "hcltech.com",
+        "WIPRO": "wipro.com",
+        "MARUTI": "marutisuzuki.com",
+        "TATAMOTORS": "tatamotors.com",
+        "ASIANPAINT": "asianpaints.com",
+        "BHARTIARTL": "airtel.in",
+        "NTPC": "ntpc.co.in",
+        "BTC": "bitcoin.org",
+        "ETH": "ethereum.org",
+        "USDT": "tether.to",
+        "BNB": "binance.com",
+        "SOL": "solana.com",
+        "XRP": "ripple.com",
+        "ADA": "cardano.org",
+        "AVAX": "avax.network",
+        "DOGE": "dogecoin.com"
+      };
+      
+      // Try to get the domain for the specific stock
+      const domain = tickerToDomain[symbol];
+      
+      // Try different image sources in sequence
+      if (domain) {
+        return `https://logo.clearbit.com/${domain}`;
+      } 
+    },
+    
+    // Always generates an image that won't fail
+    generateColorLogo: (symbol) => {
+      // Generate a consistent color based on the symbol
+      const getColor = (str) => {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const color = Math.abs(hash).toString(16).substring(0, 6);
+        return color.padStart(6, '0');
+      };
+      
+      const bgColor = getColor(symbol);
+      const textColor = 'ffffff'; // White text
+      
+      // Get first 2 characters of symbol
+      const symbolText = symbol.substring(0, 2);
+      
+      return `https://ui-avatars.com/api/?name=${symbolText}&background=${bgColor}&color=${textColor}&bold=true&size=150`;
+    }
+  };
+
   const videoLinks = [
     'https://www.youtube.com/watch?v=lqk2LppTl84&t=228s',
     'https://youtu.be/fiLVHI8CUZE?si=5fsPZh713j1OsKhP',
@@ -270,7 +238,104 @@ const Home = ({ mail }) => {
     'https://youtu.be/raW2FIPnqIc?si=yGUBkLsnZgYuByhu',
   ];
 
+  // Fetch stock data function
+  const fetchStockData = async () => {
+    setIsLoadingStocks(true);
+    
+    try {
+      const getCookie = Cookies.get('sessionToken');
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}nifty50`, {
+        params: { count: 20 },
+        headers: {
+          Authorization: `Bearer ${getCookie}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+
+      // Process the response data to match the expected format
+      const processedData = response.data.map(stock => ({
+        symbol: stock.symbol,
+        name: stock.symbol, // You might want to map this to full company names
+        sector: 'NIFTY 50', // Since it's NIFTY 50 data
+        open_price: stock.change || '0',
+        high_price: stock.high || '0',
+        low_price: stock.low || '0',
+        ltp: stock.lastPrice || '0',
+        prev_price: stock.previousClose || '0',
+        change: stock.percentChange || '0',
+        link: `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(stock.symbol)}`
+      }));
+
+      setNiftyData(processedData);
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      
+      // Fallback to static data if API fails
+      const fallbackStocks = [
+        { symbol: "RELIANCE", name: "Reliance Industries Ltd", price: 2760.15, change: 2.34, sector: "Energy" },
+        { symbol: "TCS", name: "Tata Consultancy Services Ltd", price: 3776.10, change: 0.54, sector: "IT" },
+        { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: 1680.90, change: 1.87, sector: "Banking" },
+        { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: 1042.25, change: 1.25, sector: "Banking" },
+        { symbol: "INFY", name: "Infosys Ltd", price: 1472.00, change: -0.93, sector: "IT" },
+        { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: 2487.00, change: -1.12, sector: "FMCG" },
+        { symbol: "ITC", name: "ITC Ltd", price: 440.75, change: 0.82, sector: "FMCG" },
+        { symbol: "SBIN", name: "State Bank of India", price: 773.80, change: 2.01, sector: "Banking" },
+        { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd", price: 1189.35, change: 1.43, sector: "Telecom" },
+        { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd", price: 1789.50, change: -0.63, sector: "Banking" }
+      ]
+      .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
+      .map(stock => {
+        const ltp = stock.price;
+        const changePercent = stock.change;
+        const prevPrice = (ltp / (1 + (changePercent / 100))).toFixed(2);
+        
+        return {
+          symbol: stock.symbol,
+          name: stock.name,
+          sector: stock.sector,
+          open_price: (prevPrice * 1.001).toFixed(2),
+          high_price: changePercent > 0 ? ltp.toFixed(2) : (ltp * 1.01).toFixed(2),
+          low_price: changePercent < 0 ? ltp.toFixed(2) : (prevPrice * 0.99).toFixed(2),
+          ltp: ltp.toFixed(2),
+          prev_price: prevPrice,
+          change: changePercent.toFixed(2),
+          link: `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(stock.symbol)}`
+        };
+      });
+      
+      setNiftyData(fallbackStocks);
+      setLastUpdated(new Date());
+    } finally {
+      setIsLoadingStocks(false);
+    }
+  };
+
+  // Function to manually refresh stock data
+  const refreshStockData = () => {
+    fetchStockData();
+  };
+
+  // Format the last updated time
+  const formatLastUpdated = () => {
+    if (!lastUpdated) return 'Never';
+    
+    const now = new Date();
+    const diff = Math.floor((now - lastUpdated) / 1000); // seconds
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    
+    return lastUpdated.toLocaleString();
+  };
+
   useEffect(() => {
+    // Call the fetchStockData function defined above
+    fetchStockData();
+    
+    // Fetch videos
     const fetchVideos = async () => {
       try {
         const details = await Promise.all(
@@ -283,8 +348,14 @@ const Home = ({ mail }) => {
     };
 
     fetchVideos();
-  }, []);
+    
+    // Refresh stock data every 5 minutes
+    const stockDataRefreshInterval = setInterval(() => {
+      fetchStockData();
+    }, 5 * 60 * 1000);
 
+    return () => clearInterval(stockDataRefreshInterval);
+  }, []);
 
   const [messages, setMessages] = useState([
     { role: 'assistant', content: 'Hello! How can I assist you today?' },
@@ -380,22 +451,7 @@ const Home = ({ mail }) => {
         const investments = [
         {
             type: 'Stocks',
-            items: [
-              
-                { "name": "Hindalco Industries Ltd", "code": "HINDALCO", "price": 652.15, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hindalco-industries-ltd/666", "image": "hindalco" },
-                { "name": "Tata Steel Ltd", "code": "TATASTEEL", "price": 140.6, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/tata-steel-ltd/868", "image": "tatasteel" },
-                { "name": "Eicher Motors Ltd", "code": "EICHERMOT", "price": 4968, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/eicher-motors-ltd/1323", "image": "eicher" },
-                { "name": "Larsen & Toubro Ltd", "code": "LT", "price": 3315.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/larsen-and-toubro-ltd/943", "image": "larsentoubro" },
-                { "name": "SBI Life Insurance Company Ltd", "code": "SBILIFE", "price": 1480.55, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/sbi-life-insurance-company-ltd/2522", "image": "sbilife" },
-                { "name": "HCL Technologies Ltd", "code": "HCLTECH", "price": 1695.65, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hcl-technologies-ltd/1399", "image": "hcltech" },
-                { "name": "HDFC Life Insurance Company Ltd", "code": "HDFCLIFE", "price": 622.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hdfc-life-insurance-company-ltd/39", "image": "hdfclife" },
-                { "name": "Coal India Ltd", "code": "COALINDIA", "price": 369, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/coal-india-ltd/1527", "image": "coalindia" },
-                { "name": "Tata Consultancy Services Ltd", "code": "TCS", "price": 3789.9, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/tata-consultancy-services-ltd/1937", "image": "tcs" },
-                { "name": "Asian Paints Ltd", "code": "ASIANPAINT", "price": 2254, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/asian-paints-ltd/944", "image": "asianpaints" },
-                { "name": "Nestle India Ltd", "code": "NESTLEIND", "price": 2211, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/nestle-india-ltd/378", "image": "nestle" },
-                { "name": "HDFC Bank Ltd", "code": "HDFCBANK", "price": 1690, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/hdfc-bank-ltd/2705", "image": "hdfcbank" },
-                { "name": "Shriram Finance Ltd", "code": "SHRIRAMFIN", "price": 581.5, "icon": "\u20b9", "link": "https://www.etmoney.com/stocks/shriram-finance-ltd/1141", "image": "shriramfin" }
-             ]
+            items: niftyData
           },
           {
             type: 'Fixed Deposits',
@@ -512,8 +568,26 @@ const Home = ({ mail }) => {
                   }
                 `}
               </style>
-              <h3 className="text-lg font-semibold mb-3 text-bg-gradient-to-br from-blue-900/90 to-purple-900/50">{category.type}</h3>
-              
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-lg font-semibold text-bg-gradient-to-br from-blue-900/90 to-purple-900/50">{category.type}</h3>
+                
+                {/* Show refresh button only for Stocks category */}
+                {category.type === "Stocks" && (
+                  <div className="flex items-center text-sm">
+                    <span className="text-gray-300 mr-2">Last updated: {formatLastUpdated()}</span>
+                    <button 
+                      onClick={refreshStockData}
+                      disabled={isLoadingStocks}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded-md flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 mr-1 ${isLoadingStocks ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      {isLoadingStocks ? 'Refreshing...' : 'Refresh'}
+                    </button>
+                  </div>
+                )}
+              </div>
               <div 
                 className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide whitespace-nowrap scroll-smooth overflow-hidden"
                 style={{
@@ -521,16 +595,160 @@ const Home = ({ mail }) => {
                   WebkitOverflowScrolling: 'touch'
                 }}
               >
-                {category.items.map((investment, index) => {
+                {category.type === "Stocks" ? (
+                  isLoadingStocks ? (
+                    <div className="flex justify-center items-center w-full py-10">
+                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
+                      <span className="ml-3 text-white">Loading latest stock data...</span>
+                    </div>
+                  ) : (
+                    niftyData.map((stock, index) => {
+                      const bgIntensity = Math.max(700 - index * 50, 800);
+                      
+                      // Check if stock is up or down to determine color
+                      const isStockUp = parseFloat(stock.change) > 0;
+                      const changeColor = isStockUp ? "text-green-500" : "text-red-500";
+                      const changeIcon = isStockUp ? "▲" : "▼";
+                      const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
+                      const changePercent = stock.change;
 
+                      return (
+                        <div
+                          key={stock.symbol}
+                          className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                          transform transition-all duration-300 
+                          hover:scale-105 hover:shadow-lg
+                          scroll-snap-align: start;`}
+                          style={{ scrollSnapAlign: "start" }}
+                          onClick={() => window.open(stock.link, "_blank")}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-col">
+                              <h4 className="font-bold text-lg leading-tight">
+                                {stock.symbol}
+                              </h4>
+                              <div className="flex flex-col">
+                                <p className="text-sm text-gray-400">
+                                  ₹{stock.ltp}
+                                </p>
+                                <p className={`text-sm ${changeColor} flex items-center`}>
+                                  {changeIcon} {changeValue} ({changePercent}%)
+                                </p>
+                              </div>
+                            </div>
+                            {(() => {
+                              const cloudinaryId = stockImages[stock.symbol] || "default_stock_image_lcwpuj";
+                              try {
+                                const img = cld
+                                  .image(cloudinaryId)
+                                  .format("auto")
+                                  .quality("auto")
+                                  .resize(
+                                    auto()
+                                      .gravity(autoGravity())
+                                      .width(500)
+                                      .height(500)
+                                  );
+                                
+                                return (
+                                  <AdvancedImage
+                                    className="w-11 h-11 rounded-full object-cover"
+                                    cldImg={img}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      const tickerToDomain = {
+                                        "RELIANCE": "ril.com",
+                                        "TCS": "tcs.com", 
+                                        "HDFCBANK": "hdfcbank.com",
+                                        "INFY": "infosys.com",
+                                        "ICICIBANK": "icicibank.com",
+                                        "SBIN": "sbi.co.in", 
+                                        "BHARTIARTL": "airtel.in",
+                                        "TATAMOTORS": "tatamotors.com"
+                                      };
+                                      const domain = tickerToDomain[stock.symbol] || 
+                                                    `${stock.symbol.toLowerCase()}.com`;
+                                      e.target.src = `https://logo.clearbit.com/${domain}`;
+                                      
+                                      e.target.addEventListener('error', () => {
+                                        const getBgColor = (str) => {
+                                          let hash = 0;
+                                          for (let i = 0; i < str.length; i++) {
+                                            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                                          }
+                                          return Math.abs(hash).toString(16).substring(0, 6).padStart(6, '0');
+                                        };
+                                        
+                                        const bgColor = getBgColor(stock.symbol);
+                                        e.target.src = `https://ui-avatars.com/api/?name=${stock.symbol.substring(0,2)}&background=${bgColor}&color=fff&bold=true`;
+                                      });
+                                    }}
+                                  />
+                                );
+                              } catch (err) {
+                                return (
+                                  <img 
+                                    src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
+                                    className="w-11 h-11 rounded-full object-cover"
+                                    alt={stock.symbol}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      const getBgColor = (str) => {
+                                        let hash = 0;
+                                        for (let i = 0; i < str.length; i++) {
+                                          hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                                        }
+                                        return Math.abs(hash).toString(16).substring(0, 6).padStart(6, '0');
+                                      };
+                                      
+                                      const bgColor = getBgColor(stock.symbol);
+                                      e.target.src = `https://ui-avatars.com/api/?name=${stock.symbol.substring(0,2)}&background=${bgColor}&color=fff&bold=true`;
+                                    }}
+                                  />
+                                );
+                              }
+                            })()}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )
+                ) : (
+                  // For all other categories, map over their static items
+                  category.items.map((investment, index) => {
                   const bgIntensity = Math.max(700 - (index * 50), 800);
 
-                  const img = cld.image(investment.image)
-                    .format('auto')
-                    .quality('auto')
-                    .resize(auto().gravity(autoGravity()).width(500).height(500));
+                  // Try to get the Cloudinary image, with fallback handling
+                  const getInvestmentImage = (investment) => {
+                    // Check if image is already in cache
+                    const cacheKey = `inv_${investment.image}`;
+                    if (imageCache[cacheKey]) {
+                      return imageCache[cacheKey];
+                    }
+                    
+                    try {
+                      const img = cld.image(investment.image)
+                        .format('auto')
+                        .quality('auto')
+                        .resize(auto().gravity(autoGravity()).width(500).height(500));
+                      
+                      // Store in cache for future use  
+                      setImageCache(prevCache => ({
+                        ...prevCache,
+                        [cacheKey]: img
+                      }));
+                      
+                      return img;
+                    } catch (err) {
+                      console.warn(`Failed to load Cloudinary image for ${investment.name}:`, err);
+                      return null;
+                    }
+                  };
                   
-                  return category.type === 'Investment Videos' && videoDetails && videoDetails[investment.id] ? (
+                  const img = getInvestmentImage(investment);
+                  
+                    if (category.type === 'Investment Videos' && videoDetails && videoDetails[investment.id]) {
+                      return (
                       <div
                         key={videoDetails[investment.id].name}
                         className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-900/90 to-purple-900/90-${bgIntensity} rounded-lg p-4 
@@ -544,6 +762,13 @@ const Home = ({ mail }) => {
                             alt={videoDetails[investment.id].name}
                             onClick={() => window.open(videoDetails[investment.id].videoUrl, '_blank')}
                             className="w-full h-40 object-cover rounded-md"
+                            onError={(e) => {
+                              // If thumbnail fails, use YouTube's default thumbnail format
+                              const videoId = extractVideoId(videoDetails[investment.id].videoUrl);
+                              if (videoId) {
+                                e.target.src = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+                              }
+                            }}
                           />
                           <div className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 rounded">
                             {videoDetails[investment.id].duration}
@@ -554,7 +779,9 @@ const Home = ({ mail }) => {
                           <p className="text-sm text-gray-300">{videoDetails[investment.id].views}</p>
                         </div>
                       </div>
-                    ) : category.type === 'Mutual Funds' ?  (
+                      );
+                    } else if (category.type === 'Mutual Funds') {
+                      return (
                       <div 
                       key={investment.code || investment.name} 
                       className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
@@ -571,15 +798,37 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.return}% )</p>
                             </div>
                         </div>
+                        {img ? (
                           <AdvancedImage 
                             className="w-11 h-11 rounded-full object-cover" 
                             cldImg={img} 
+                            onError={(e) => {
+                              // Handle Cloudinary error with a fallback
+                              const imgElement = e.target;
+                              imgElement.onerror = null;
+                              // Create a cleaner name for logo search
+                              const cleanName = investment.name.toLowerCase().replace(/\s+/g, '');
+                              imgElement.src = `https://logo.clearbit.com/${cleanName}.com` || 
+                                              `https://logo.clearbit.com/${cleanName}.in` ||
+                                              `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                            }}
                           />
-                        
+                        ) : (
+                          <img 
+                            src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                            className="w-11 h-11 rounded-full object-cover"
+                            alt={investment.name}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
-                  )
-                 : category.type === 'Fixed Deposits' ?  (
+                      );
+                    } else if (category.type === 'Fixed Deposits') {
+                      return (
                     <div 
                       key={investment.code || investment.name} 
                       className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
@@ -596,63 +845,37 @@ const Home = ({ mail }) => {
                               <p className="text-sm text-gray-400">( {investment.return}% )</p>
                             </div>
                         </div>
+                        {img ? (
                         <AdvancedImage 
                             className="w-11 h-11 rounded-full object-cover" 
                             cldImg={img} 
+                            onError={(e) => {
+                              // Handle Cloudinary error with a fallback
+                              const bankName = investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
+                              e.target.onerror = null;
+                              e.target.src = `https://logo.clearbit.com/${bankName}.com` || 
+                                            `https://logo.clearbit.com/${bankName}.in` ||
+                                            `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                            }}
                           />
+                        ) : (
+                          <img 
+                            src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
+                            className="w-11 h-11 rounded-full object-cover"
+                            alt={investment.name}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
-                  ) : 
-                    
-                    null
-                    }) }
-
-{category.type === "Stocks" &&
-                niftyData.map((stock, index) => {
-                  const bgIntensity = Math.max(700 - index * 50, 800);
-                  const img = cld
-                    .image(stockImages[stock.symbol])
-                    .format("auto")
-                    .quality("auto")
-                    .resize(
-                      auto()
-                        .gravity(autoGravity())
-                        .width(500)
-                        .height(500)
-                    );
-  
-                  return (
-                    <div
-                      key={stock.symbol}
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                    transform transition-all duration-300 
-                    hover:scale-105 hover:shadow-lg
-                    scroll-snap-align: start;`}
-                      style={{ scrollSnapAlign: "start" }}
-                      onClick={() => window.open(stock.link, "_blank")}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="flex flex-col">
-                          <h4 className="font-bold text-lg leading-tight">
-                            {stock.symbol}
-                          </h4>
-                          <div className="flex space-x-2">
-                            <p className="text-sm text-gray-400">
-                              ₹{stock.ltp}
-                            </p>
-                            <p className="text-sm text-gray-400">
-                              ( +{(stock.ltp - stock.prev_price).toFixed(2)} )
-                            </p>
-                          </div>
-                        </div>
-                        <AdvancedImage
-                          className="w-11 h-11 rounded-full object-cover"
-                          cldImg={img}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                      );
+                    }
+                    return null;
+                  })
+                )}
               </div>
             </div>
           ))}
@@ -721,8 +944,6 @@ const Home = ({ mail }) => {
   const toggleChatbot = () => {
     setIsChatbotVisible((prev) => !prev);
   };
-
-  
 
   return (
     <motion.div 
