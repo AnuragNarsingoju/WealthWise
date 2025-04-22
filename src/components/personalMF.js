@@ -191,7 +191,7 @@ const InvestmentRecommendationForm = ({mail}) => {
                                 transition={{ duration: 0.2 }}
                                 className="relative"
                             >
-                                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                                <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center w-6">
                                     {field.icon}
                                 </div>
                                {field.type === 'select' ? (
