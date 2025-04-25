@@ -300,7 +300,7 @@ const PersonalizedStocks = ({mail}) => {
                                     </select>
                                 ) : (
                                     <input
-                                        type={field.type}
+                                        type="number"
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
