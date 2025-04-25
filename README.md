@@ -1,72 +1,171 @@
-# Getting Started with Create React App
+# 🚀 WEALTH-WISE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Your intelligent financial companion for smarter investing, budgeting, and financial education.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## �� Problem Statement
 
-### `npm start`
+In today's fast-paced financial world, individuals struggle with complex financial planning and investment decisions. Traditional finance apps offer either basic rule-based insights or rely on slow GPU-based AI models, resulting in delayed advice and missed opportunities. Users need real-time, personalized financial guidance that adapts to their unique goals and risk profiles.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Wealth Wise addresses this by leveraging Groq's LPU technology to deliver instant, intelligent financial advisory. With blazing-fast inference speeds (300+ tokens/second) and integrated mathematical analysis, we provide real-time, data-backed financial recommendations that transform how users manage their wealth.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🎯 Objective
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+WealthWise is a AI-powered financial advisory and education platform that provides an intuitive, user-friendly interface for investment planning and financial analysis. It offers an interactive AI chatbot, real-time market simulation, personalized insights, and comprehensive financial education resources, making financial literacy accessible to users of all levels.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🧠 Team & Approach
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Team Name:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`Abhiyantrana-Navonmesakah`
 
-### `npm run eject`
+### Team Members:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Anurag [@AnuragNarsingoju](https://github.com/AnuragNarsingoju)
+- Nagasai [@NagasaiPraneeth](https://github.com/NagasaiPraneeth)
+- Aashish [@Aashish17405](https://github.com/Aashish17405)
+- Abhilash [@AbhiGX](https://github.com/Abhi-GX)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Your Approach:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Focused on making financial literacy accessible to users of all backgrounds
+- Addressed key challenges in financial education through AI-powered assistance
+- Developed an interactive simulation for risk-free market learning
+- Created a learning-by-doing framework for financial concepts
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Core Technologies Used:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Frontend: React.js, Tailwind CSS
+- Backend: Express.js, Firebase
+- Database: MongoDB, Firebase Firestore
+- Hosting: Vercel (https://wealthwisee.vercel.app/)
 
-### Code Splitting
+### Sponsor Technologies Used (if any):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- [✅] **Groq:** Leveraged Groq's LPU™ Inference Engine for enhanced AI capabilities:
+  - Implemented ultra-fast AI inference for real-time financial advice
+  - Utilized RAG (Retrieval-Augmented Generation) for accurate market insights
+  - Achieved low-latency responses for interactive chatbot functionality
+  - Optimized cost-efficiency through better performance per watt
+  - Enabled scalable AI processing for enterprise-level financial analysis
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ✨ Key Features
 
-### Making a Progressive Web App
+- ✅ **Personalized Financial Dashboard**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  - Real-time display of income and expenses
+  - Smart investment recommendations
+  - Intelligent budget planner with spending insights
+  - Visual learning tools for financial progress tracking
 
-### Advanced Configuration
+- ✅ **AI-Powered Investment Assistant**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  - AI-driven stock & mutual fund suggestions
+  - Personalized recommendations based on risk profile
+  - Goal-based investment planning
+  - Interactive financial education chatbot with jargon-free explanations
 
-### Deployment
+- ✅ **Financial Education Center**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+  - Bite-sized financial literacy modules
+  - Interactive quizzes and learning assessments
+  - Personalized learning paths based on financial goals
+  - Real-world case studies and examples
 
-### `npm run build` fails to minify
+- ✅ **Virtual Stock Market Simulator**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# WealthWise
-# WealthWise-Frontend
+  - Practice trading with virtual currency
+  - Interactive portfolio management
+  - Live market simulation with educational tooltips
+  - Historical data visualization with learning annotations
+
+- ✅ **Secure Authentication & Modern UX**
+  - Google OAuth integration
+  - Clean, responsive UI with Tailwind CSS
+  - Mobile-first approach
+  - Cross-device compatibility
+
+---
+
+## 📽️ Demo & Deliverables
+
+- **Demo Video Link:** [Paste YouTube or Loom link here]
+- **Pitch Deck / PPT Link:** [Paste Google Slides / PDF link here]
+
+---
+
+## ✅ Tasks & Bonus Checklist
+
+- [✅] **All members of the team completed the mandatory task - Followed at least 2 of our social channels and filled the form** (Details in Participant Manual)
+- [✅] **All members of the team completed Bonus Task 1 - Sharing of Badges and filled the form (2 points)** (Details in Participant Manual)
+- [✅] **All members of the team completed Bonus Task 2 - Signing up for Sprint.dev and filled the form (3 points)** (Details in Participant Manual)
+
+---
+
+## 🧪 How to Run the Project
+
+### Requirements:
+
+- Node.js
+- npm package manager
+- A web browser
+
+### Local Setup:
+
+```bash
+# Clone the repo
+git clone https://github.com/Abhiyantrana-Navonmesakah/Wealth-wise-frontend
+
+# Navigate to the project directory
+cd Wealth-wise-frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+
+The application will launch at http://localhost:3000 in your default browser.
+
+---
+
+## 🧬 Future Scope
+
+- 📈 Integration with more financial APIs for broader market data
+- 🛡️ Advanced security features for financial transactions
+- 🌐 Multi-language support for global accessibility
+- 📱 Native mobile application development
+- 🤖 Enhanced AI capabilities for more precise financial advice
+- 🎓 Certification programs for completed financial education modules
+- 🔄 Gamification elements to increase engagement with financial learning
+
+---
+
+## 📎 Resources / Credits
+
+- Firebase for authentication and database services
+- React.js for frontend development
+- Tailwind CSS for UI/UX design
+- Financial APIs for market data
+- Open-source libraries for data visualization
+- Educational content from financial literacy experts
+
+---
+
+## 🏁 Final Words
+
+The WealthWise project aims to democratize financial literacy and empower users to make informed investment decisions. Our team has created an accessible platform that combines cutting-edge technology with user-friendly design to transform how millennials approach personal finance. By integrating education throughout the user experience, we're not just helping users manage money, but teaching them the skills they need for lifelong financial success.
+
+---
