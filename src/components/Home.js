@@ -97,17 +97,43 @@ const Home = ({ mail }) => {
 
   const [videoDetails, setVideoDetails] = useState([]);
 
-  const [niftyData, setNiftyData] = useState([]);
-  const [isLoadingStocks, setIsLoadingStocks] = useState(true);
+  const [niftyData, setNiftyData] = useState([
+    { symbol: "RELIANCE", name: "Reliance Industries Ltd", price: 2760.15, change: 2.34, sector: "Energy", open_price: 2763.12, high_price: 2770.25, low_price: 2750.80, ltp: 2760.15, prev_price: 2695.35, link: "https://www.nseindia.com/get-quotes/equity?symbol=RELIANCE" },
+    { symbol: "TCS", name: "Tata Consultancy Services Ltd", price: 3776.10, change: 0.54, sector: "IT", open_price: 3780.50, high_price: 3785.75, low_price: 3770.20, ltp: 3776.10, prev_price: 3755.80, link: "https://www.nseindia.com/get-quotes/equity?symbol=TCS" },
+    { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: 1680.90, change: 1.87, sector: "Banking", open_price: 1682.30, high_price: 1690.45, low_price: 1678.15, ltp: 1680.90, prev_price: 1650.05, link: "https://www.nseindia.com/get-quotes/equity?symbol=HDFCBANK" },
+    { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: 1042.25, change: 1.25, sector: "Banking", open_price: 1045.70, high_price: 1048.90, low_price: 1040.10, ltp: 1042.25, prev_price: 1029.40, link: "https://www.nseindia.com/get-quotes/equity?symbol=ICICIBANK" },
+    { symbol: "INFY", name: "Infosys Ltd", price: 1472.00, change: -0.93, sector: "IT", open_price: 1475.20, high_price: 1480.35, low_price: 1472.00, ltp: 1472.00, prev_price: 1485.80, link: "https://www.nseindia.com/get-quotes/equity?symbol=INFY" },
+    { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: 2487.00, change: -1.12, sector: "FMCG", open_price: 2490.15, high_price: 2510.30, low_price: 2487.00, ltp: 2487.00, prev_price: 2515.10, link: "https://www.nseindia.com/get-quotes/equity?symbol=HINDUNILVR" },
+    { symbol: "ITC", name: "ITC Ltd", price: 440.75, change: 0.82, sector: "FMCG", open_price: 441.20, high_price: 443.60, low_price: 439.50, ltp: 440.75, prev_price: 437.20, link: "https://www.nseindia.com/get-quotes/equity?symbol=ITC" },
+    { symbol: "SBIN", name: "State Bank of India", price: 773.80, change: 2.01, sector: "Banking", open_price: 775.50, high_price: 780.25, low_price: 770.40, ltp: 773.80, prev_price: 758.55, link: "https://www.nseindia.com/get-quotes/equity?symbol=SBIN" },
+    { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd", price: 1189.35, change: 1.43, sector: "Telecom", open_price: 1190.60, high_price: 1195.80, low_price: 1185.20, ltp: 1189.35, prev_price: 1172.60, link: "https://www.nseindia.com/get-quotes/equity?symbol=BHARTIARTL" },
+    { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd", price: 1789.50, change: -0.63, sector: "Banking", open_price: 1793.10, high_price: 1800.25, low_price: 1789.50, ltp: 1789.50, prev_price: 1800.85, link: "https://www.nseindia.com/get-quotes/equity?symbol=KOTAKBANK" }
+  ]);
+  const [isLoadingStocks, setIsLoadingStocks] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   
-  // Add states for mutual funds and fixed deposits
-  const [mutualFundsData, setMutualFundsData] = useState([]);
-  const [isLoadingMF, setIsLoadingMF] = useState(true);
+  // Add states for mutual funds and fixed deposits with initial static data
+  const [mutualFundsData, setMutualFundsData] = useState([
+    { name: 'HDFC Bluechip', code: 'Direct-Growth', return: 15.82, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622', image: 'hdfc_mf_ixtwmi' },
+    { name: 'Aditya Birla Sun Life', code: 'Direct-Growth', return: 9.58, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477', image: 'aditya_birla_arlswk' },
+    { name: 'Quant Multi Asset', code: 'Direct-Growth', return: 16.25, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918', image: 'quant_hcnfdx' },
+    { name: 'ICICI Prudential', code: 'Direct-Growth', return: 18.3, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416', image: 'icici_yzot5k' },
+    { name: 'HSBC Value Fund', code: 'Direct-Growth', return: 21.28, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/hsbc-value-fund-direct-growth/15836', image: 'hsbc_ffoui0' },
+    { name: 'UTI Short Duration', code: 'Direct-Growth', return: 7.42, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/uti-short-duration-direct-growth/16611', image: 'uti_n4psc1' },
+    { name: 'LIC Arbitrage Fund', code: 'Direct-Growth', return: 5.71, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/lic-mf-arbitrage-fund-direct-growth/39181', image: 'lic_rp71bg' },
+  ]);
+  const [isLoadingMF, setIsLoadingMF] = useState(false);
   const [lastUpdatedMF, setLastUpdatedMF] = useState(null);
   
-  const [fixedDepositsData, setFixedDepositsData] = useState([]);
-  const [isLoadingFD, setIsLoadingFD] = useState(true);
+  const [fixedDepositsData, setFixedDepositsData] = useState([
+    { name: 'ICICI Bank', code: 'ICICI FD', return: 7.5, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/icici-bank-fd-rates/5', image: 'icici_yzot5k' },
+    { name: 'HDFC Bank', code: 'HDFC FD', return: 7.2, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/hdfc-bank-fd-rates/4', image: 'hdfv_jl9z3y' },
+    { name: 'RBL Bank', code: 'RBL FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/rbl-bank-fd-rates/16', image: 'bank_RBL_u7p6jc' },
+    { name: 'Bank of Baroda', code: 'BOB FD', return: 7.9, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bank-of-baroda-fd-rates/6', image: 'bob-Photoroom_oqoj67' },
+    { name: 'Bajaj Finance Ltd.', code: 'Bajaj FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bajaj-finance-ltd-fd-rates/1', image: 'bajaj_finance_h8xx2a' },
+    { name: 'State Bank of India', code: 'SBI FD', return: 5.6, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/sbi-bank-fd-rates/2', image: 'sbi_wugpsu' }
+  ]);
+  const [isLoadingFD, setIsLoadingFD] = useState(false);
   const [lastUpdatedFD, setLastUpdatedFD] = useState(null);
   
   // Add cache for stock images to prevent reloading
@@ -324,42 +350,7 @@ const Home = ({ mail }) => {
       setLastUpdated(new Date());
     } catch (error) {
       console.error('Error fetching stock data:', error);
-      
-      // Fallback to static data if API fails
-      const fallbackStocks = [
-        { symbol: "RELIANCE", name: "Reliance Industries Ltd", price: 2760.15, change: 2.34, sector: "Energy" },
-        { symbol: "TCS", name: "Tata Consultancy Services Ltd", price: 3776.10, change: 0.54, sector: "IT" },
-        { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: 1680.90, change: 1.87, sector: "Banking" },
-        { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: 1042.25, change: 1.25, sector: "Banking" },
-        { symbol: "INFY", name: "Infosys Ltd", price: 1472.00, change: -0.93, sector: "IT" },
-        { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: 2487.00, change: -1.12, sector: "FMCG" },
-        { symbol: "ITC", name: "ITC Ltd", price: 440.75, change: 0.82, sector: "FMCG" },
-        { symbol: "SBIN", name: "State Bank of India", price: 773.80, change: 2.01, sector: "Banking" },
-        { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd", price: 1189.35, change: 1.43, sector: "Telecom" },
-        { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank Ltd", price: 1789.50, change: -0.63, sector: "Banking" }
-      ]
-      .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
-      .map(stock => {
-        const ltp = stock.price;
-        const changePercent = stock.change;
-        const prevPrice = (ltp / (1 + (changePercent / 100))).toFixed(2);
-        
-        return {
-          symbol: stock.symbol,
-          name: stock.name,
-          sector: stock.sector,
-          open_price: (prevPrice * 1.001).toFixed(2),
-          high_price: changePercent > 0 ? ltp.toFixed(2) : (ltp * 1.01).toFixed(2),
-          low_price: changePercent < 0 ? ltp.toFixed(2) : (prevPrice * 0.99).toFixed(2),
-          ltp: ltp.toFixed(2),
-          prev_price: prevPrice,
-          change: changePercent.toFixed(2),
-          link: `https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(stock.symbol)}`
-        };
-      });
-      
-      setNiftyData(fallbackStocks);
-      setLastUpdated(new Date());
+      // Don't update with fallback data since we already have static data loaded
     } finally {
       setIsLoadingStocks(false);
     }
@@ -426,20 +417,7 @@ const Home = ({ mail }) => {
       setLastUpdatedMF(new Date());
     } catch (error) {
       console.error('Error fetching mutual fund data:', error);
-      
-      // Fallback to static data if API fails
-      const fallbackMF = [
-        { name: 'HDFC Bluechip', code: 'Direct-Growth', return: 15.82, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/hdfc-balanced-advantage-fund-direct-plan-growth/15622', image: 'hdfc_mf_ixtwmi' },
-        { name: 'Aditya Birla Sun Life', code: 'Direct-Growth', return: 9.58, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/aditya-birla-sun-life-medium-term-plan-direct-growth/15477', image: 'aditya_birla_arlswk' },
-        { name: 'Quant Multi Asset', code: 'Direct-Growth', return: 16.25, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/quant-multi-asset-fund-direct-growth/16918', image: 'quant_hcnfdx' },
-        { name: 'ICICI Prudential', code: 'Direct-Growth', return: 18.3, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/icici-prudential-infrastructure-direct-growth/15416', image: 'icici_yzot5k' },
-        { name: 'HSBC Value Fund', code: 'Direct-Growth', return: 21.28, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/hsbc-value-fund-direct-growth/15836', image: 'hsbc_ffoui0' },
-        { name: 'UTI Short Duration', code: 'Direct-Growth', return: 7.42, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/uti-short-duration-direct-growth/16611', image: 'uti_n4psc1' },
-        { name: 'LIC Arbitrage Fund', code: 'Direct-Growth', return: 5.71, icon: '₹', link: 'https://www.etmoney.com/mutual-funds/lic-mf-arbitrage-fund-direct-growth/39181', image: 'lic_rp71bg' },
-      ];
-      
-      setMutualFundsData(fallbackMF);
-      setLastUpdatedMF(new Date());
+      // Don't update with fallback data since we already have static data loaded
     } finally {
       setIsLoadingMF(false);
     }
@@ -490,19 +468,7 @@ const Home = ({ mail }) => {
       setLastUpdatedFD(new Date());
     } catch (error) {
       console.error('Error fetching FD data:', error);
-      
-      // Fallback to static data if API fails
-      const fallbackFD = [
-        { name: 'ICICI Bank', code: 'ICICI FD', return: 7.5, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/icici-bank-fd-rates/5', image: 'icici_yzot5k' },
-        { name: 'HDFC Bank', code: 'HDFC FD', return: 7.2, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/hdfc-bank-fd-rates/4', image: 'hdfv_jl9z3y' },
-        { name: 'RBL Bank', code: 'RBL FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/rbl-bank-fd-rates/16', image: 'bank_RBL_u7p6jc' },
-        { name: 'Bank of Baroda', code: 'BOB FD', return: 7.9, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bank-of-baroda-fd-rates/6', image: 'bob-Photoroom_oqoj67' },
-        { name: 'Bajaj Finance Ltd.', code: 'Bajaj FD', return: 7.8, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/bajaj-finance-ltd-fd-rates/1', image: 'bajaj_finance_h8xx2a' },
-        { name: 'State Bank of India', code: 'SBI FD', return: 5.6, icon: '₹', link: 'https://www.etmoney.com/fixed-deposit/sbi-bank-fd-rates/2', image: 'sbi_wugpsu' }
-      ];
-      
-      setFixedDepositsData(fallbackFD);
-      setLastUpdatedFD(new Date());
+      // Don't update with fallback data since we already have static data loaded
     } finally {
       setIsLoadingFD(false);
     }
@@ -818,288 +784,570 @@ const Home = ({ mail }) => {
               >
                 {category.type === "Stocks" ? (
                   isLoadingStocks ? (
-                    <div className="flex justify-center items-center w-full py-10">
-                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-                      <span className="ml-3 text-white">Loading latest stock data...</span>
-                    </div>
-                  ) : (
-                    niftyData.map((stock, index) => {
-                      const bgIntensity = Math.max(700 - index * 50, 800);
-                      
-                      // Check if stock is up or down to determine color
-                      const isStockUp = parseFloat(stock.change) > 0;
-                      const changeColor = isStockUp ? "text-green-500" : "text-red-500";
-                      const changeIcon = isStockUp ? "▲" : "▼";
-                      const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
-                      const changePercent = stock.change;
+                    // Instead of loading indicator, render the static data
+                    niftyData
+                      .sort((a, b) => parseFloat(b.change) - parseFloat(a.change)) // Sort in descending order by change
+                      .map((stock, index) => {
+                        const bgIntensity = Math.max(700 - index * 50, 800);
+                        
+                        // Check if stock is up or down to determine color
+                        const isStockUp = parseFloat(stock.change) > 0;
+                        const changeColor = isStockUp ? "text-green-500" : "text-red-500";
+                        const changeIcon = isStockUp ? "▲" : "▼";
+                        const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
+                        const changePercent = stock.change;
 
-                      return (
-                        <div
-                          key={stock.symbol}
-                          className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                          transform transition-all duration-300 
-                          hover:scale-105 hover:shadow-lg
-                          scroll-snap-align: start;`}
-                          style={{ scrollSnapAlign: "start" }}
-                          onClick={() => window.open(stock.link, "_blank")}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <h4 className="font-bold text-lg leading-tight">
-                                {stock.symbol}
-                              </h4>
+                        return (
+                          <motion.div
+                            key={stock.symbol}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(stock.link, "_blank")}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
                               <div className="flex flex-col">
-                                <p className="text-sm text-gray-400">
-                                  ₹{stock.ltp}
-                                </p>
-                                <p className={`text-sm ${changeColor} flex items-center`}>
-                                  {changeIcon} {changeValue} ({changePercent}%)
-                                </p>
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {stock.symbol}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    ₹{stock.ltp}
+                                  </p>
+                                  <p className={`text-sm ${changeColor} flex items-center`}>
+                                    {changeIcon} {changeValue} ({changePercent}%)
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                            {(() => {
-                              const cloudinaryId = stockImages[stock.symbol] || "default_stock_image_lcwpuj";
-                              try {
-                                const img = cld
-                                  .image(cloudinaryId)
-                                  .format("auto")
-                                  .quality("auto")
-                                  .resize(
-                                    auto()
-                                      .gravity(autoGravity())
-                                      .width(500)
-                                      .height(500)
+                              {(() => {
+                                const cloudinaryId = stockImages[stock.symbol] || "default_stock_image_lcwpuj";
+                                try {
+                                  const img = cld
+                                    .image(cloudinaryId)
+                                    .format("auto")
+                                    .quality("auto")
+                                    .resize(
+                                      auto()
+                                        .gravity(autoGravity())
+                                        .width(500)
+                                        .height(500)
+                                    );
+                                  
+                                  return (
+                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                      <AdvancedImage
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        cldImg={img}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          const tickerToDomain = {
+                                            "RELIANCE": "ril.com",
+                                            "TCS": "tcs.com", 
+                                            "HDFCBANK": "hdfcbank.com",
+                                            "INFY": "infosys.com",
+                                            "ICICIBANK": "icicibank.com",
+                                            "SBIN": "sbi.co.in", 
+                                            "BHARTIARTL": "airtel.in",
+                                            "TATAMOTORS": "tatamotors.com"
+                                          };
+                                          const domain = tickerToDomain[stock.symbol] || 
+                                                        `${stock.symbol.toLowerCase()}.com`;
+                                          e.target.src = `https://logo.clearbit.com/${domain}`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          e.target.addEventListener('error', () => {
+                                            e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                          });
+                                        }}
+                                      />
+                                    </div>
                                   );
-                                
-                                return (
-                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
-                                    <AdvancedImage
-                                      className="w-10 h-10 object-contain rounded-full"
-                                      cldImg={img}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        const tickerToDomain = {
-                                          "RELIANCE": "ril.com",
-                                          "TCS": "tcs.com", 
-                                          "HDFCBANK": "hdfcbank.com",
-                                          "INFY": "infosys.com",
-                                          "ICICIBANK": "icicibank.com",
-                                          "SBIN": "sbi.co.in", 
-                                          "BHARTIARTL": "airtel.in",
-                                          "TATAMOTORS": "tatamotors.com"
-                                        };
-                                        const domain = tickerToDomain[stock.symbol] || 
-                                                      `${stock.symbol.toLowerCase()}.com`;
-                                        e.target.src = `https://logo.clearbit.com/${domain}`;
-                                        
-                                        // Final fallback if clearbit fails
-                                        e.target.addEventListener('error', () => {
+                                } catch (err) {
+                                  return (
+                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                      <img 
+                                        src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={stock.symbol}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
                                           e.target.src = createFallbackImage(stock.symbol, 'stock');
-                                        });
-                                      }}
-                                    />
-                                  </div>
-                                );
-                              } catch (err) {
-                                return (
-                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
-                                    <img 
-                                      src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
-                                      className="w-10 h-10 object-contain rounded-full"
-                                      alt={stock.symbol}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = createFallbackImage(stock.symbol, 'stock');
-                                      }}
-                                    />
-                                  </div>
-                                );
-                              }
-                            })()}
-                          </div>
-                        </div>
-                      );
-                    })
+                                        }}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
+                  ) : (
+                    niftyData
+                      .sort((a, b) => parseFloat(b.change) - parseFloat(a.change)) // Sort in descending order by change
+                      .map((stock, index) => {
+                        const bgIntensity = Math.max(700 - index * 50, 800);
+                        
+                        // Check if stock is up or down to determine color
+                        const isStockUp = parseFloat(stock.change) > 0;
+                        const changeColor = isStockUp ? "text-green-500" : "text-red-500";
+                        const changeIcon = isStockUp ? "▲" : "▼";
+                        const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
+                        const changePercent = stock.change;
+
+                        return (
+                          <motion.div
+                            key={stock.symbol}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(stock.link, "_blank")}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="flex flex-col">
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {stock.symbol}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    ₹{stock.ltp}
+                                  </p>
+                                  <p className={`text-sm ${changeColor} flex items-center`}>
+                                    {changeIcon} {changeValue} ({changePercent}%)
+                                  </p>
+                                </div>
+                              </div>
+                              {(() => {
+                                const cloudinaryId = stockImages[stock.symbol] || "default_stock_image_lcwpuj";
+                                try {
+                                  const img = cld
+                                    .image(cloudinaryId)
+                                    .format("auto")
+                                    .quality("auto")
+                                    .resize(
+                                      auto()
+                                        .gravity(autoGravity())
+                                        .width(500)
+                                        .height(500)
+                                    );
+                                  
+                                  return (
+                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                      <AdvancedImage
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        cldImg={img}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          const tickerToDomain = {
+                                            "RELIANCE": "ril.com",
+                                            "TCS": "tcs.com", 
+                                            "HDFCBANK": "hdfcbank.com",
+                                            "INFY": "infosys.com",
+                                            "ICICIBANK": "icicibank.com",
+                                            "SBIN": "sbi.co.in", 
+                                            "BHARTIARTL": "airtel.in",
+                                            "TATAMOTORS": "tatamotors.com"
+                                          };
+                                          const domain = tickerToDomain[stock.symbol] || 
+                                                        `${stock.symbol.toLowerCase()}.com`;
+                                          e.target.src = `https://logo.clearbit.com/${domain}`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          e.target.addEventListener('error', () => {
+                                            e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                          });
+                                        }}
+                                      />
+                                    </div>
+                                  );
+                                } catch (err) {
+                                  return (
+                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                      <img 
+                                        src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={stock.symbol}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                        }}
+                                      />
+                                    </div>
+                                  );
+                                }
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
                   )
                 ) : category.type === "Mutual Funds" ? (
                   isLoadingMF ? (
-                    <div className="flex justify-center items-center w-full py-10">
-                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-                      <span className="ml-3 text-white">Loading latest mutual fund data...</span>
-                    </div>
-                  ) : (
-                    mutualFundsData.map((fund, index) => {
-                      const bgIntensity = Math.max(700 - (index * 50), 800);
-                      
-                      // Determine if return is positive or negative for color styling
-                      const isPositive = parseFloat(fund.return) > 0;
-                      const returnColor = isPositive ? "text-green-500" : "text-red-500";
-                      const returnIcon = isPositive ? "▲" : "▼";
+                    // Instead of loading indicator, render the static data
+                    mutualFundsData
+                      .sort((a, b) => parseFloat(b.return) - parseFloat(a.return)) // Sort in descending order by return
+                      .map((fund, index) => {
+                        const bgIntensity = Math.max(700 - (index * 50), 800);
+                        
+                        // Determine if return is positive or negative for color styling
+                        const isPositive = parseFloat(fund.return) > 0;
+                        const returnColor = isPositive ? "text-green-500" : "text-red-500";
+                        const returnIcon = isPositive ? "▲" : "▼";
 
-                      return (
-                        <div
-                          key={fund.name}
-                          className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                          transform transition-all duration-300 
-                          hover:scale-105 hover:shadow-lg
-                          scroll-snap-align: start;`}
-                          style={{ scrollSnapAlign: "start" }}
-                          onClick={() => window.open(fund.link, '_blank')}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <h4 className="font-bold text-lg leading-tight">
-                                {fund.name}
-                              </h4>
+                        return (
+                          <motion.div
+                            key={fund.name}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(fund.link, '_blank')}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
                               <div className="flex flex-col">
-                                <p className="text-sm text-gray-400">
-                                  {fund.code}
-                                </p>
-                                <p className={`text-sm ${returnColor} flex items-center`}>
-                                  {returnIcon} {fund.return}% (annual)
-                                </p>
-                              </div>
-                            </div>
-                            {(() => {
-                              let img;
-                              try {
-                                img = cld.image(fund.image)
-                                  .format('auto')
-                                  .quality('auto')
-                                  .resize(auto().gravity(autoGravity()).width(500).height(500));
-                              } catch (err) {
-                                console.log(`Error loading image for ${fund.name}:`, err);
-                              }
-                              
-                              return (
-                                <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
-                                  {img ? (
-                                    <AdvancedImage 
-                                      className="w-10 h-10 object-contain rounded-full" 
-                                      cldImg={img} 
-                                      onError={(e) => {
-                                        // Handle Cloudinary error with a fallback
-                                        const imgElement = e.target;
-                                        imgElement.onerror = null;
-                                        
-                                        // Try company logo from clearbit
-                                        const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
-                                        imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
-                                        
-                                        // Final fallback if clearbit fails
-                                        imgElement.addEventListener('error', () => {
-                                          imgElement.src = createFallbackImage(fund.name, 'mf');
-                                        });
-                                      }}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={`https://logo.clearbit.com/${fund.name.toLowerCase().replace(/\s+/g, '')}.com`}
-                                      className="w-10 h-10 object-contain rounded-full"
-                                      alt={fund.name}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = createFallbackImage(fund.name, 'mf');
-                                      }}
-                                    />
-                                  )}
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {fund.name}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    {fund.code}
+                                  </p>
+                                  <p className={`text-sm ${returnColor} flex items-center`}>
+                                    {returnIcon} {fund.return}% (annual)
+                                  </p>
                                 </div>
-                              );
-                            })()}
-                          </div>
-                        </div>
-                      );
-                    })
+                              </div>
+                              {(() => {
+                                let img;
+                                try {
+                                  img = cld.image(fund.image)
+                                    .format('auto')
+                                    .quality('auto')
+                                    .resize(auto().gravity(autoGravity()).width(500).height(500));
+                                } catch (err) {
+                                  console.log(`Error loading image for ${fund.name}:`, err);
+                                }
+                                
+                                return (
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    {img ? (
+                                      <AdvancedImage 
+                                        className="w-10 h-10 object-contain rounded-full" 
+                                        cldImg={img} 
+                                        onError={(e) => {
+                                          // Handle Cloudinary error with a fallback
+                                          const imgElement = e.target;
+                                          imgElement.onerror = null;
+                                          
+                                          // Try company logo from clearbit
+                                          const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
+                                          imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          imgElement.addEventListener('error', () => {
+                                            imgElement.src = createFallbackImage(fund.name, 'mf');
+                                          });
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={`https://logo.clearbit.com/${fund.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={fund.name}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = createFallbackImage(fund.name, 'mf');
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
+                  ) : (
+                    mutualFundsData
+                      .sort((a, b) => parseFloat(b.return) - parseFloat(a.return)) // Sort in descending order by return
+                      .map((fund, index) => {
+                        const bgIntensity = Math.max(700 - (index * 50), 800);
+                        
+                        // Determine if return is positive or negative for color styling
+                        const isPositive = parseFloat(fund.return) > 0;
+                        const returnColor = isPositive ? "text-green-500" : "text-red-500";
+                        const returnIcon = isPositive ? "▲" : "▼";
+
+                        return (
+                          <motion.div
+                            key={fund.name}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(fund.link, '_blank')}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="flex flex-col">
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {fund.name}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    {fund.code}
+                                  </p>
+                                  <p className={`text-sm ${returnColor} flex items-center`}>
+                                    {returnIcon} {fund.return}% (annual)
+                                  </p>
+                                </div>
+                              </div>
+                              {(() => {
+                                let img;
+                                try {
+                                  img = cld.image(fund.image)
+                                    .format('auto')
+                                    .quality('auto')
+                                    .resize(auto().gravity(autoGravity()).width(500).height(500));
+                                } catch (err) {
+                                  console.log(`Error loading image for ${fund.name}:`, err);
+                                }
+                                
+                                return (
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    {img ? (
+                                      <AdvancedImage 
+                                        className="w-10 h-10 object-contain rounded-full" 
+                                        cldImg={img} 
+                                        onError={(e) => {
+                                          // Handle Cloudinary error with a fallback
+                                          const imgElement = e.target;
+                                          imgElement.onerror = null;
+                                          
+                                          // Try company logo from clearbit
+                                          const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
+                                          imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          imgElement.addEventListener('error', () => {
+                                            imgElement.src = createFallbackImage(fund.name, 'mf');
+                                          });
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={`https://logo.clearbit.com/${fund.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={fund.name}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = createFallbackImage(fund.name, 'mf');
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
                   )
                 ) : category.type === "Fixed Deposits" ? (
                   isLoadingFD ? (
-                    <div className="flex justify-center items-center w-full py-10">
-                      <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500"></div>
-                      <span className="ml-3 text-white">Loading latest fixed deposit rates...</span>
-                    </div>
-                  ) : (
-                    fixedDepositsData.map((fd, index) => {
-                      const bgIntensity = Math.max(700 - (index * 50), 800);
-                      
-                      // For FDs, we'll consider anything above 7% as "good" for visual indication
-                      const isHighReturn = parseFloat(fd.return) >= 7.0;
-                      const returnColor = isHighReturn ? "text-green-500" : "text-yellow-500";
-                      const returnIcon = isHighReturn ? "★" : "•";
+                    // Instead of loading indicator, render the static data
+                    fixedDepositsData
+                      .sort((a, b) => parseFloat(b.return) - parseFloat(a.return)) // Sort in descending order by return
+                      .map((fd, index) => {
+                        const bgIntensity = Math.max(700 - (index * 50), 800);
+                        
+                        // For FDs, we'll consider anything above 7% as "good" for visual indication
+                        const isHighReturn = parseFloat(fd.return) >= 7.0;
+                        const returnColor = isHighReturn ? "text-green-500" : "text-yellow-500";
+                        const returnIcon = isHighReturn ? "★" : "•";
 
-                      return (
-                        <div
-                          key={fd.name}
-                          className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                          transform transition-all duration-300 
-                          hover:scale-105 hover:shadow-lg
-                          scroll-snap-align: start;`}
-                          style={{ scrollSnapAlign: "start" }}
-                          onClick={() => window.open(fd.link, '_blank')}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex flex-col">
-                              <h4 className="font-bold text-lg leading-tight">
-                                {fd.name}
-                              </h4>
+                        return (
+                          <motion.div
+                            key={fd.name}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(fd.link, '_blank')}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
                               <div className="flex flex-col">
-                                <p className="text-sm text-gray-400">
-                                  {fd.code}
-                                </p>
-                                <p className={`text-sm ${returnColor} flex items-center`}>
-                                  {returnIcon} {fd.return}% interest
-                                </p>
-                              </div>
-                            </div>
-                            {(() => {
-                              let img;
-                              try {
-                                img = cld.image(fd.image)
-                                  .format('auto')
-                                  .quality('auto')
-                                  .resize(auto().gravity(autoGravity()).width(500).height(500));
-                              } catch (err) {
-                                console.log(`Error loading image for ${fd.name}:`, err);
-                              }
-                              
-                              return (
-                                <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
-                                  {img ? (
-                                    <AdvancedImage 
-                                      className="w-10 h-10 object-contain rounded-full" 
-                                      cldImg={img} 
-                                      onError={(e) => {
-                                        // Handle Cloudinary error with a fallback
-                                        const imgElement = e.target;
-                                        imgElement.onerror = null;
-                                        
-                                        // Try bank logo from clearbit
-                                        const cleanName = fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
-                                        imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
-                                        
-                                        // Final fallback if clearbit fails
-                                        imgElement.addEventListener('error', () => {
-                                          imgElement.src = createFallbackImage(fd.name, 'fd');
-                                        });
-                                      }}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={`https://logo.clearbit.com/${fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
-                                      className="w-10 h-10 object-contain rounded-full"
-                                      alt={fd.name}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = createFallbackImage(fd.name, 'fd');
-                                      }}
-                                    />
-                                  )}
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {fd.name}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    {fd.code}
+                                  </p>
+                                  <p className={`text-sm ${returnColor} flex items-center`}>
+                                    {returnIcon} {fd.return}% interest
+                                  </p>
                                 </div>
-                              );
-                            })()}
-                          </div>
-                        </div>
-                      );
-                    })
+                              </div>
+                              {(() => {
+                                let img;
+                                try {
+                                  img = cld.image(fd.image)
+                                    .format('auto')
+                                    .quality('auto')
+                                    .resize(auto().gravity(autoGravity()).width(500).height(500));
+                                } catch (err) {
+                                  console.log(`Error loading image for ${fd.name}:`, err);
+                                }
+                                
+                                return (
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    {img ? (
+                                      <AdvancedImage 
+                                        className="w-10 h-10 object-contain rounded-full" 
+                                        cldImg={img} 
+                                        onError={(e) => {
+                                          // Handle Cloudinary error with a fallback
+                                          const imgElement = e.target;
+                                          imgElement.onerror = null;
+                                          
+                                          // Try bank logo from clearbit
+                                          const cleanName = fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
+                                          imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          imgElement.addEventListener('error', () => {
+                                            imgElement.src = createFallbackImage(fd.name, 'fd');
+                                          });
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={`https://logo.clearbit.com/${fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={fd.name}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = createFallbackImage(fd.name, 'fd');
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
+                  ) : (
+                    fixedDepositsData
+                      .sort((a, b) => parseFloat(b.return) - parseFloat(a.return)) // Sort in descending order by return
+                      .map((fd, index) => {
+                        const bgIntensity = Math.max(700 - (index * 50), 800);
+                        
+                        // For FDs, we'll consider anything above 7% as "good" for visual indication
+                        const isHighReturn = parseFloat(fd.return) >= 7.0;
+                        const returnColor = isHighReturn ? "text-green-500" : "text-yellow-500";
+                        const returnIcon = isHighReturn ? "★" : "•";
+
+                        return (
+                          <motion.div
+                            key={fd.name}
+                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                            transform transition-all duration-300 
+                            hover:scale-105 hover:shadow-lg
+                            scroll-snap-align: start;`}
+                            style={{ scrollSnapAlign: "start" }}
+                            onClick={() => window.open(fd.link, '_blank')}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="flex flex-col">
+                                <h4 className="font-bold text-lg leading-tight">
+                                  {fd.name}
+                                </h4>
+                                <div className="flex flex-col">
+                                  <p className="text-sm text-gray-400">
+                                    {fd.code}
+                                  </p>
+                                  <p className={`text-sm ${returnColor} flex items-center`}>
+                                    {returnIcon} {fd.return}% interest
+                                  </p>
+                                </div>
+                              </div>
+                              {(() => {
+                                let img;
+                                try {
+                                  img = cld.image(fd.image)
+                                    .format('auto')
+                                    .quality('auto')
+                                    .resize(auto().gravity(autoGravity()).width(500).height(500));
+                                } catch (err) {
+                                  console.log(`Error loading image for ${fd.name}:`, err);
+                                }
+                                
+                                return (
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    {img ? (
+                                      <AdvancedImage 
+                                        className="w-10 h-10 object-contain rounded-full" 
+                                        cldImg={img} 
+                                        onError={(e) => {
+                                          // Handle Cloudinary error with a fallback
+                                          const imgElement = e.target;
+                                          imgElement.onerror = null;
+                                          
+                                          // Try bank logo from clearbit
+                                          const cleanName = fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
+                                          imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          
+                                          // Final fallback if clearbit fails
+                                          imgElement.addEventListener('error', () => {
+                                            imgElement.src = createFallbackImage(fd.name, 'fd');
+                                          });
+                                        }}
+                                      />
+                                    ) : (
+                                      <img
+                                        src={`https://logo.clearbit.com/${fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
+                                        className="w-10 h-10 object-contain rounded-full"
+                                        alt={fd.name}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src = createFallbackImage(fd.name, 'fd');
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </motion.div>
+                        );
+                      })
                   )
                 ) : (
                   // For other categories like videos, map over their static items
