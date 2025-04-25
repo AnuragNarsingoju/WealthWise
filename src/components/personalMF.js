@@ -213,14 +213,16 @@ const InvestmentRecommendationForm = ({mail}) => {
                                     </select>
                                 ) : (
                                     <input
-                                        type="number"
-                                        name={field.name}
-                                        value={formData[field.name]}
-                                        onChange={handleChange}
-                                        placeholder={field.label}
-                                        className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
-                                        required
-                                    />
+					    type="number"
+					    name={field.name}
+					    value={formData[field.name]}
+					    onChange={handleChange}
+					    placeholder={field.label}
+					    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
+					    required
+					    inputMode="numeric"
+					    pattern="[0-9]*"
+					/>
                                 )}
                             </motion.div>
                         ))}
