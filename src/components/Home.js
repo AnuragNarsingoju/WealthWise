@@ -781,96 +781,120 @@ const Home = ({ mail }) => {
                       </div>
                       );
                     } else if (category.type === 'Mutual Funds') {
+                      // Determine if return is positive or negative for color styling
+                      const isPositive = parseFloat(investment.return) > 0;
+                      const returnColor = isPositive ? "text-green-500" : "text-red-500";
+                      const returnIcon = isPositive ? "▲" : "▼";
+                      
                       return (
                       <div 
-                      key={investment.code || investment.name} 
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                        transform transition-all duration-300 
-                        hover:scale-105 hover:shadow-lg
-                        scroll-snap-align: start;`}
+                        key={investment.code || investment.name} 
+                        className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                          transform transition-all duration-300 
+                          hover:scale-105 hover:shadow-lg
+                          scroll-snap-align: start;`}
+                        style={{ scrollSnapAlign: "start" }}
                         onClick={() => window.open(investment.link, '_blank')}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                            <h4 className="font-bold text-lg">{investment.name}</h4>
-                            <div className="flex space-x-2">
-                              <p className="text-sm text-gray-400">{investment.code}</p>
-                              <p className="text-sm text-gray-400">( {investment.return}% )</p>
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <h4 className="font-bold text-lg leading-tight">
+                              {investment.name}
+                            </h4>
+                            <div className="flex flex-col">
+                              <p className="text-sm text-gray-400">
+                                {investment.code}
+                              </p>
+                              <p className={`text-sm ${returnColor} flex items-center`}>
+                                {returnIcon} {investment.return}% (annual)
+                              </p>
                             </div>
+                          </div>
+                          {img ? (
+                            <AdvancedImage 
+                              className="w-11 h-11 rounded-full object-cover" 
+                              cldImg={img} 
+                              onError={(e) => {
+                                // Handle Cloudinary error with a fallback
+                                const imgElement = e.target;
+                                imgElement.onerror = null;
+                                // Create a cleaner name for logo search
+                                const cleanName = investment.name.toLowerCase().replace(/\s+/g, '');
+                                imgElement.src = `https://logo.clearbit.com/${cleanName}.com` || 
+                                                `https://logo.clearbit.com/${cleanName}.in` ||
+                                                `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                              }}
+                            />
+                          ) : (
+                            <img 
+                              src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                              className="w-11 h-11 rounded-full object-cover"
+                              alt={investment.name}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                              }}
+                            />
+                          )}
                         </div>
-                        {img ? (
-                          <AdvancedImage 
-                            className="w-11 h-11 rounded-full object-cover" 
-                            cldImg={img} 
-                            onError={(e) => {
-                              // Handle Cloudinary error with a fallback
-                              const imgElement = e.target;
-                              imgElement.onerror = null;
-                              // Create a cleaner name for logo search
-                              const cleanName = investment.name.toLowerCase().replace(/\s+/g, '');
-                              imgElement.src = `https://logo.clearbit.com/${cleanName}.com` || 
-                                              `https://logo.clearbit.com/${cleanName}.in` ||
-                                              `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                            }}
-                          />
-                        ) : (
-                          <img 
-                            src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '')}.com`}
-                            className="w-11 h-11 rounded-full object-cover"
-                            alt={investment.name}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                            }}
-                          />
-                        )}
                       </div>
-                    </div>
                       );
                     } else if (category.type === 'Fixed Deposits') {
+                      // For FDs, we'll consider anything above 7% as "good" for visual indication
+                      const isHighReturn = parseFloat(investment.return) >= 7.0;
+                      const returnColor = isHighReturn ? "text-green-500" : "text-yellow-500";
+                      const returnIcon = isHighReturn ? "★" : "•";
+                      
                       return (
-                    <div 
-                      key={investment.code || investment.name} 
-                      className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                        transform transition-all duration-300 
-                        hover:scale-105 hover:shadow-lg
-                        scroll-snap-align: start;`}
+                      <div 
+                        key={investment.code || investment.name} 
+                        className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                          transform transition-all duration-300 
+                          hover:scale-105 hover:shadow-lg
+                          scroll-snap-align: start;`}
+                        style={{ scrollSnapAlign: "start" }}
                         onClick={() => window.open(investment.link, '_blank')}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                            <h4 className="font-bold text-lg">{investment.name}</h4>
-                            <div className="flex space-x-2">
-                              <p className="text-sm text-gray-400">{investment.code}</p>
-                              <p className="text-sm text-gray-400">( {investment.return}% )</p>
+                      >
+                        <div className="flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <h4 className="font-bold text-lg leading-tight">
+                              {investment.name}
+                            </h4>
+                            <div className="flex flex-col">
+                              <p className="text-sm text-gray-400">
+                                {investment.code}
+                              </p>
+                              <p className={`text-sm ${returnColor} flex items-center`}>
+                                {returnIcon} {investment.return}% interest
+                              </p>
                             </div>
+                          </div>
+                          {img ? (
+                          <AdvancedImage 
+                              className="w-11 h-11 rounded-full object-cover" 
+                              cldImg={img} 
+                              onError={(e) => {
+                                // Handle Cloudinary error with a fallback
+                                const bankName = investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
+                                e.target.onerror = null;
+                                e.target.src = `https://logo.clearbit.com/${bankName}.com` || 
+                                              `https://logo.clearbit.com/${bankName}.in` ||
+                                              `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                              }}
+                            />
+                          ) : (
+                            <img 
+                              src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
+                              className="w-11 h-11 rounded-full object-cover"
+                              alt={investment.name}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
+                              }}
+                            />
+                          )}
                         </div>
-                        {img ? (
-                        <AdvancedImage 
-                            className="w-11 h-11 rounded-full object-cover" 
-                            cldImg={img} 
-                            onError={(e) => {
-                              // Handle Cloudinary error with a fallback
-                              const bankName = investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
-                              e.target.onerror = null;
-                              e.target.src = `https://logo.clearbit.com/${bankName}.com` || 
-                                            `https://logo.clearbit.com/${bankName}.in` ||
-                                            `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                            }}
-                          />
-                        ) : (
-                          <img 
-                            src={`https://logo.clearbit.com/${investment.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
-                            className="w-11 h-11 rounded-full object-cover"
-                            alt={investment.name}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = `https://ui-avatars.com/api/?name=${investment.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                            }}
-                          />
-                        )}
                       </div>
-                    </div>
                       );
                     }
                     return null;
