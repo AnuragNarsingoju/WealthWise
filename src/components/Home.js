@@ -872,60 +872,47 @@ const Home = ({ mail }) => {
                                   );
                                 
                                 return (
-                                  <AdvancedImage
-                                    className="w-11 h-11 rounded-full object-cover"
-                                    cldImg={img}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      const tickerToDomain = {
-                                        "RELIANCE": "ril.com",
-                                        "TCS": "tcs.com", 
-                                        "HDFCBANK": "hdfcbank.com",
-                                        "INFY": "infosys.com",
-                                        "ICICIBANK": "icicibank.com",
-                                        "SBIN": "sbi.co.in", 
-                                        "BHARTIARTL": "airtel.in",
-                                        "TATAMOTORS": "tatamotors.com"
-                                      };
-                                      const domain = tickerToDomain[stock.symbol] || 
-                                                    `${stock.symbol.toLowerCase()}.com`;
-                                      e.target.src = `https://logo.clearbit.com/${domain}`;
-                                      
-                                      e.target.addEventListener('error', () => {
-                                        const getBgColor = (str) => {
-                                          let hash = 0;
-                                          for (let i = 0; i < str.length; i++) {
-                                            hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                                          }
-                                          return Math.abs(hash).toString(16).substring(0, 6).padStart(6, '0');
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    <AdvancedImage
+                                      className="w-10 h-10 object-contain rounded-full"
+                                      cldImg={img}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        const tickerToDomain = {
+                                          "RELIANCE": "ril.com",
+                                          "TCS": "tcs.com", 
+                                          "HDFCBANK": "hdfcbank.com",
+                                          "INFY": "infosys.com",
+                                          "ICICIBANK": "icicibank.com",
+                                          "SBIN": "sbi.co.in", 
+                                          "BHARTIARTL": "airtel.in",
+                                          "TATAMOTORS": "tatamotors.com"
                                         };
+                                        const domain = tickerToDomain[stock.symbol] || 
+                                                      `${stock.symbol.toLowerCase()}.com`;
+                                        e.target.src = `https://logo.clearbit.com/${domain}`;
                                         
-                                        const bgColor = getBgColor(stock.symbol);
-                                        e.target.src = `https://ui-avatars.com/api/?name=${stock.symbol.substring(0,2)}&background=${bgColor}&color=fff&bold=true`;
-                                      });
-                                    }}
-                                  />
+                                        // Final fallback if clearbit fails
+                                        e.target.addEventListener('error', () => {
+                                          e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                        });
+                                      }}
+                                    />
+                                  </div>
                                 );
                               } catch (err) {
                                 return (
-                                  <img 
-                                    src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
-                                    className="w-11 h-11 rounded-full object-cover"
-                                    alt={stock.symbol}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      const getBgColor = (str) => {
-                                        let hash = 0;
-                                        for (let i = 0; i < str.length; i++) {
-                                          hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                                        }
-                                        return Math.abs(hash).toString(16).substring(0, 6).padStart(6, '0');
-                                      };
-                                      
-                                      const bgColor = getBgColor(stock.symbol);
-                                      e.target.src = `https://ui-avatars.com/api/?name=${stock.symbol.substring(0,2)}&background=${bgColor}&color=fff&bold=true`;
-                                    }}
-                                  />
+                                  <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                    <img 
+                                      src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
+                                      className="w-10 h-10 object-contain rounded-full"
+                                      alt={stock.symbol}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                      }}
+                                    />
+                                  </div>
                                 );
                               }
                             })()}
@@ -974,26 +961,49 @@ const Home = ({ mail }) => {
                               </div>
                             </div>
                             {(() => {
-                              const img = cld.image(fund.image)
-                                .format('auto')
-                                .quality('auto')
-                                .resize(auto().gravity(autoGravity()).width(500).height(500));
+                              let img;
+                              try {
+                                img = cld.image(fund.image)
+                                  .format('auto')
+                                  .quality('auto')
+                                  .resize(auto().gravity(autoGravity()).width(500).height(500));
+                              } catch (err) {
+                                console.log(`Error loading image for ${fund.name}:`, err);
+                              }
                               
                               return (
-                                <AdvancedImage 
-                                  className="w-11 h-11 rounded-full object-cover" 
-                                  cldImg={img} 
-                                  onError={(e) => {
-                                    // Handle Cloudinary error with a fallback
-                                    const imgElement = e.target;
-                                    imgElement.onerror = null;
-                                    // Create a cleaner name for logo search
-                                    const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
-                                    imgElement.src = `https://logo.clearbit.com/${cleanName}.com` || 
-                                                    `https://logo.clearbit.com/${cleanName}.in` ||
-                                                    `https://ui-avatars.com/api/?name=${fund.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                                  }}
-                                />
+                                <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                  {img ? (
+                                    <AdvancedImage 
+                                      className="w-10 h-10 object-contain rounded-full" 
+                                      cldImg={img} 
+                                      onError={(e) => {
+                                        // Handle Cloudinary error with a fallback
+                                        const imgElement = e.target;
+                                        imgElement.onerror = null;
+                                        
+                                        // Try company logo from clearbit
+                                        const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
+                                        imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                        
+                                        // Final fallback if clearbit fails
+                                        imgElement.addEventListener('error', () => {
+                                          imgElement.src = createFallbackImage(fund.name, 'mf');
+                                        });
+                                      }}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={`https://logo.clearbit.com/${fund.name.toLowerCase().replace(/\s+/g, '')}.com`}
+                                      className="w-10 h-10 object-contain rounded-full"
+                                      alt={fund.name}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = createFallbackImage(fund.name, 'mf');
+                                      }}
+                                    />
+                                  )}
+                                </div>
                               );
                             })()}
                           </div>
@@ -1041,26 +1051,49 @@ const Home = ({ mail }) => {
                               </div>
                             </div>
                             {(() => {
-                              const img = cld.image(fd.image)
-                                .format('auto')
-                                .quality('auto')
-                                .resize(auto().gravity(autoGravity()).width(500).height(500));
+                              let img;
+                              try {
+                                img = cld.image(fd.image)
+                                  .format('auto')
+                                  .quality('auto')
+                                  .resize(auto().gravity(autoGravity()).width(500).height(500));
+                              } catch (err) {
+                                console.log(`Error loading image for ${fd.name}:`, err);
+                              }
                               
                               return (
-                                <AdvancedImage 
-                                  className="w-11 h-11 rounded-full object-cover" 
-                                  cldImg={img} 
-                                  onError={(e) => {
-                                    // Handle Cloudinary error with a fallback
-                                    const imgElement = e.target;
-                                    imgElement.onerror = null;
-                                    // Create a cleaner name for logo search
-                                    const cleanName = fd.name.toLowerCase().replace(/\s+/g, '');
-                                    imgElement.src = `https://logo.clearbit.com/${cleanName}.com` || 
-                                                    `https://logo.clearbit.com/${cleanName}.in` ||
-                                                    `https://ui-avatars.com/api/?name=${fd.name.substring(0,2)}&background=0D8ABC&color=fff`;
-                                  }}
-                                />
+                                <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                  {img ? (
+                                    <AdvancedImage 
+                                      className="w-10 h-10 object-contain rounded-full" 
+                                      cldImg={img} 
+                                      onError={(e) => {
+                                        // Handle Cloudinary error with a fallback
+                                        const imgElement = e.target;
+                                        imgElement.onerror = null;
+                                        
+                                        // Try bank logo from clearbit
+                                        const cleanName = fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '');
+                                        imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                        
+                                        // Final fallback if clearbit fails
+                                        imgElement.addEventListener('error', () => {
+                                          imgElement.src = createFallbackImage(fd.name, 'fd');
+                                        });
+                                      }}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={`https://logo.clearbit.com/${fd.name.toLowerCase().replace(/\s+/g, '').replace('ltd.', '')}.com`}
+                                      className="w-10 h-10 object-contain rounded-full"
+                                      alt={fd.name}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = createFallbackImage(fd.name, 'fd');
+                                      }}
+                                    />
+                                  )}
+                                </div>
                               );
                             })()}
                           </div>
@@ -1177,6 +1210,42 @@ const Home = ({ mail }) => {
 
   const toggleChatbot = () => {
     setIsChatbotVisible((prev) => !prev);
+  };
+
+  // Function to generate a consistent color based on text
+  const generateConsistentColor = (text) => {
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      hash = text.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.abs(hash).toString(16).substring(0, 6).padStart(6, '0');
+    return color;
+  };
+
+  // Function to create a fallback image for any entity
+  const createFallbackImage = (name, type = 'generic') => {
+    // Determine background color based on entity type
+    let bgColor;
+    let textColor = 'fff'; // White text
+    let initials;
+    
+    if (type === 'stock') {
+      bgColor = '0047AB'; // Stock blue
+      initials = name.substring(0, 2).toUpperCase();
+    } else if (type === 'mf') {
+      bgColor = '228B22'; // Fund green
+      initials = name.split(' ')[0].substring(0, 2).toUpperCase();
+    } else if (type === 'fd') {
+      bgColor = '8B008B'; // FD purple
+      initials = name.split(' ')[0].substring(0, 2).toUpperCase();
+    } else {
+      // Generate a random but consistent color for other types
+      bgColor = generateConsistentColor(name);
+      initials = name.substring(0, 2).toUpperCase();
+    }
+    
+    // Use rounded=true to ensure perfect circle and adjust font size for better appearance
+    return `https://ui-avatars.com/api/?name=${initials}&background=${bgColor}&color=${textColor}&bold=true&size=150&font-size=0.33&rounded=true`;
   };
 
   return (
