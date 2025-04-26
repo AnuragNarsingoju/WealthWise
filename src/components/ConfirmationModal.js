@@ -1,104 +1,143 @@
-import React from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, X, Check } from 'lucide-react';
+import React, { useState } from "react";
+import { X } from "lucide-react";
 
-const ConfirmationModal = ({ stock, onConfirm, onClose }) => {
+const ConfirmationModal = ({ 
+  isOpen, 
+  stock, 
+  onConfirm, 
+  onClose, 
+  action = "buy", 
+  currentPrice
+}) => {
+  const [quantity, setQuantity] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  if (!isOpen || !stock) return null;
+  
+  // Calculate total cost based on quantity and action type
+  const totalCost = (action === "buy" ? currentPrice : stock.boughtPrice) * quantity;
+  const potentialProfit = action === "sell" ? (currentPrice - stock.boughtPrice) * quantity : 0;
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
+    
+    await onConfirm(stock, quantity, totalCost);
+    
+    setIsProcessing(false);
+    setQuantity(1);
+  };
 
-  return createPortal(
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto overflow-x-hidden"
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm"
-          onClick={onClose}
-        />
-
-        {/* Modal */}
-        <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          className="relative w-full max-w-md mx-4 bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden"
-        >
-          {/* Header */}
-          <div className="px-6 py-4 border-b border-white/10 flex items-center">
-            <AlertCircle className="w-6 h-6 text-white mr-3" />
-            <h2 className="text-xl font-semibold text-white flex-1">Confirm Purchase</h2>
-            <button
-              onClick={onClose}
-              className="p-1 rounded-full hover:bg-white/10 transition-colors"
-            >
-              <X className="w-5 h-5 text-white/70" />
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="p-6">
-            <div className="space-y-4">
-              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-sm text-white/60">Stock</div>
-                    <div className="text-lg font-semibold text-white">{stock.name}</div>
-                    <div className="text-sm text-blue-400">{stock.symbol}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-white/60">Quantity</div>
-                    <div className="text-lg font-semibold text-white">{stock.quantity}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-white/60">Price per Share</div>
-                    <div className="text-lg font-semibold text-white">₹{stock.price.toFixed(2)}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-white/60">Total Amount</div>
-                    <div className="text-lg font-semibold text-white">
-                      ₹{(stock.price * stock.quantity).toFixed(2)}
-                    </div>
-                  </div>
-                </div>
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h3 className="text-lg font-medium">
+            {action === "buy" ? "Buy Stock" : "Sell Stock"}
+          </h3>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-full hover:bg-gray-100"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="p-4">
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-medium text-lg">{stock.symbol}</h4>
+              {stock.name && <p className="text-gray-600">{stock.name}</p>}
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Price
+                </label>
+                <p className="mt-1 font-medium">
+                  ${action === "buy" ? currentPrice?.toFixed(2) : stock.boughtPrice?.toFixed(2)}
+                </p>
               </div>
-
-              <p className="text-white/70 text-sm">
-                Please confirm your purchase of {stock.quantity} shares of {stock.name} ({stock.symbol}).
-                This action cannot be undone.
-              </p>
+              
+              {action === "sell" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Current Price
+                  </label>
+                  <p className="mt-1 font-medium">
+                    ${currentPrice?.toFixed(2)}
+                  </p>
+                </div>
+              )}
+              
+              {action === "sell" && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Available
+                  </label>
+                  <p className="mt-1 font-medium">
+                    {stock.quantity} shares
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            <div>
+              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                Quantity
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                min={1}
+                max={action === "sell" ? stock.quantity : undefined}
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Total {action === "buy" ? "Cost" : "Value"}
+              </label>
+              <p className="mt-1 text-lg font-bold">${totalCost.toFixed(2)}</p>
+              
+              {action === "sell" && potentialProfit !== 0 && (
+                <p className={`text-sm font-medium ${potentialProfit > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {potentialProfit > 0 ? 'Profit: ' : 'Loss: '}
+                  ${Math.abs(potentialProfit).toFixed(2)}
+                </p>
+              )}
             </div>
           </div>
-
-          {/* Footer */}
-          <div className="px-6 py-4 border-t border-white/10 flex justify-end space-x-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+          
+          <div className="mt-6 flex justify-end space-x-3">
+            <button
+              type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-white/80 hover:bg-white/10 transition-colors flex items-center"
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+              disabled={isProcessing}
             >
-              <X className="w-4 h-4 mr-2" />
               Cancel
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onConfirm}
-              className="px-4 py-2 rounded-xl bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center shadow-lg shadow-blue-500/20"
+            </button>
+            <button
+              type="submit"
+              className={`px-4 py-2 rounded-md text-sm font-medium text-white ${
+                action === "buy" 
+                  ? "bg-green-600 hover:bg-green-700" 
+                  : "bg-red-600 hover:bg-red-700"
+              }`}
+              disabled={isProcessing}
             >
-              <Check className="w-4 h-4 mr-2" />
-              Confirm Purchase
-            </motion.button>
+              {isProcessing ? "Processing..." : action === "buy" ? "Buy" : "Sell"}
+            </button>
           </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>,
-    document.body
+        </form>
+      </div>
+    </div>
   );
 };
 
