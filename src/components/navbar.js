@@ -13,8 +13,10 @@ import {
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { getBalance } from './Portfolio';
 
 const Navbar = ({mail}) => {
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,6 +24,47 @@ const Navbar = ({mail}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [data, setData] = useState({});
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [balance, setBalance] = useState(getBalance());
+
+  // Update balance when it changes in localStorage
+  useEffect(() => {
+    const checkBalance = () => {
+      const newBalance = getBalance();
+      if (newBalance !== balance) {
+        console.log('Balance updated:', newBalance);
+        setBalance(newBalance);
+      }
+    };
+    
+    // Check when component mounts
+    checkBalance();
+    
+    // Set up interval to check periodically
+    const intervalId = setInterval(checkBalance, 2000);
+    
+    // Listen for storage events (if balance is changed in another tab)
+    const handleStorageChange = (e) => {
+      if (e.key === 'userBalance') {
+        checkBalance();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [balance]);
+
+  // Format currency for display
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
 
   const handleProfile = async (e) => {
     try {
@@ -186,14 +229,24 @@ const Navbar = ({mail}) => {
                     <div className="p-4 border-b border-red-500 text-center w-full">
                       <p className="text-sm font-semibold text-gray-200 whitespace-normal">{data.name}</p>
                       <p className="text-sm font-semibold text-gray-200 mt-2 whitespace-normal">{data.email}</p>
-                      <button
-                            onClick={() => navigate('/portfolio', { replace: true })}
-                            className="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-all duration-300"
-                            style={{marginLeft:'25%'}}
-                          >
-                            <Wallet className="w-5 h-5 text-white" />
-                            <span className="text-white font-medium">Rs. {localStorage.getItem('userBalance') || "0"}</span>
-                          </button>
+                    </div>
+                    
+                    {/* Styled Wallet Section */}
+                    <div className="w-full p-4 border-b border-red-500">
+                      <div className="bg-gradient-to-r from-purple-600/40 to-blue-600/40 rounded-lg p-4 shadow-inner">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-300">Available Balance</span>
+                          <Wallet className="w-4 h-4 text-blue-300" />
+                        </div>
+                        <div 
+                          className="text-xl font-bold text-white"
+                          onClick={() => navigate('/portfolio', { replace: true })}
+                          style={{cursor: 'pointer'}}
+                        >
+                          {formatCurrency(balance)}
+                        </div>
+                        <div className="text-xs text-blue-300 mt-1">Click to manage your portfolio</div>
+                      </div>
                     </div>
                     
                     <button 
@@ -250,16 +303,25 @@ const Navbar = ({mail}) => {
               <p className="text-gray-100">{data.email}</p>
               
               {/* WealthWise Balance for Mobile */}
-              <button
-                onClick={() => {
-                  navigate('/portfolio', { replace: true });
-                  setIsMobileMenuOpen(false);
-                }}
-                className="mt-4 flex items-center justify-center space-x-2 bg-white/10 px-4 py-2 rounded-lg w-full hover:bg-white/20 transition-all duration-300"
-              >
-                <Wallet className="w-5 h-5 text-white" />
-                <span className="text-white font-medium">Rs. {data.balance || "0"}</span>
-              </button>
+              <div className="mt-4 w-full">
+                <div className="bg-gradient-to-r from-purple-600/40 to-blue-600/40 rounded-lg p-4 shadow-inner">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-gray-300">Available Balance</span>
+                    <Wallet className="w-4 h-4 text-blue-300" />
+                  </div>
+                  <div 
+                    className="text-xl font-bold text-white"
+                    onClick={() => {
+                      navigate('/portfolio', { replace: true });
+                      setIsMobileMenuOpen(false);
+                    }}
+                    style={{cursor: 'pointer'}}
+                  >
+                    {formatCurrency(balance)}
+                  </div>
+                  <div className="text-xs text-blue-300 mt-1">Click to manage your portfolio</div>
+                </div>
+              </div>
             </div>
 
             <div className="py-4">
