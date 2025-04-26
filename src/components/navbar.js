@@ -192,7 +192,7 @@ const Navbar = ({mail}) => {
                             style={{marginLeft:'25%'}}
                           >
                             <Wallet className="w-5 h-5 text-white" />
-                            <span className="text-white font-medium">Rs. {data.balance || "0"}</span>
+                            <span className="text-white font-medium">Rs. {localStorage.getItem('userBalance') || "0"}</span>
                           </button>
                     </div>
                     
