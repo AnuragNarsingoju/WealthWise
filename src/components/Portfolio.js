@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, AlertTriangle, Plus, Minus, ArrowUp, ArrowDown, RefreshCw } from 'lucide-react';
 import Navbar from './navbar';
+import { motion, AnimatePresence } from 'framer-motion';
+
 // Stock market data with realistic values
 const STOCKS = [
   { 
@@ -34,10 +36,50 @@ const STOCKS = [
 ];
 
 // Helper functions for localStorage
-const saveBalance = (balance) => localStorage.setItem('userBalance', balance.toString());
-const getBalance = () => parseFloat(localStorage.getItem('userBalance') || '10000');
-const savePortfolio = (portfolio) => localStorage.setItem('userPortfolio', JSON.stringify(portfolio));
-const getPortfolio = () => JSON.parse(localStorage.getItem('userPortfolio') || '[]');
+export const saveBalance = (balance) => {
+  try {
+    localStorage.setItem('userBalance', balance.toString());
+    console.log('Balance saved to localStorage:', balance);
+  } catch (error) {
+    console.error('Error saving balance to localStorage:', error);
+  }
+};
+
+export const getBalance = () => {
+  try {
+    const storedBalance = localStorage.getItem('userBalance');
+    if (storedBalance === null) {
+      return 10000; // Default initial balance
+    }
+    const parsedBalance = parseFloat(storedBalance);
+    return isNaN(parsedBalance) ? 10000 : parsedBalance;
+  } catch (error) {
+    console.error('Error retrieving balance from localStorage:', error);
+    return 10000;
+  }
+};
+
+export const savePortfolio = (portfolio) => {
+  try {
+    localStorage.setItem('userPortfolio', JSON.stringify(portfolio));
+    console.log('Portfolio saved to localStorage');
+  } catch (error) {
+    console.error('Error saving portfolio to localStorage:', error);
+  }
+};
+
+export const getPortfolio = () => {
+  try {
+    const storedPortfolio = localStorage.getItem('userPortfolio');
+    if (!storedPortfolio) {
+      return [];
+    }
+    return JSON.parse(storedPortfolio);
+  } catch (error) {
+    console.error('Error retrieving portfolio from localStorage:', error);
+    return [];
+  }
+};
 
 const StockTradingApp = () => {
   const [balance, setBalance] = useState(getBalance());
@@ -102,6 +144,11 @@ const StockTradingApp = () => {
     
     return () => clearInterval(interval);
   }, []);
+
+  // Ensure balance is saved to localStorage whenever it changes
+  useEffect(() => {
+    saveBalance(balance);
+  }, [balance]);
 
   // Show notification message
   const showNotification = (message, type = 'success') => {
@@ -231,61 +278,124 @@ const StockTradingApp = () => {
   // Reset everything (for testing)
   const resetPortfolio = () => {
     if (window.confirm('This will reset your balance to ₩10,000 and clear your portfolio. Continue?')) {
-      setBalance(10000);
+      const initialBalance = 10000;
+      setBalance(initialBalance);
       setPortfolio([]);
-      saveBalance(10000);
+      saveBalance(initialBalance);
       savePortfolio([]);
       showNotification('Portfolio has been reset', 'success');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
+    <motion.div 
+      className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Header */}
       <Navbar/>
 
       {/* Notification */}
-      {notification && (
-        <div 
-          className={`fixed top-16 right-4 p-4 rounded-lg shadow-lg z-50 flex items-center ${
-            notification.type === "error" ? "bg-red-500" : "bg-green-500"
-          } text-white`}
-        >
-          {notification.type === "error" ? (
-            <AlertTriangle className="w-5 h-5 mr-2" />
-          ) : (
-            null
-          )}
-          <p>{notification.message}</p>
-        </div>
-      )}
+      <AnimatePresence>
+        {notification && (
+          <motion.div 
+            className={`fixed top-16 right-4 p-4 rounded-lg shadow-lg z-50 flex items-center ${
+              notification.type === "error" ? "bg-red-500" : "bg-green-500"
+            } text-white`}
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            {notification.type === "error" ? (
+              <AlertTriangle className="w-5 h-5 mr-2" />
+            ) : (
+              null
+            )}
+            <p>{notification.message}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <main className="container mx-auto px-4 py-8 mt-12">
+      <motion.main 
+        className="container mx-auto px-4 py-8 mt-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         {/* Dashboard Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl">
+          <motion.div 
+            className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl"
+            whileHover={{ 
+              scale: 1.02, 
+              boxShadow: "0 10px 25px -5px rgba(75, 0, 130, 0.5)", 
+              background: "rgba(255, 255, 255, 0.15)" 
+            }}
+            transition={{ duration: 0.2 }}
+          >
             <h2 className="text-lg font-medium mb-2">Cash Balance</h2>
             <p className="text-2xl font-bold">₩{balance.toFixed(2)}</p>
-          </div>
+          </motion.div>
           
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl">
+          <motion.div 
+            className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl"
+            whileHover={{ 
+              scale: 1.02, 
+              boxShadow: "0 10px 25px -5px rgba(75, 0, 130, 0.5)", 
+              background: "rgba(255, 255, 255, 0.15)" 
+            }}
+            transition={{ duration: 0.2 }}
+          >
             <h2 className="text-lg font-medium mb-2">Portfolio Value</h2>
             <p className="text-2xl font-bold">₩{calculatePortfolioValue().toFixed(2)}</p>
-          </div>
+          </motion.div>
           
-          <div className={`bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl 
-            ${calculateTotalPnL() > 0 ? 'text-green-400' : calculateTotalPnL() < 0 ? 'text-red-400' : ''}`}>
+          <motion.div 
+            className={`bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 shadow-xl 
+              ${calculateTotalPnL() > 0 ? 'text-green-400' : calculateTotalPnL() < 0 ? 'text-red-400' : ''}`}
+            whileHover={{ 
+              scale: 1.02, 
+              boxShadow: "0 10px 25px -5px rgba(75, 0, 130, 0.5)", 
+              background: "rgba(255, 255, 255, 0.15)" 
+            }}
+            transition={{ duration: 0.2 }}
+          >
             <h2 className="text-lg font-medium mb-2 text-white">Total P&L</h2>
             <p className="text-2xl font-bold flex items-center">
               {calculateTotalPnL() > 0 ? '+' : ''}{calculateTotalPnL().toFixed(2)}
-              <TrendingUp className={`ml-2 h-5 w-5 ${calculateTotalPnL() >= 0 ? 'rotate-0' : 'rotate-180'}`} />
+              <motion.div
+                animate={{ rotate: calculateTotalPnL() >= 0 ? 0 : 180 }}
+                transition={{ duration: 0.5 }}
+              >
+                <TrendingUp className="ml-2 h-5 w-5" />
+              </motion.div>
             </p>
-          </div>
+          </motion.div>
         </div>
 
         {/* Available Stocks Section */}
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Available Stocks</h2>
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Available Stocks</h2>
+            <motion.button
+              onClick={fetchCurrentPrices}
+              className="flex items-center space-x-2 text-blue-400 hover:text-blue-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <span>Refresh</span>
+            </motion.button>
+          </div>
+        
           <div className="overflow-x-auto">
             <table className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
               <thead>
@@ -297,14 +407,21 @@ const StockTradingApp = () => {
                 </tr>
               </thead>
               <tbody>
-                {STOCKS.map((stock) => {
+                {STOCKS.map((stock, index) => {
                   const priceChange = priceChanges[stock.symbol] || 0;
                   const priceChangeClass = 
                     priceChange > 0 ? 'text-green-400' : 
                     priceChange < 0 ? 'text-red-400' : '';
                   
                   return (
-                    <tr key={stock.symbol} className="border-b border-white/10 hover:bg-white/5">
+                    <motion.tr 
+                      key={stock.symbol} 
+                      className="border-b border-white/10 hover:bg-white/5"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: index * 0.05 }}
+                      whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+                    >
                       <td className="py-4 px-6 font-medium">{stock.symbol}</td>
                       <td className="py-4 px-6">{stock.name}</td>
                       <td className={`py-4 px-6 text-right ${priceChangeClass}`}>
@@ -312,14 +429,19 @@ const StockTradingApp = () => {
                           ₩{stockPrices[stock.symbol]?.toFixed(2) || 'Loading...'}
                           
                           {priceChange !== 0 && (
-                            <span className="ml-2 flex items-center text-xs">
+                            <motion.span 
+                              className="ml-2 flex items-center text-xs"
+                              initial={{ opacity: 0, scale: 0 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.3 }}
+                            >
                               {priceChange > 0 ? (
                                 <ArrowUp className="w-3 h-3 mr-1" />
                               ) : (
                                 <ArrowDown className="w-3 h-3 mr-1" />
                               )}
                               {Math.abs(priceChange).toFixed(2)}
-                            </span>
+                            </motion.span>
                           )}
                         </div>
                         <div className="text-xs text-gray-400">
@@ -327,46 +449,70 @@ const StockTradingApp = () => {
                         </div>
                       </td>
                       <td className="py-4 px-6 text-right">
-                        <button 
+                        <motion.button 
                           onClick={() => openModal(stock, 'buy')} 
                           className="bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded-md mr-2 inline-flex items-center"
+                          whileHover={{ scale: 1.05, backgroundColor: "#22c55e" }}
+                          whileTap={{ scale: 0.95 }}
+                          transition={{ duration: 0.2 }}
                         >
                           <Plus className="w-4 h-4 mr-1" />
                           Buy
-                        </button>
+                        </motion.button>
                       </td>
-                    </tr>
+                    </motion.tr>
                   );
                 })}
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
         {/* Portfolio Section */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           <h2 className="text-xl font-bold mb-4">My Portfolio</h2>
           {portfolio.length > 0 ? (
             <div className="overflow-x-auto">
-              <div className="mb-4 p-4 bg-indigo-900/50 rounded-lg border border-indigo-400/30">
+              <motion.div 
+                className="mb-4 p-4 bg-indigo-900/50 rounded-lg border border-indigo-400/30"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ boxShadow: "0 8px 25px -5px rgba(99, 102, 241, 0.4)" }}
+              >
                 <h3 className="font-semibold mb-2 flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2" />
+                  <motion.div
+                    animate={{ 
+                      rotate: [0, 15, 0, -15, 0],
+                    }}
+                    transition={{ 
+                      duration: 1.5, 
+                      repeat: Infinity, 
+                      repeatDelay: 5 
+                    }}
+                  >
+                    <TrendingUp className="w-5 h-5 mr-2" />
+                  </motion.div>
                   Portfolio Performance Summary
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <div className="text-sm text-gray-300">Total Investment</div>
                     <div className="text-lg font-bold">
                       ₩{portfolio.reduce((sum, pos) => sum + (pos.avgPrice * pos.quantity), 0).toFixed(2)}
                     </div>
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <div className="text-sm text-gray-300">Current Value</div>
                     <div className="text-lg font-bold">
                       ₩{portfolio.reduce((sum, pos) => sum + ((stockPrices[pos.symbol] || 0) * pos.quantity), 0).toFixed(2)}
                     </div>
-                  </div>
-                  <div>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <div className="text-sm text-gray-300">Overall Return</div>
                     <div className={`text-lg font-bold flex items-center ${calculateTotalPnL() >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                       {calculateTotalPnL() >= 0 ? '+' : ''}
@@ -375,9 +521,9 @@ const StockTradingApp = () => {
                         ({((calculateTotalPnL() / portfolio.reduce((sum, pos) => sum + (pos.avgPrice * pos.quantity), 0)) * 100).toFixed(2)}%)
                       </span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
               
               <table className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
                 <thead>
@@ -393,7 +539,7 @@ const StockTradingApp = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {portfolio.map((position) => {
+                  {portfolio.map((position, index) => {
                     const currentPrice = stockPrices[position.symbol] || 0;
                     const pnl = (currentPrice - position.avgPrice) * position.quantity;
                     const pnlPercent = ((currentPrice / position.avgPrice) - 1) * 100;
@@ -411,7 +557,14 @@ const StockTradingApp = () => {
                       ((currentPrice - stockDetails.yearRange.low) / (stockDetails.yearRange.high - stockDetails.yearRange.low)) * 100 : 50;
                     
                     return (
-                      <tr key={position.symbol} className="border-b border-white/10 hover:bg-white/5">
+                      <motion.tr 
+                        key={position.symbol} 
+                        className="border-b border-white/10 hover:bg-white/5"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, delay: index * 0.05 }}
+                        whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+                      >
                         <td className="py-4 px-6 font-medium">{position.symbol}</td>
                         <td className="py-4 px-6">{position.name}</td>
                         <td className="py-4 px-6 text-right">{position.quantity}</td>
@@ -422,16 +575,32 @@ const StockTradingApp = () => {
                         }`}>
                           <div className="flex items-center justify-end gap-2">
                             ₩{currentPrice.toFixed(2)}
-                            {isProfitable && <ArrowUp className="w-4 h-4" />}
-                            {!isBreakEven && !isProfitable && <ArrowDown className="w-4 h-4" />}
+                            {isProfitable && 
+                              <motion.div
+                                animate={{ y: [0, -4, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+                              >
+                                <ArrowUp className="w-4 h-4" />
+                              </motion.div>
+                            }
+                            {!isBreakEven && !isProfitable && 
+                              <motion.div
+                                animate={{ y: [0, 4, 0] }}
+                                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+                              >
+                                <ArrowDown className="w-4 h-4" />
+                              </motion.div>
+                            }
                           </div>
                           
                           {/* Day range position indicator */}
                           <div className="mt-1 w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                            <div 
+                            <motion.div 
                               className="h-full bg-blue-500" 
-                              style={{ width: `${Math.min(100, Math.max(0, dayRangePercent))}%` }}
-                            ></div>
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.min(100, Math.max(0, dayRangePercent))}%` }}
+                              transition={{ duration: 0.8, delay: 0.2 }}
+                            ></motion.div>
                           </div>
                           <div className="text-xs text-gray-400 mt-1">
                             Day: {dayRangePercent.toFixed(0)}%
@@ -439,35 +608,62 @@ const StockTradingApp = () => {
                         </td>
                         <td className="py-4 px-6 text-center">
                           {isProfitable ? (
-                            <div className="flex flex-col items-center">
-                              <span className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/30 text-green-300 border border-green-500/50">
+                            <motion.div 
+                              className="flex flex-col items-center"
+                              whileHover={{ scale: 1.05 }}
+                            >
+                              <motion.span 
+                                className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/30 text-green-300 border border-green-500/50"
+                                initial={{ scale: 0.8 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.3 }}
+                              >
                                 PROFIT
-                              </span>
+                              </motion.span>
                               <div className="text-xs mt-1 text-green-300">
                                 Above buy price
                               </div>
                               <div className="mt-2 text-xs">
-                                <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                                <motion.span 
+                                  className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"
+                                  animate={{ opacity: [1, 0.5, 1] }}
+                                  transition={{ duration: 1.5, repeat: Infinity }}
+                                ></motion.span>
                                 Good time to sell
                               </div>
-                            </div>
+                            </motion.div>
                           ) : isBreakEven ? (
-                            <span className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-gray-500/30 text-gray-300 border border-gray-500/50">
+                            <motion.span 
+                              className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-gray-500/30 text-gray-300 border border-gray-500/50"
+                              whileHover={{ scale: 1.05 }}
+                            >
                               BREAK EVEN
-                            </span>
+                            </motion.span>
                           ) : (
-                            <div className="flex flex-col items-center">
-                              <span className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/30 text-red-300 border border-red-500/50">
+                            <motion.div 
+                              className="flex flex-col items-center"
+                              whileHover={{ scale: 1.05 }}
+                            >
+                              <motion.span 
+                                className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/30 text-red-300 border border-red-500/50"
+                                initial={{ scale: 0.8 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.3 }}
+                              >
                                 LOSS
-                              </span>
+                              </motion.span>
                               <div className="text-xs mt-1 text-red-300">
                                 Below buy price
                               </div>
                               <div className="mt-2 text-xs">
-                                <span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"></span>
+                                <motion.span 
+                                  className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1"
+                                  animate={{ opacity: [1, 0.5, 1] }}
+                                  transition={{ duration: 1.5, repeat: Infinity }}
+                                ></motion.span>
                                 Consider holding
                               </div>
-                            </div>
+                            </motion.div>
                           )}
                         </td>
                         <td className={`py-4 px-6 text-right ${pnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -480,128 +676,181 @@ const StockTradingApp = () => {
                           
                           {/* Year range position indicator */}
                           <div className="mt-1 w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                            <div 
+                            <motion.div 
                               className={`h-full ${pnl >= 0 ? 'bg-green-500' : 'bg-red-500'}`} 
-                              style={{ width: `${Math.min(100, Math.max(0, yearRangePercent))}%` }}
-                            ></div>
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.min(100, Math.max(0, yearRangePercent))}%` }}
+                              transition={{ duration: 0.8, delay: 0.3 }}
+                            ></motion.div>
                           </div>
                           <div className="text-xs text-gray-400 mt-1">
                             52-week: {yearRangePercent.toFixed(0)}%
                           </div>
                         </td>
                         <td className="py-4 px-6 text-right">
-                          <button 
+                          <motion.button 
                             onClick={() => openModal(position, 'sell')} 
                             className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-md inline-flex items-center"
+                            whileHover={{ scale: 1.05, backgroundColor: "#dc2626" }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             <Minus className="w-4 h-4 mr-1" />
                             Sell
-                          </button>
+                          </motion.button>
                         </td>
-                      </tr>
+                      </motion.tr>
                     );
                   })}
                 </tbody>
               </table>
             </div>
           ) : (
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 text-center">
-              <p className="text-lg">Your portfolio is empty.</p>
+            <motion.div 
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20 text-center"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ 
+                boxShadow: "0 10px 25px -5px rgba(75, 0, 130, 0.3)",
+                background: "rgba(255, 255, 255, 0.15)"
+              }}
+            >
+              <motion.p 
+                className="text-lg"
+                animate={{ scale: [1, 1.02, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                Your portfolio is empty.
+              </motion.p>
               <p className="mt-2">Buy stocks to get started!</p>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
 
         {/* Reset button for testing */}
         <div className="mt-8 text-center">
-          <button 
+          <motion.button 
             onClick={resetPortfolio}
             className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md"
+            whileHover={{ scale: 1.05, backgroundColor: "#4B5563" }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ duration: 0.2 }}
           >
             Reset Portfolio
-          </button>
+          </motion.button>
         </div>
-      </main>
+      </motion.main>
 
       {/* Transaction Modal */}
-      {modalOpen && selectedStock && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md border border-gray-700">
-            <h3 className="text-xl font-bold mb-4">
-              {modalAction === 'buy' ? 'Buy' : 'Sell'} {selectedStock.name}
-            </h3>
-            
-            <div className="mb-4">
-              <p className="mb-2">Current Price: ₩{stockPrices[selectedStock.symbol]?.toFixed(2)}</p>
-              {modalAction === 'sell' && (
-                <p className="mb-2">
-                  Shares Owned: {portfolio.find(p => p.symbol === selectedStock.symbol)?.quantity || 0}
-                </p>
-              )}
-            </div>
-            
-            <div className="mb-6">
-              <label className="block mb-2">Quantity:</label>
-              <div className="flex items-center">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-l-md"
-                >-</button>
-                <input 
-                  type="number" 
-                  min="1" 
-                  value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 0))}
-                  className="bg-gray-800 text-center py-2 px-4 w-20 focus:outline-none border-t border-b border-gray-700"
-                />
-                <button 
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-r-md"
-                >+</button>
+      <AnimatePresence>
+        {modalOpen && selectedStock && (
+          <motion.div 
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setModalOpen(false)}
+          >
+            <motion.div 
+              className="bg-gray-900 rounded-xl p-6 w-full max-w-md border border-gray-700"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-xl font-bold mb-4">
+                {modalAction === 'buy' ? 'Buy' : 'Sell'} {selectedStock.name}
+              </h3>
+              
+              <div className="mb-4">
+                <p className="mb-2">Current Price: ₩{stockPrices[selectedStock.symbol]?.toFixed(2)}</p>
+                {modalAction === 'sell' && (
+                  <p className="mb-2">
+                    Shares Owned: {portfolio.find(p => p.symbol === selectedStock.symbol)?.quantity || 0}
+                  </p>
+                )}
               </div>
-            </div>
-            
-            <div className="mb-6">
-              <p className="text-lg font-medium">
-                Total: ₩{(stockPrices[selectedStock.symbol] * quantity).toFixed(2)}
-              </p>
-              {modalAction === 'buy' && (
-                <p className={`text-sm ${(stockPrices[selectedStock.symbol] * quantity) > balance ? 'text-red-400' : ''}`}>
-                  {(stockPrices[selectedStock.symbol] * quantity) > balance 
-                    ? 'Insufficient balance for this transaction'
-                    : `Remaining balance after purchase: ₩${(balance - (stockPrices[selectedStock.symbol] * quantity)).toFixed(2)}`
+              
+              <div className="mb-6">
+                <label className="block mb-2">Quantity:</label>
+                <div className="flex items-center">
+                  <motion.button 
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-l-md"
+                    whileTap={{ scale: 0.9 }}
+                  >-</motion.button>
+                  <input 
+                    type="number" 
+                    min="1" 
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 0))}
+                    className="bg-gray-800 text-center py-2 px-4 w-20 focus:outline-none border-t border-b border-gray-700"
+                  />
+                  <motion.button 
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-r-md"
+                    whileTap={{ scale: 0.9 }}
+                  >+</motion.button>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <motion.p 
+                  className="text-lg font-medium"
+                  key={quantity} // This makes the animation trigger on quantity change
+                  initial={{ scale: 0.95 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Total: ₩{(stockPrices[selectedStock.symbol] * quantity).toFixed(2)}
+                </motion.p>
+                {modalAction === 'buy' && (
+                  <p className={`text-sm ${(stockPrices[selectedStock.symbol] * quantity) > balance ? 'text-red-400' : ''}`}>
+                    {(stockPrices[selectedStock.symbol] * quantity) > balance 
+                      ? 'Insufficient balance for this transaction'
+                      : `Remaining balance after purchase: ₩${(balance - (stockPrices[selectedStock.symbol] * quantity)).toFixed(2)}`
+                    }
+                  </p>
+                )}
+              </div>
+              
+              <div className="flex justify-end space-x-4">
+                <motion.button 
+                  onClick={() => setModalOpen(false)}
+                  className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button 
+                  onClick={modalAction === 'buy' ? handleBuy : handleSell}
+                  className={`${
+                    modalAction === 'buy' 
+                      ? 'bg-green-600 hover:bg-green-700' 
+                      : 'bg-red-600 hover:bg-red-700'
+                  } text-white py-2 px-4 rounded-md`}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: modalAction === 'buy' ? "#22c55e" : "#dc2626"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  disabled={
+                    modalAction === 'buy' 
+                      ? (stockPrices[selectedStock.symbol] * quantity) > balance
+                      : (portfolio.find(p => p.symbol === selectedStock.symbol)?.quantity || 0) < quantity
                   }
-                </p>
-              )}
-            </div>
-            
-            <div className="flex justify-end space-x-4">
-              <button 
-                onClick={() => setModalOpen(false)}
-                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={modalAction === 'buy' ? handleBuy : handleSell}
-                className={`${
-                  modalAction === 'buy' 
-                    ? 'bg-green-600 hover:bg-green-700' 
-                    : 'bg-red-600 hover:bg-red-700'
-                } text-white py-2 px-4 rounded-md`}
-                disabled={
-                  modalAction === 'buy' 
-                    ? (stockPrices[selectedStock.symbol] * quantity) > balance
-                    : (portfolio.find(p => p.symbol === selectedStock.symbol)?.quantity || 0) < quantity
-                }
-              >
-                Confirm {modalAction === 'buy' ? 'Purchase' : 'Sale'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                >
+                  Confirm {modalAction === 'buy' ? 'Purchase' : 'Sale'}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
