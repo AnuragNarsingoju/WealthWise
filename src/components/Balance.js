@@ -1,156 +1,186 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { motion } from 'framer-motion';
-import { Loader2, Wallet, PiggyBank, LineChart } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend, 
+  ResponsiveContainer 
+} from "recharts";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Balance = ({ userId }) => {
-  const [balanceData, setBalanceData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [investedAmount, setInvestedAmount] = useState(0);
+  const [performanceData, setPerformanceData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      const getCookie = Cookies.get('sessionToken');
-      setLoading(true);
+    const fetchData = async () => {
+      setIsLoading(true);
       setError(null);
-
+      const getCookie = Cookies.get("sessionToken");
+      
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}getbalance`, {
-          params: { userId: userId },
-          headers: {
-            Authorization: `Bearer ${getCookie}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        setBalanceData(response.data.user);
-        let temp = 0;
-        const stocks = response.data.user.stocks;
-        for(let i=0; i<stocks.length; i++){
-          temp += stocks[i].boughtPrice;
+        // Get portfolio profit/loss data
+        const response = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}portfolio-profit-loss`,
+          {
+            params: { email: userId },
+            headers: {
+              Authorization: `Bearer ${getCookie}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        
+        // Get user balance data
+        const balanceResponse = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}getbalance`,
+          {
+            params: { userId },
+            headers: {
+              Authorization: `Bearer ${getCookie}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        
+        // Get portfolio value
+        const valueResponse = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}getvalue`,
+          {
+            params: { email: userId },
+            headers: {
+              Authorization: `Bearer ${getCookie}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        
+        // Generate mock performance data (in a real app, this would come from the backend)
+        const currentTime = new Date();
+        const totalProfitLoss = response.data.totalProfitOrLoss || 0;
+        const userBalance = balanceResponse.data.user.balance || 0;
+        const portfolioValue = valueResponse.data.amount || 0;
+        const initialInvestment = portfolioValue - totalProfitLoss;
+        
+        // Create a historical performance simulation
+        // In a real application, this would use actual historical data
+        const mockData = [];
+        
+        // Starting 30 days ago
+        for (let i = 30; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(currentTime.getDate() - i);
+          
+          // Create a slight randomness but trending toward the current value
+          const trend = i / 30; // 0 to 1 as we get closer to today
+          const randomFactor = 0.05; // 5% random variation
+          
+          // For the starting value, calculate as if the profit/loss accumulated gradually
+          const portfolioAtDay = initialInvestment + (totalProfitLoss * trend) + 
+                               (Math.random() * randomFactor * 2 - randomFactor) * initialInvestment;
+          
+          mockData.push({
+            date: date.toLocaleDateString(),
+            value: Math.max(0, portfolioAtDay.toFixed(2)), // Ensure no negative values
+          });
         }
-        setInvestedAmount(temp);
+        
+        // Add the exact current value as the last point
+        mockData[mockData.length - 1].value = portfolioValue;
+        
+        setPerformanceData(mockData);
       } catch (error) {
-        setError('Failed to fetch balance data. Please try again later.');
+        console.error("Error fetching performance data:", error);
+        setError("Failed to load performance data");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     if (userId) {
-      fetchBalance();
+      fetchData();
     }
   }, [userId]);
 
-  if (loading) {
+  const formatCurrency = (value) => {
+    return `₹${value}`;
+  };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
+          <p className="text-white font-medium">{label}</p>
+          <p className="text-green-400 font-medium">
+            {`Portfolio Value: ${formatCurrency(payload[0].value)}`}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-white/80">
-        <Loader2 className="w-8 h-8 animate-spin mb-4" />
-        <p className="text-sm font-medium">Loading balance details...</p>
+      <div className="flex justify-center items-center h-full">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-white"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-64 text-red-400">
-        <p className="text-sm font-medium">{error}</p>
+      <div className="flex justify-center items-center h-full">
+        <p className="text-red-400">{error}</p>
       </div>
     );
   }
 
-  if (!balanceData) {
-    return (
-      <div className="flex items-center justify-center h-64 text-white/80">
-        <p className="text-sm font-medium">No balance data available</p>
-      </div>
-    );
-  }
-
-  const { balance, pvalue } = balanceData;
-  const totalBalance = balance + pvalue;
-  const investedPercentage = (investedAmount / totalBalance) * 100;
+  // Calculate if overall portfolio is positive or negative
+  const isPositive = performanceData.length >= 2 && 
+                    Number(performanceData[performanceData.length - 1].value) >= 
+                    Number(performanceData[0].value);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-8"
-    >
-      <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-2">
-        <Wallet className="w-6 h-6" />
-        Account Balance
-      </h2>
-
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10"
-        >
-          <div className="flex items-center gap-2 text-white/60 mb-2">
-            <LineChart className="w-4 h-4" />
-            <span className="text-sm">Total Balance</span>
-          </div>
-          <div className="text-2xl font-bold text-white">
-            ₹{totalBalance && totalBalance.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10"
-        >
-          <div className="flex items-center gap-2 text-white/60 mb-2">
-            <Wallet className="w-4 h-4" />
-            <span className="text-sm">Available Cash</span>
-          </div>
-          <div className="text-2xl font-bold text-white">
-            ₹{balance.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10"
-        >
-          <div className="flex items-center gap-2 text-white/60 mb-2">
-            <PiggyBank className="w-4 h-4" />
-            <span className="text-sm">Invested Amount</span>
-          </div>
-          <div className="text-2xl font-bold text-white">
-            ₹{investedAmount.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="space-y-4">
-        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${investedPercentage}%` }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full"
-          />
-        </div>
-        
-        <div className="flex justify-between text-sm text-white/60">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full" />
-            <span>Invested ({investedPercentage.toFixed(1)}%)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 bg-white/20 rounded-full" />
-            <span>Available ({(100 - investedPercentage).toFixed(1)}%)</span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart
+        data={performanceData}
+        margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+        <XAxis 
+          dataKey="date" 
+          tick={{ fill: "white" }} 
+          tickLine={{ stroke: "white" }}
+          axisLine={{ stroke: "white" }}
+          tickFormatter={(value) => {
+            // Show fewer x-axis labels on smaller screens
+            const date = new Date(value);
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+          }}
+        />
+        <YAxis 
+          tick={{ fill: "white" }} 
+          tickLine={{ stroke: "white" }}
+          axisLine={{ stroke: "white" }}
+          tickFormatter={formatCurrency}
+        />
+        <Tooltip content={<CustomTooltip />} />
+        <Line
+          type="monotone"
+          dataKey="value"
+          stroke={isPositive ? "#4ade80" : "#f87171"} // Green if positive, red if negative
+          strokeWidth={3}
+          dot={false}
+          activeDot={{ r: 8, fill: isPositive ? "#4ade80" : "#f87171", stroke: "white" }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 
