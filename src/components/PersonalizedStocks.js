@@ -82,12 +82,11 @@ const PersonalizedStocks = ({mail}) => {
                     withCredentials: true,
                 }
             );
-            setRecommendation(response.data.answer.received);
+            let recommendationText = response.data.answer.received;
             
-            // Check if response is less than 200 characters and add default content
-            if (response.data.answer.received.length < 200) {
-                const defaultContent = `
-### Top 5 Stock Recommendations Based on Financial Metrics and Sentiment Analysis
+            // Add default content if response is less than 200 characters
+            if (recommendationText.length < 200) {
+                recommendationText = `### Top 5 Stock Recommendations Based on Financial Metrics and Sentiment Analysis
 
 #### 1. **Johnson & Johnson (JNJ)**  
    - **Summary of Financial Metrics:**  
@@ -157,16 +156,19 @@ const PersonalizedStocks = ({mail}) => {
 ---
 
 ### Conclusion  
-The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix of stability, growth, and income, aligning well with the user's medium risk tolerance and swing-trading strategy. Each stock has been selected based on strong financial metrics and positive or neutral sentiment analysis, ensuring a well-rounded portfolio that aims to maximize returns while managing risk effectively.
+The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix of stability, growth, and income, aligning well with the user's medium risk tolerance and swing-trading strategy. Each stock has been selected based on strong financial metrics and positive or neutral sentiment analysis, ensuring a well-rounded portfolio that aims to maximize returns while managing risk effectively.`;
+            }
+            
+            // Add market alert to all responses
+            recommendationText += `
 
 *Market Alert: Geopolitical Tensions Affecting Market Stability*
 
 ->The recent *terrorist attack in Pahalgam, Kashmir*, has escalated tensions between India and Pakistan, leading to increased market volatility and investor caution.
 ->The imposition of *widespread tariffs by the U.S.* has triggered a significant global stock market downturn, with major indices experiencing sharp declines and heightened volatility.
 -> Additionally, the disruption in global oil supply due to conflicts in the **Strait of Hormuz** has further exacerbated concerns about energy prices and economic stability worldwide.`;
-
-                setRecommendation(defaultContent);
-            }
+            
+            setRecommendation(recommendationText);
             
             setTimeout(() => {
                 const recommendationElement = document.getElementById('recommendation-section');
