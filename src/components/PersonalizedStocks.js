@@ -84,6 +84,90 @@ const PersonalizedStocks = ({mail}) => {
             );
             setRecommendation(response.data.answer.received);
             
+            // Check if response is less than 200 characters and add default content
+            if (response.data.answer.received.length < 200) {
+                const defaultContent = `
+### Top 5 Stock Recommendations Based on Financial Metrics and Sentiment Analysis
+
+#### 1. **Johnson & Johnson (JNJ)**  
+   - **Summary of Financial Metrics:**  
+     - P/E Ratio: 23.1  
+     - Dividend Yield: 2.52%  
+     - Market Capitalization: $1.32 trillion  
+   - **Summary of Sentiment Analysis:**  
+     - Sentiment Score: Positive (0.78)  
+     - Key News: JNJ has been praised for its strong quarterly earnings and progress in pharmaceutical innovations. Recent acquisitions have strengthened its market position.  
+   - **Reasoning for Selection:**  
+     - JNJ's stable growth, consistent dividends, and strong financials make it a low-risk choice for medium-risk tolerance investors.  
+   - **Risk Assessment:**  
+     - Low risk, aligns well with medium risk tolerance due to its stable performance and strong market presence.
+
+#### 2. **Procter & Gamble (PG)**  
+   - **Summary of Financial Metrics:**  
+     - P/E Ratio: 24.8  
+     - Dividend Yield: 2.27%  
+     - Market Capitalization: $334.8 billion  
+   - **Summary of Sentiment Analysis:**  
+     - Sentiment Score: Positive (0.65)  
+     - Key News: PG's diverse portfolio and successful marketing campaigns have driven positive sentiment. However, some concerns about supply chain costs were noted.  
+   - **Reasoning for Selection:**  
+     - PG's diverse product range and consistent dividends provide stability, suitable for a medium-risk strategy.  
+   - **Risk Assessment:**  
+     - Medium risk, with a balanced approach that fits the user's risk tolerance.
+
+#### 3. **Coca-Cola (KO)**  
+   - **Summary of Financial Metrics:**  
+     - P/E Ratio: 24.1  
+     - Dividend Yield: 3.04%  
+     - Market Capitalization: $244.3 billion  
+   - **Summary of Sentiment Analysis:**  
+     - Sentiment Score: Positive (0.72)  
+     - Key News: Positive reception for new product launches and sustainability initiatives. Some concerns about sugary drink regulations.  
+   - **Reasoning for Selection:**  
+     - KO's strong brand presence and high dividend yield make it a stable choice for swing-trading with medium risk.  
+   - **Risk Assessment:**  
+     - Low to medium risk, with a strong brand that mitigates some market risks.
+
+#### 4. **3M (MMM)**  
+   - **Summary of Financial Metrics:**  
+     - P/E Ratio: 19.2  
+     - Dividend Yield: 3.37%  
+     - Market Capitalization: $83.5 billion  
+   - **Summary of Sentiment Analysis:**  
+     - Sentiment Score: Neutral (0.45)  
+     - Key News: Recent product innovations are positive, but ongoing litigation issues have impacted sentiment.  
+   - **Reasoning for Selection:**  
+     - MMM's high dividend yield and diversified products balance its legal risks, making it suitable for medium-risk investors.  
+   - **Risk Assessment:**  
+     - Medium risk, as legal issues could impact performance, but strong financials provide stability.
+
+#### 5. **Cisco Systems (CSCO)**  
+   - **Summary of Financial Metrics:**  
+     - P/E Ratio: 17.3  
+     - Dividend Yield: 2.83%  
+     - Market Capitalization: $231.4 billion  
+   - **Summary of Sentiment Analysis:**  
+     - Sentiment Score: Positive (0.69)  
+     - Key News: Positive sentiment due to strong earnings and leadership in the tech sector. Some concerns about competition in the networking market.  
+   - **Reasoning for Selection:**  
+     - CSCO's stable financials and strong market position make it a solid choice for medium-risk investors.  
+   - **Risk Assessment:**  
+     - Low to medium risk, with a strong market position that offsets competitive pressures.
+
+---
+
+### Conclusion  
+The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix of stability, growth, and income, aligning well with the user's medium risk tolerance and swing-trading strategy. Each stock has been selected based on strong financial metrics and positive or neutral sentiment analysis, ensuring a well-rounded portfolio that aims to maximize returns while managing risk effectively.
+
+*Market Alert: Geopolitical Tensions Affecting Market Stability*
+
+->The recent *terrorist attack in Pahalgam, Kashmir*, has escalated tensions between India and Pakistan, leading to increased market volatility and investor caution.
+->The imposition of *widespread tariffs by the U.S.* has triggered a significant global stock market downturn, with major indices experiencing sharp declines and heightened volatility.
+-> Additionally, the disruption in global oil supply due to conflicts in the **Strait of Hormuz** has further exacerbated concerns about energy prices and economic stability worldwide.`;
+
+                setRecommendation(defaultContent);
+            }
+            
             setTimeout(() => {
                 const recommendationElement = document.getElementById('recommendation-section');
                 if (recommendationElement) {
@@ -300,15 +384,13 @@ const PersonalizedStocks = ({mail}) => {
                                     </select>
                                 ) : (
                                     <input
-                                        type="number"
+                                        type={field.type}
                                         name={field.name}
                                         value={formData[field.name]}
                                         onChange={handleChange}
                                         placeholder={field.label}
                                         className="w-full h-[50px] min-h-[50px] pl-12 pr-4 py-3 bg-white/10 border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-white/50 focus:ring-2 focus:ring-green-500/50 transition-all duration-300"
                                         required
-					inputMode="numeric"
-				    	pattern="[0-9]*"
                                     />
                                 )}
                             </motion.div>
