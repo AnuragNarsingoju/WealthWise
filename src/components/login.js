@@ -2,7 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import {  Mail, ChevronLeft, Eye, EyeOff, User, Lock, AlertCircle, AlignCenter } from 'lucide-react';
 import '../index.css';
 import {  provider,auth   } from "../firebase";
-import { signInWithPopup ,signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail,getAuth, signOut ,createUserWithEmailAndPassword,sendEmailVerification} from "firebase/auth";
+import { signInWithRedirect, signInWithEmailAndPassword,sendPasswordResetEmail,fetchSignInMethodsForEmail,getAuth, signOut ,createUserWithEmailAndPassword,sendEmailVerification, getRedirectResult} from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
@@ -477,8 +477,94 @@ const Login = (log) => {
 
 
   
-  const signInWithGoogle = async () => {
+  useEffect(() => {
+    // Handle the redirect result when the component mounts
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
+          const getCookie = Cookies.get('sessionToken');
+          try {
+            const response1 = await axios.post(
+              process.env.REACT_APP_BACKEND_URL + "signup",
+              user1,
+              {
+                headers: {
+                  Authorization: `Bearer ${getCookie}`,
+                  'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+              }
+            );
+          } catch(e) {
+            console.log(e);
+          }
+          setEmail(user.email);
+          log.email(user.email);
+          setIsLoggedIn(true);
+          const ps = process.env.REACT_APP_SECRET;
+          const auth1 = await user.getIdToken();
 
+          try {
+            setIsLoggedIn(true);
+            const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
+            const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
+            const val = {email1: email, auth: auth1, token1: recaptchaToken};
+            const valString = JSON.stringify(val);
+            const encrypted = CryptoJS.AES.encrypt(valString, key, {
+              iv: iv,
+              mode: CryptoJS.mode.CBC,
+              padding: CryptoJS.pad.Pkcs7
+            }).toString();
+
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted}, { withCredentials: true });
+            const expires = new Date();
+            expires.setTime(expires.getTime() + 8 * 60 * 60 * 1000);
+            settoken(response.data);
+            const dat = response.data;
+            Cookies.set('sessionToken', dat.token, { expires, secure: true, sameSite: 'Strict' });
+            setLoading(false);  
+            setIsLoggedIn(true);
+            toast.dismiss();
+            toast.success('Login successful!');
+            log.user1(true);
+            clear();
+
+            try {
+              const getCookie = Cookies.get('sessionToken');
+              const findemail = await axios.get(
+                `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(user.email)}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${getCookie}`,
+                    'Content-Type': 'application/json',
+                  },
+                  withCredentials: true,
+                }
+              );
+              findemail.data.user.count === 0 ? navigate('/foam', { replace: true }) : navigate('/home', { replace: true });
+            } catch(e) {
+              navigate('/foam', { replace: true });
+            }
+          } catch (error) {
+            console.error('Encryption/Decryption error:', error);
+          }
+        }
+      } catch (error) {
+        console.error("Error during Google Sign-In redirect:", error);
+        toast.error('An error occurred during sign-in. Please try again.', {
+          position: 'top-center',
+          autoClose: 3000,
+        });
+      }
+    };
+
+    handleRedirectResult();
+  }, []);
+
+  const signInWithGoogle = async () => {
     toast(
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div
@@ -495,7 +581,7 @@ const Login = (log) => {
             textAlign:'center'
           }}
         ></div>
-       Authenticating…
+       Redirecting to Google Sign-In...
       </div>,
       {
         position: 'top-center',
@@ -508,85 +594,16 @@ const Login = (log) => {
     );
 
     setLoading(true);
-    let encrypted="";
-    const Rtoken = await recaptchaRef.current.execute();
-    setRecaptchaToken(Rtoken);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      const user1 = { email: user.email, password : null, phone : user.phoneNumber, name : user.displayName,profile : user.photoURL};
-      const getCookie = Cookies.get('sessionToken');
-      try{
-        const response1 = await axios.post(
-          process.env.REACT_APP_BACKEND_URL + "signup",
-          user1,
-          {
-            headers: {
-              Authorization: `Bearer ${getCookie}`,
-              'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-          }
-        );
-      }catch(e){
-        console.log(e);
-      }
-      setEmail(user.email)
-      log.email(user.email);
-      setIsLoggedIn(true);
-      const ps=process.env.REACT_APP_SECRET;
-      const auth1= await user.getIdToken();
-
-      try {
-        setIsLoggedIn(true);
-        
-        const key = CryptoJS.enc.Utf8.parse(ps.padEnd(32, ' ')); 
-        const iv = CryptoJS.enc.Utf8.parse(ps.padEnd(16, ' '));
-         const val={email1:email,auth:auth1,token1:Rtoken};
-         const valString = JSON.stringify(val);
-        encrypted = CryptoJS.AES.encrypt(valString, key, {
-            iv: iv,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString();
-            
-        } catch (error) {
-            console.error('Encryption/Decryption error:', error);
-        }
-
-      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "login", {encrypted} ,{ withCredentials: true });
-      const expires = new Date();
-      expires.setTime(expires.getTime() + 8 * 60 * 60 * 1000)
-      settoken(response.data);
-      const dat=response.data;
-      Cookies.set('sessionToken', dat.token , { expires, secure: true, sameSite: 'Strict' });
-      setLoading(false);  
-      setIsLoggedIn(true);
-      toast.dismiss();
-      toast.success('Login successful!');
-      log.user1(true);
-      clear();
-       try{
-          const getCookie = Cookies.get('sessionToken');
-          const findemail = await axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}findemail?email=${encodeURIComponent(user.email)}`,
-            {
-              headers: {
-                Authorization: `Bearer ${getCookie}`,
-                'Content-Type': 'application/json',
-              },
-              withCredentials: true,
-            }
-          );
-        findemail.data.user.count===0? navigate('/foam', { replace: true }) : navigate('/home', { replace: true })
-      }catch(e){
-        navigate('/foam', { replace: true })
-      }
-      
+      await signInWithRedirect(auth, provider);
     } catch (error) {
-      console.error("Error during Google Sign-In:", error);
+      console.error("Error initiating Google Sign-In:", error);
       toast.dismiss();
+      toast.error('An error occurred while initiating sign-in. Please try again.', {
+        position: 'top-center',
+        autoClose: 3000,
+      });
+      setLoading(false);
     }
   };
 
