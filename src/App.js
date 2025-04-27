@@ -47,10 +47,19 @@ const App = () => {
   
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
+
     if (storedEmail) {
       setMail(storedEmail);
     }
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('sessionToken');
+    const email = localStorage.getItem('userEmail');
+    if (token && email && window.location.pathname === '/') {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const containerVariants = {
         hidden: { opacity: 0 },
