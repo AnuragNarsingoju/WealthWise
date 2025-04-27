@@ -48,7 +48,6 @@ const App = () => {
           localStorage.setItem("userEmail", user.email); 
         } else {
           setMail('');
-          localStorage.removeItem("userEmail");
           await auth.signOut();
         }
         setLoading(false);
