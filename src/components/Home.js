@@ -100,7 +100,7 @@ async function fetchYouTubeVideoDetails(link) {
 
 const Home = ({ mail }) => {
   const cld = new Cloudinary({ cloud: { cloudName: 'djlgmbop9' } });
-
+  const navigate = useNavigate();       
   const [videoDetails, setVideoDetails] = useState([]);
 
   const [niftyData, setNiftyData] = useState([
@@ -359,7 +359,7 @@ const Home = ({ mail }) => {
       setNiftyData(processedData);
       setLastUpdated(new Date());
     } catch (error) {
-      const navigate = useNavigate();       
+      
       if (error.response.data.error === 'invalid token' || error.response.data.error === 'Unauthorized request') {
           localStorage.removeItem('sessionToken');
           localStorage.removeItem('userEmail');
@@ -575,7 +575,6 @@ const Home = ({ mail }) => {
     const StocksData = () => {  
         const [activeButton, setActiveButton] = useState(null);
         const [handleErr,sethandleErr]=useState(false);
-        const navigate = useNavigate();       
 
         useEffect(() => {
           if (activeButton === "Expense Tracker") {
