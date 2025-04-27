@@ -478,7 +478,6 @@ const Login = (log) => {
 
   
   const signInWithGoogle = async () => {
-
     toast(
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div
@@ -587,6 +586,33 @@ const Login = (log) => {
     } catch (error) {
       console.error("Error during Google Sign-In:", error);
       toast.dismiss();
+      
+      if (error.code === 'auth/popup-blocked') {
+        toast.error(
+          <div>
+            <p>Pop-up blocked by your browser.</p>
+            <p>Please enable pop-ups for this site to continue with Google Sign-In.</p>
+            <p>In Safari: Safari → Settings → Websites → Pop-up Windows → Allow</p>
+          </div>,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            closeOnClick: true,
+            draggable: true,
+          }
+        );
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        toast.error('Sign-in was cancelled. Please try again.', {
+          position: 'top-center',
+          autoClose: 3000,
+        });
+      } else {
+        toast.error('An error occurred during sign-in. Please try again.', {
+          position: 'top-center',
+          autoClose: 3000,
+        });
+      }
+      setLoading(false);
     }
   };
 
