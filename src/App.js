@@ -54,6 +54,7 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('sessionToken');
     const email = localStorage.getItem('userEmail');
+    console.log(window.location.pathname);
     if (token && email && window.location.pathname === '/') {
       navigate('/home');
     }
