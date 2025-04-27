@@ -25,13 +25,16 @@ const App = () => {
   const navigate = useNavigate();
   const token = Cookies.get('sessionToken');
 
-  useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (user) => {
+ const unsubscribe = auth.onAuthStateChanged(async (user) => {
     try {
       setLoading(true);
         if (user) {
           setMail(user.email);
           localStorage.setItem("userEmail", user.email); 
+        } else {
+          setMail('');
+          localStorage.removeItem("userEmail");
+          await auth.signOut();
         }
         setLoading(false);
       } catch (error) {
@@ -39,7 +42,7 @@ const App = () => {
         setLoading(false);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
   
