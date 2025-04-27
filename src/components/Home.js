@@ -338,6 +338,10 @@ const Home = ({ mail }) => {
         withCredentials: true,
       });
 
+
+
+      
+
       // Process the response data to match the expected format
       const processedData = response.data.map(stock => ({
         symbol: stock.symbol,
@@ -355,6 +359,15 @@ const Home = ({ mail }) => {
       setNiftyData(processedData);
       setLastUpdated(new Date());
     } catch (error) {
+
+      if (error.response.data.error === 'invalid token' || error.response.data.error === 'Unauthorized request') {
+           toast.error('❌ Invaild Token', {
+              position: 'top-center',
+              hideProgressBar: false,
+              pauseOnHover: true,
+            });
+            navigate('/', { state: { showToast: true } });
+      }
       console.error('Error fetching stock data:', error);
       // Don't update with fallback data since we already have static data loaded
     } finally {
