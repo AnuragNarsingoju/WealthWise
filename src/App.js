@@ -23,27 +23,7 @@ const App = () => {
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged(async (user) => {
-    try {
-      setLoading(true);
-        if (user) {
-          setMail(user.email);
-          localStorage.setItem("userEmail", user.email); 
-        } else {
-          setMail('');
-          localStorage.removeItem("userEmail");
-          await auth.signOut();
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error during authentication state change:', error);
-        setLoading(false);
-      }
-    });
   
-    return () => unsubscribe();
-  }, []);
   
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
