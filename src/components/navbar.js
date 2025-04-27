@@ -110,10 +110,7 @@ const Navbar = ({mail}) => {
 
   const handleLogout = () => {
     Cookies.remove('sessionToken');
-    Cookies.remove('userEmail');}
-    localStorage.removeItem('sessionToken');
-    localStorage.removeItem('userEmail');
-    
+    localStorage.remove('userEmail');}
     navigate('/',{ replace: true });
   };
 
