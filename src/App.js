@@ -209,7 +209,7 @@ const App = () => {
         `}
       </style>
       <Routes>
-       {mail === '' ? (
+       {mail === '' && !token ? (
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
       ) : (
         <Route path="/" element={<Home />} />
