@@ -23,6 +23,18 @@ const App = () => {
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const token = Cookies.get('sessionToken');
+    const email = localStorage.getItem('userEmail');
+    console.log(window.location.pathname);
+    if (token && email && window.location.pathname === '/') {
+      navigate('/home');
+    }
+  }, [navigate]);
+
+  
   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
     try {
