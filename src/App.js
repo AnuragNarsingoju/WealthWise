@@ -25,14 +25,14 @@ const App = () => {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    const token = Cookies.get('sessionToken');
-    const email = localStorage.getItem('userEmail');
-    console.log(window.location.pathname);
-    if (token && email && window.location.pathname === '/') {
-      navigate('/home');
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   const token = Cookies.get('sessionToken');
+  //   const email = localStorage.getItem('userEmail');
+  //   console.log(window.location.pathname);
+  //   if (token && email && window.location.pathname === '/') {
+  //     navigate('/home');
+  //   }
+  // }, [navigate]);
 
   
   useEffect(() => {
@@ -41,6 +41,9 @@ const App = () => {
       setLoading(true);
         if (user) {
           setMail(user.email);
+          if (window.location.pathname === '/' && token ) {
+            navigate('/home');
+          }
           localStorage.setItem("userEmail", user.email); 
         } else {
           setMail('');
