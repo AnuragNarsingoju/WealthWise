@@ -23,7 +23,7 @@ const App = () => {
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const token = Cookies.get('sessionToken');
 
   useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -209,7 +209,11 @@ const App = () => {
         `}
       </style>
       <Routes>
+       {mail === '' ? (
         <Route path="/" element={<Login user1={setLog} email={setMail} />} />
+      ) : (
+        <Route path="/" element={<Home />} />
+      )}
         <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
         <Route path="/foam" element={  mail!=='' ?<Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
