@@ -361,6 +361,8 @@ const Home = ({ mail }) => {
     } catch (error) {
       const navigate = useNavigate();       
       if (error.response.data.error === 'invalid token' || error.response.data.error === 'Unauthorized request') {
+          localStorage.removeItem('sessionToken');
+          localStorage.removeItem('userEmail');
           navigate('/', { replace: true });
       }
       console.error('Error fetching stock data:', error);
