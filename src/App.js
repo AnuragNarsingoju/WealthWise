@@ -16,16 +16,15 @@ import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
-import Cookies from 'js-cookie';
+
 
 const App = () => {
   const [log, setLog] = useState(false);
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const token = Cookies.get('sessionToken');
-
- const unsubscribe = auth.onAuthStateChanged(async (user) => {
+  useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(async (user) => {
     try {
       setLoading(true);
         if (user) {
@@ -48,20 +47,10 @@ const App = () => {
   
   useEffect(() => {
     const storedEmail = localStorage.getItem("userEmail");
-
     if (storedEmail) {
       setMail(storedEmail);
     }
   }, []);
-
-  useEffect(() => {
-    const token = Cookies.get('sessionToken');
-    const email = localStorage.getItem('userEmail');
-    console.log(window.location.pathname);
-    if (token && email && window.location.pathname === '/') {
-      navigate('/home');
-    }
-  }, [navigate]);
 
   const containerVariants = {
         hidden: { opacity: 0 },
