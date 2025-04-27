@@ -209,7 +209,7 @@ const App = () => {
         `}
       </style>
       <Routes>
-        <Route path="/" element={<Login user1={setLog} email={setMail} />} />
+        <Route path="/" element={mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} />} />
         <Route path="*" element={ mail!=='' ? <PageNotFound /> : <Login user1={setLog} email={setMail} />} />
         <Route path="/home" element={ mail!=='' ? <Home mail={mail} /> : <Login user1={setLog} email={setMail} /> } />
         <Route path="/foam" element={  mail!=='' ?<Psinfo mail={mail} /> : <Login user1={setLog} email={setMail} />} />
