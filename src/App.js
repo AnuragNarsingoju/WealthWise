@@ -16,6 +16,7 @@ import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
+import Cookies from 'js-cookie';
 
 
 const App = () => {
@@ -23,7 +24,7 @@ const App = () => {
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const token = Cookies.get('sessionToken');
 
   // useEffect(() => {
   //   const token = Cookies.get('sessionToken');
