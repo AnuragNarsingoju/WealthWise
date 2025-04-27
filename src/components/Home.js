@@ -359,14 +359,9 @@ const Home = ({ mail }) => {
       setNiftyData(processedData);
       setLastUpdated(new Date());
     } catch (error) {
-
+      const navigate = useNavigate();       
       if (error.response.data.error === 'invalid token' || error.response.data.error === 'Unauthorized request') {
-           toast.error('❌ Invaild Token', {
-              position: 'top-center',
-              hideProgressBar: false,
-              pauseOnHover: true,
-            });
-            navigate('/', { state: { showToast: true } });
+          navigate('/', { replace: true });
       }
       console.error('Error fetching stock data:', error);
       // Don't update with fallback data since we already have static data loaded
