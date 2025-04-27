@@ -16,7 +16,7 @@ import ExpenseDate from './components/ExpenseDate';
 import ExpenseTracker from './components/ExpenseTracker';
 import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
-
+import Cookies from 'js-cookie';
 
 const App = () => {
   const [log, setLog] = useState(false);
@@ -52,7 +52,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('sessionToken');
+    const token = Cookies.get('sessionToken');
     const email = localStorage.getItem('userEmail');
     console.log(window.location.pathname);
     if (token && email && window.location.pathname === '/') {
