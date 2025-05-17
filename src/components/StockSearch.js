@@ -79,7 +79,12 @@ const StockSearch = ({ email, onSuccess }) => {
     
     try {
        const getCookie = Cookies.get('sessionToken');
-       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}stock/price?symbol=${symbol}`);
+       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}stock/price?symbol=${symbol}`,{
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+          },
+          withCredentials: true,
+        });
       
       if (!response.ok) {
         throw new Error('Failed to fetch stock price');
@@ -115,6 +120,7 @@ const StockSearch = ({ email, onSuccess }) => {
     setError(null);
     
     try {
+      const getCookie = Cookies.get('sessionToken');
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}stock/buy`,
         {
@@ -124,7 +130,8 @@ const StockSearch = ({ email, onSuccess }) => {
         },
         {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+             Authorization: `Bearer ${getCookie}`,
           }
         }
       );
