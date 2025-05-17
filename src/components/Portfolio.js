@@ -25,7 +25,7 @@ const Portfolio = () => {
 
 
   
-export const saveBalance = (balance) => {
+ const saveBalance = (balance) => {
   try {
     localStorage.setItem('userBalance', balance.toString());
     console.log('Balance saved to localStorage:', balance);
@@ -34,7 +34,7 @@ export const saveBalance = (balance) => {
   }
 };
 
-export const getBalance = () => {
+ const getBalance = () => {
   try {
     const storedBalance = localStorage.getItem('userBalance');
     if (storedBalance === null) {
@@ -48,7 +48,7 @@ export const getBalance = () => {
   }
 };
 
-export const savePortfolio = (portfolio) => {
+ const savePortfolio = (portfolio) => {
   try {
     localStorage.setItem('userPortfolio', JSON.stringify(portfolio));
     console.log('Portfolio saved to localStorage');
@@ -57,7 +57,7 @@ export const savePortfolio = (portfolio) => {
   }
 };
 
-export const getPortfolio = () => {
+ const getPortfolio = () => {
   try {
     const storedPortfolio = localStorage.getItem('userPortfolio');
     if (!storedPortfolio) {
