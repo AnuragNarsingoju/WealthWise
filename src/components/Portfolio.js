@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { DollarSign, TrendingUp, AlertTriangle, ArrowUp, ArrowDown, RefreshCw, ChevronDown, 
-  ChevronUp, Briefcase, PieChart, Award, XCircle, Minus, CheckCircle, AlertCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, AlertTriangle, ArrowUp, ArrowDown, RefreshCw, ChevronDown,ChevronUp, Briefcase, PieChart, Award, XCircle, Minus, CheckCircle, AlertCircle } from 'lucide-react';
 import StockSearch from './StockSearch';
+import Navbar from './navbar';
 
 const Portfolio = () => {
   const [portfolioData, setPortfolioData] = useState(null);
@@ -21,6 +21,56 @@ const Portfolio = () => {
   useEffect(() => {
     fetchPortfolioData();
   }, []);
+
+
+
+  
+export const saveBalance = (balance) => {
+  try {
+    localStorage.setItem('userBalance', balance.toString());
+    console.log('Balance saved to localStorage:', balance);
+  } catch (error) {
+    console.error('Error saving balance to localStorage:', error);
+  }
+};
+
+export const getBalance = () => {
+  try {
+    const storedBalance = localStorage.getItem('userBalance');
+    if (storedBalance === null) {
+      return 10000; // Default initial balance
+    }
+    const parsedBalance = parseFloat(storedBalance);
+    return isNaN(parsedBalance) ? 10000 : parsedBalance;
+  } catch (error) {
+    console.error('Error retrieving balance from localStorage:', error);
+    return 10000;
+  }
+};
+
+export const savePortfolio = (portfolio) => {
+  try {
+    localStorage.setItem('userPortfolio', JSON.stringify(portfolio));
+    console.log('Portfolio saved to localStorage');
+  } catch (error) {
+    console.error('Error saving portfolio to localStorage:', error);
+  }
+};
+
+export const getPortfolio = () => {
+  try {
+    const storedPortfolio = localStorage.getItem('userPortfolio');
+    if (!storedPortfolio) {
+      return [];
+    }
+    return JSON.parse(storedPortfolio);
+  } catch (error) {
+    console.error('Error retrieving portfolio from localStorage:', error);
+    return [];
+  }
+};
+
+  
 
   const fetchPortfolioData = async () => {
     setLoading(true);
