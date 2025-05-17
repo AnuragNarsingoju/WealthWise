@@ -31,7 +31,7 @@ const Navbar = () => {
       if (!mail) return;
 
       const response = await axios.get(
-        `http://localhost:5001/api/getbalance?userId=${encodeURIComponent(
+        `${process.env.REACT_APP_BACKEND_URL}getbalance?userId=${encodeURIComponent(
           mail
         )}`
       );
