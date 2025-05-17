@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, TrendingUp, DollarSign, AlertTriangle, ArrowRight, ChevronDown, ChevronUp, X, Loader, ShoppingCart } from 'lucide-react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const StockSearch = ({ email, onSuccess }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,7 +78,8 @@ const StockSearch = ({ email, onSuccess }) => {
     setError(null);
     
     try {
-      const response = await fetch(`http://localhost:5001/api/stock/price?symbol=${symbol}`);
+       const getCookie = Cookies.get('sessionToken');
+       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}stock/price?symbol=${symbol}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch stock price');
