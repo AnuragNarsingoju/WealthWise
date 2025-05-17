@@ -29,11 +29,19 @@ const Navbar = () => {
   const fetchBalance = async () => {
     try {
       if (!mail) return;
-
+      const getCookie = Cookies.get("sessionToken");
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}getbalance?userId=${encodeURIComponent(
           mail
         )}`
+        ,
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
       if (
         response.data &&
