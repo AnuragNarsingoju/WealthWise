@@ -115,17 +115,19 @@ const StockSearch = ({ email, onSuccess }) => {
     setError(null);
     
     try {
-      const response = await fetch('http://localhost:5001/api/stock/buy', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}stock/buy`,
+        {
           email,
           symbol: selectedStock.symbol,
           quantity
-        })
-      });
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       
       const data = await response.json();
       
