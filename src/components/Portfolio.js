@@ -25,11 +25,10 @@ const Portfolio = () => {
   const fetchPortfolioData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5001/api/portfolio?email=${emailId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch portfolio data');
-      }
-      const data = await response.json();
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}portfolio?email=${emailId}`
+      );
+      const data = response.data;
       setPortfolioData(data);
       setError(null);
     } catch (err) {
@@ -58,17 +57,11 @@ const Portfolio = () => {
     setIsProcessing(true);
     
     try {
-      const response = await fetch('http://localhost:5001/api/stock/sell', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "stock/sell", {
           email: emailId,
           symbol: selectedStock.symbol,
-          quantity: parseInt(sellQuantity)
-        }),
-      });
+          quantity: parseInt(sellQuantity),
+        });
 
       const data = await response.json();
       
