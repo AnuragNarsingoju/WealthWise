@@ -203,7 +203,7 @@ const Portfolio = ({mail}) => {
   return (
     <>
     <Navbar mail={mail}/>
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 text-white p-4 mt-[80px]">
       <div className="container mx-auto px-4 py-8">
         {/* Notification */}
         {notification && (
