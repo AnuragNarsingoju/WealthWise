@@ -3,7 +3,7 @@ import { DollarSign, TrendingUp, AlertTriangle, ArrowUp, ArrowDown, RefreshCw, C
 import StockSearch from './StockSearch';
 import Navbar from './navbar';
 import axios from "axios";
-const Portfolio = () => {
+const Portfolio = ({mail}) => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
