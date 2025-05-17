@@ -3,6 +3,8 @@ import { DollarSign, TrendingUp, AlertTriangle, ArrowUp, ArrowDown, RefreshCw, C
 import StockSearch from './StockSearch';
 import Navbar from './navbar';
 import axios from "axios";
+import Cookies from 'js-cookie';
+
 const Portfolio = ({mail}) => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,8 +27,15 @@ const Portfolio = ({mail}) => {
   const fetchPortfolioData = async () => {
     setLoading(true);
     try {
+      const getCookie = Cookies.get('sessionToken');
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}portfolio?email=${emailId}`
+        `${process.env.REACT_APP_BACKEND_URL}portfolio?email=${emailId}`,{
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
       const data = response.data;
       setPortfolioData(data);
@@ -57,11 +66,22 @@ const Portfolio = ({mail}) => {
     setIsProcessing(true);
     
     try {
-      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + "stock/sell", {
+       const getCookie = Cookies.get('sessionToken');
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + "stock/sell",
+        {
           email: emailId,
           symbol: selectedStock.symbol,
           quantity: parseInt(sellQuantity),
-        });
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
       const data = await response.json();
       
