@@ -1,10 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, TrendingUp, DollarSign, AlertTriangle, ArrowRight, ChevronDown, ChevronUp, X, Loader, ShoppingCart } from 'lucide-react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Search,
+  TrendingUp,
+  DollarSign,
+  AlertTriangle,
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  X,
+  Loader,
+  ShoppingCart,
+} from "lucide-react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const StockSearch = ({ email, onSuccess }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedStock, setSelectedStock] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -14,17 +25,17 @@ const StockSearch = ({ email, onSuccess }) => {
   const [showTrending, setShowTrending] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  
+
   const searchRef = useRef(null);
-  
+
   // Example trending stocks (replace with actual trending data if available)
   const trendingStocks = [
-    { symbol: 'RELIANCE', name: 'Reliance Industries Ltd.' },
-    { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd.' },
-    { symbol: 'TCS', name: 'Tata Consultancy Services Ltd.' },
-    { symbol: 'INFY', name: 'Infosys Ltd.' },
-    { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd.' },
-    { symbol: 'SBIN', name: 'State Bank of India' }
+    { symbol: "RELIANCE", name: "Reliance Industries Ltd." },
+    { symbol: "HDFCBANK", name: "HDFC Bank Ltd." },
+    { symbol: "TCS", name: "Tata Consultancy Services Ltd." },
+    { symbol: "INFY", name: "Infosys Ltd." },
+    { symbol: "ICICIBANK", name: "ICICI Bank Ltd." },
+    { symbol: "SBIN", name: "State Bank of India" },
   ];
 
   // Close search results when clicking outside
@@ -49,23 +60,24 @@ const StockSearch = ({ email, onSuccess }) => {
       setShowResults(true);
       return;
     }
-    
+
     setLoading(true);
     setError(null);
     setShowTrending(false);
-    
+
     try {
       // For demo purposes, we'll simulate a search result
       // In a real app, you would call an API endpoint to search for stocks
       const simulatedResults = trendingStocks.filter(
-        stock => stock.symbol.includes(searchTerm.toUpperCase()) || 
-                stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+        (stock) =>
+          stock.symbol.includes(searchTerm.toUpperCase()) ||
+          stock.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      
+
       setSearchResults(simulatedResults);
       setShowResults(true);
     } catch (err) {
-      setError('Failed to search for stocks. Please try again.');
+      setError("Failed to search for stocks. Please try again.");
       setSearchResults([]);
     } finally {
       setLoading(false);
@@ -76,31 +88,33 @@ const StockSearch = ({ email, onSuccess }) => {
   const getStockPrice = async (symbol) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-       const getCookie = Cookies.get('sessionToken');
-       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}stock/price?symbol=${symbol}`,{
+      const getCookie = Cookies.get("sessionToken");
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}stock/price?symbol=${symbol}`,
+        {
           headers: {
             Authorization: `Bearer ${getCookie}`,
           },
           withCredentials: true,
-        });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch stock price');
-      }
-      
-      const data = await response.json();
-      setSelectedStock(data);
+        }
+      );
+
+      // Axios response data is directly available in response.data
+      setSelectedStock(response.data);
       setShowResults(false);
     } catch (err) {
-      setError('Error fetching stock price. Please try again.');
-      // For demo purposes, set mock data
-      setSelectedStock({
-        symbol: symbol,
-        name: trendingStocks.find(s => s.symbol === symbol)?.name || symbol,
-        price: Math.random() * 2000 + 500 // Random price between 500 and 2500
-      });
+      setError("Error fetching stock price. Please try again.");
+      // Only set mock data if we're in development mode
+      if (process.env.NODE_ENV === "development") {
+        setError(null); // Clear error since we're providing mock data
+        setSelectedStock({
+          symbol: symbol,
+          name: trendingStocks.find((s) => s.symbol === symbol)?.name || symbol,
+          price: Math.random() * 2000 + 500, // Random price between 500 and 2500
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -110,55 +124,56 @@ const StockSearch = ({ email, onSuccess }) => {
   const buyStock = async () => {
     if (!email || !selectedStock || quantity <= 0) {
       setNotification({
-        type: 'error',
-        message: 'Please enter a valid email, select a stock, and specify a quantity'
+        type: "error",
+        message:
+          "Please enter a valid email, select a stock, and specify a quantity",
       });
       return;
     }
-    
+
     setPurchasing(true);
     setError(null);
-    
+
     try {
-      const getCookie = Cookies.get('sessionToken');
+      const getCookie = Cookies.get("sessionToken");
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}stock/buy`,
         {
           email,
           symbol: selectedStock.symbol,
-          quantity
+          quantity,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
-             Authorization: `Bearer ${getCookie}`,
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie}`,
+          },
         }
       );
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to buy stock');
-      }
-      
+
+      // Axios response data is directly available in response.data
+      const data = response.data;
+
       setNotification({
-        type: 'success',
-        message: `Successfully purchased ${quantity} shares of ${selectedStock.symbol}`
+        type: "success",
+        message: `Successfully purchased ${quantity} shares of ${selectedStock.symbol}`,
       });
-      
+
       // Reset the form
       setSelectedStock(null);
       setQuantity(1);
-      
+
       // Notify parent component that purchase was successful
       if (onSuccess) {
         onSuccess(data);
       }
     } catch (err) {
       setNotification({
-        type: 'error',
-        message: err.message || 'Failed to buy stock. Please try again.'
+        type: "error",
+        message:
+          err.response?.data?.error ||
+          err.message ||
+          "Failed to buy stock. Please try again.",
       });
     } finally {
       setPurchasing(false);
@@ -167,10 +182,10 @@ const StockSearch = ({ email, onSuccess }) => {
 
   // Format currency values
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 2
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2,
     }).format(value);
   };
 
@@ -180,26 +195,33 @@ const StockSearch = ({ email, onSuccess }) => {
       const timer = setTimeout(() => {
         setNotification(null);
       }, 5000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [notification]);
 
   // Handle pressing Enter in search input
   const handleSearchKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       searchStock();
     }
   };
 
   return (
-
-<div className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6 relative" ref={searchRef} style={{ zIndex: 40 }}>    {/* Notification */}
+    <div
+      className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6 relative"
+      ref={searchRef}
+      style={{ zIndex: 40 }}
+    >
+      {" "}
+      {/* Notification */}
       {notification && (
-        <div className={`absolute top-0 right-0 m-4 p-3 rounded-lg shadow-lg z-50 flex items-center max-w-md ${
-          notification.type === 'error' ? 'bg-red-500/90' : 'bg-green-500/90'
-        } text-white`}>
-          {notification.type === 'error' ? (
+        <div
+          className={`absolute top-0 right-0 m-4 p-3 rounded-lg shadow-lg z-50 flex items-center max-w-md ${
+            notification.type === "error" ? "bg-red-500/90" : "bg-green-500/90"
+          } text-white`}
+        >
+          {notification.type === "error" ? (
             <AlertTriangle className="w-5 h-5 mr-2 flex-shrink-0" />
           ) : (
             <ShoppingCart className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -207,12 +229,10 @@ const StockSearch = ({ email, onSuccess }) => {
           <p>{notification.message}</p>
         </div>
       )}
-
       <h2 className="text-xl font-semibold mb-4 flex items-center">
         <Search className="w-5 h-5 mr-2" />
         Search & Buy Stocks
       </h2>
-      
       {/* Search Input Section */}
       <div className="mb-6">
         <div className="flex items-center">
@@ -223,7 +243,7 @@ const StockSearch = ({ email, onSuccess }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleSearchKeyDown}
               onClick={() => {
-                if (searchTerm.trim() === '') {
+                if (searchTerm.trim() === "") {
                   setShowTrending(true);
                   setShowResults(true);
                 }
@@ -232,9 +252,9 @@ const StockSearch = ({ email, onSuccess }) => {
               placeholder="Search by symbol or company name"
             />
             {searchTerm && (
-              <button 
+              <button
                 onClick={() => {
-                  setSearchTerm('');
+                  setSearchTerm("");
                   setSearchResults([]);
                   setShowResults(false);
                   setShowTrending(false);
@@ -250,13 +270,17 @@ const StockSearch = ({ email, onSuccess }) => {
             className="ml-2 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-lg flex items-center justify-center"
             disabled={loading}
           >
-            {loading ? <Loader className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
+            {loading ? (
+              <Loader className="w-5 h-5 animate-spin" />
+            ) : (
+              <Search className="w-5 h-5" />
+            )}
           </button>
         </div>
-        
+
         {/* Search Results Dropdown */}
         {showResults && (
-  <div className="absolute z-50 left-0 right-0 bg-gray-800/95 backdrop-blur-sm mt-1 rounded-lg border border-white/20 shadow-xl max-h-80 overflow-y-auto mx-0">
+          <div className="absolute z-50 left-0 right-0 bg-gray-800/95 backdrop-blur-sm mt-1 rounded-lg border border-white/20 shadow-xl max-h-80 overflow-y-auto mx-0">
             {loading ? (
               <div className="p-4 flex justify-center">
                 <Loader className="w-6 h-6 animate-spin text-indigo-400" />
@@ -266,7 +290,7 @@ const StockSearch = ({ email, onSuccess }) => {
             ) : searchResults.length > 0 ? (
               <ul>
                 {searchResults.map((stock) => (
-                  <li 
+                  <li
                     key={stock.symbol}
                     className="border-b border-white/10 last:border-b-0"
                   >
@@ -275,7 +299,9 @@ const StockSearch = ({ email, onSuccess }) => {
                       className="w-full text-left py-3 px-4 hover:bg-white/10 flex items-center justify-between group"
                     >
                       <div>
-                        <span className="font-medium text-indigo-300">{stock.symbol}</span>
+                        <span className="font-medium text-indigo-300">
+                          {stock.symbol}
+                        </span>
                         <p className="text-sm text-gray-300">{stock.name}</p>
                       </div>
                       <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-indigo-400" />
@@ -293,7 +319,7 @@ const StockSearch = ({ email, onSuccess }) => {
                 </div>
                 <ul>
                   {trendingStocks.map((stock) => (
-                    <li 
+                    <li
                       key={stock.symbol}
                       className="border-b border-white/10 last:border-b-0"
                     >
@@ -302,7 +328,9 @@ const StockSearch = ({ email, onSuccess }) => {
                         className="w-full text-left py-3 px-4 hover:bg-white/10 flex items-center justify-between group"
                       >
                         <div>
-                          <span className="font-medium text-indigo-300">{stock.symbol}</span>
+                          <span className="font-medium text-indigo-300">
+                            {stock.symbol}
+                          </span>
                           <p className="text-sm text-gray-300">{stock.name}</p>
                         </div>
                         <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-indigo-400" />
@@ -312,12 +340,13 @@ const StockSearch = ({ email, onSuccess }) => {
                 </ul>
               </div>
             ) : (
-              <div className="p-4 text-gray-300">No results found. Try searching for a different term.</div>
+              <div className="p-4 text-gray-300">
+                No results found. Try searching for a different term.
+              </div>
             )}
           </div>
         )}
       </div>
-      
       {/* Selected Stock Information */}
       {selectedStock && (
         <div className="bg-white/5 rounded-lg p-4 border border-indigo-500/20 mb-6">
@@ -328,30 +357,36 @@ const StockSearch = ({ email, onSuccess }) => {
             </div>
             <div className="text-right">
               <p className="text-gray-300 text-sm">Current Price</p>
-              <p className="text-xl font-bold text-indigo-300">{formatCurrency(selectedStock.price)}</p>
+              <p className="text-xl font-bold text-indigo-300">
+                {formatCurrency(selectedStock.price)}
+              </p>
             </div>
           </div>
-          
+
           {/* Buy Form */}
           <div className="mt-4 border-t border-white/10 pt-4">
             <div className="flex flex-col sm:flex-row items-end gap-4">
               <div className="w-full sm:w-1/3">
-                <label className="block mb-2 text-sm text-gray-300">Quantity</label>
+                <label className="block mb-2 text-sm text-gray-300">
+                  Quantity
+                </label>
                 <div className="flex">
-                  <button 
+                  <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-l-md"
                   >
                     -
                   </button>
-                  <input 
-                    type="number" 
-                    min="1" 
+                  <input
+                    type="number"
+                    min="1"
                     value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 0))}
+                    onChange={(e) =>
+                      setQuantity(Math.max(1, parseInt(e.target.value) || 0))
+                    }
                     className="bg-gray-800 text-center py-2 px-2 w-full focus:outline-none border-t border-b border-gray-700"
                   />
-                  <button 
+                  <button
                     onClick={() => setQuantity(quantity + 1)}
                     className="bg-gray-700 hover:bg-gray-600 py-2 px-3 rounded-r-md"
                   >
@@ -359,14 +394,14 @@ const StockSearch = ({ email, onSuccess }) => {
                   </button>
                 </div>
               </div>
-              
+
               <div className="w-full sm:w-1/3">
                 <p className="mb-2 text-sm text-gray-300">Total Cost</p>
                 <p className="bg-gray-800/50 py-2 px-4 rounded-md font-bold">
                   {formatCurrency(selectedStock.price * quantity)}
                 </p>
               </div>
-              
+
               <div className="w-full sm:w-1/3">
                 <button
                   onClick={buyStock}
@@ -390,11 +425,11 @@ const StockSearch = ({ email, onSuccess }) => {
           </div>
         </div>
       )}
-      
       {/* Disclaimer */}
       <p className="text-xs text-gray-400 mt-2">
-        Market data is delayed. Trading in securities involves risk and may result in loss of capital. 
-        Make sure to research thoroughly before investing.
+        Market data is delayed. Trading in securities involves risk and may
+        result in loss of capital. Make sure to research thoroughly before
+        investing.
       </p>
     </div>
   );
