@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DollarSign, TrendingUp, AlertTriangle, ArrowUp, ArrowDown, RefreshCw, ChevronDown,ChevronUp, Briefcase, PieChart, Award, XCircle, Minus, CheckCircle, AlertCircle } from 'lucide-react';
 import StockSearch from './StockSearch';
 import Navbar from './navbar';
-
+import axios from "axios";
 const Portfolio = () => {
   const [portfolioData, setPortfolioData] = useState(null);
   const [loading, setLoading] = useState(true);
