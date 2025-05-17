@@ -9,8 +9,7 @@ const Portfolio = () => {
   const [error, setError] = useState(null);
   const [expandedSection, setExpandedSection] = useState('portfolio');
   const [emailId, setEmailId] = useState(localStorage.getItem("userEmail")); // Get email from localStorage
-  
-  // State for sell modal
+
   const [sellModalOpen, setSellModalOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState(null);
   const [sellQuantity, setSellQuantity] = useState(1);
@@ -22,55 +21,6 @@ const Portfolio = () => {
     fetchPortfolioData();
   }, []);
 
-
-
-  
- const saveBalance = (balance) => {
-  try {
-    localStorage.setItem('userBalance', balance.toString());
-    console.log('Balance saved to localStorage:', balance);
-  } catch (error) {
-    console.error('Error saving balance to localStorage:', error);
-  }
-};
-
- const getBalance = () => {
-  try {
-    const storedBalance = localStorage.getItem('userBalance');
-    if (storedBalance === null) {
-      return 10000; // Default initial balance
-    }
-    const parsedBalance = parseFloat(storedBalance);
-    return isNaN(parsedBalance) ? 10000 : parsedBalance;
-  } catch (error) {
-    console.error('Error retrieving balance from localStorage:', error);
-    return 10000;
-  }
-};
-
- const savePortfolio = (portfolio) => {
-  try {
-    localStorage.setItem('userPortfolio', JSON.stringify(portfolio));
-    console.log('Portfolio saved to localStorage');
-  } catch (error) {
-    console.error('Error saving portfolio to localStorage:', error);
-  }
-};
-
- const getPortfolio = () => {
-  try {
-    const storedPortfolio = localStorage.getItem('userPortfolio');
-    if (!storedPortfolio) {
-      return [];
-    }
-    return JSON.parse(storedPortfolio);
-  } catch (error) {
-    console.error('Error retrieving portfolio from localStorage:', error);
-    return [];
-  }
-};
-
-  
 
   const fetchPortfolioData = async () => {
     setLoading(true);
