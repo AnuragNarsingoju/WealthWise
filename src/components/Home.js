@@ -287,7 +287,7 @@ const Home = ({ mail }) => {
       
       // Try different image sources in sequence
       if (domain) {
-        if(domain==="bajaj.com"{
+        if(domain==="bajaj.com"){
           return `https://ui-avatars.com/api/?name=bajaj&background=random&size=128`;
         }
         return `https://logo.clearbit.com/${domain}`;
