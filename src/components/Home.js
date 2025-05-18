@@ -377,6 +377,11 @@ const Home = ({ mail }) => {
     fetchStockData();
   };
 
+  function createFallbackImage(symbol, type = "stock") {
+    // You can customize this service or use your own
+    return `https://ui-avatars.com/api/?name=${symbol}&background=random&size=128`;
+  }
+
   // Format the last updated time
   const formatLastUpdated = (date = lastUpdated) => {
     if (!date) return 'Never';
@@ -899,107 +904,99 @@ const Home = ({ mail }) => {
                           </div>
                         );
                       })
-                  ) : (
-                    niftyData
-                      .sort((a, b) => parseFloat(b.change) - parseFloat(a.change)) // Sort in descending order by change
-                      .map((stock, index) => {
-                        const bgIntensity = Math.max(700 - index * 50, 800);
-                        
-                        // Check if stock is up or down to determine color
-                        const isStockUp = parseFloat(stock.change) > 0;
-                        const changeColor = isStockUp ? "text-green-500" : "text-red-500";
-                        const changeIcon = isStockUp ? "▲" : "▼";
-                        const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
-                        const changePercent = stock.change;
-
-                        return (
-                          <div
-                            key={stock.symbol}
-                            className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
-                            transform transition-all duration-300 
-                            hover:scale-105 hover:shadow-lg
-                            scroll-snap-align: start;`}
-                            style={{ scrollSnapAlign: "start" }}
-                            onClick={() => window.open(stock.link, "_blank")}
-                          >
-                            <div className="flex justify-between items-center">
+                  ) : (niftyData
+                    .sort((a, b) => parseFloat(b.change) - parseFloat(a.change)) // Sort in descending order by change
+                    .map((stock, index) => {
+                      const bgIntensity = Math.max(700 - index * 50, 800);
+                  
+                      const isStockUp = parseFloat(stock.change) > 0;
+                      const changeColor = isStockUp ? "text-green-500" : "text-red-500";
+                      const changeIcon = isStockUp ? "▲" : "▼";
+                      const changeValue = (parseFloat(stock.ltp) - parseFloat(stock.prev_price)).toFixed(2);
+                      const changePercent = stock.change;
+                  
+                      return (
+                        <div
+                          key={stock.symbol}
+                          className={`flex-shrink-0 w-64 bg-gradient-to-br from-blue-1500/90 to-purple-1500/90${bgIntensity} rounded-lg p-4 
+                          transform transition-all duration-300 
+                          hover:scale-105 hover:shadow-lg
+                          scroll-snap-align: start;`}
+                          style={{ scrollSnapAlign: "start" }}
+                          onClick={() => window.open(stock.link, "_blank")}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex flex-col">
+                              <h4 className="font-bold text-lg leading-tight">{stock.symbol}</h4>
                               <div className="flex flex-col">
-                                <h4 className="font-bold text-lg leading-tight">
-                                  {stock.symbol}
-                                </h4>
-                                <div className="flex flex-col">
-                                  <p className="text-sm text-gray-400">
-                                    ₹{stock.ltp}
-                                  </p>
-                                  <p className={`text-sm ${changeColor} flex items-center`}>
-                                    {changeIcon} {changeValue} ({changePercent}%)
-                                  </p>
-                                </div>
+                                <p className="text-sm text-gray-400">₹{stock.ltp}</p>
+                                <p className={`text-sm ${changeColor} flex items-center`}>
+                                  {changeIcon} {changeValue} ({changePercent}%)
+                                </p>
                               </div>
+                            </div>
+                  
+                            {/* Image Section */}
+                            <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
                               {(() => {
-                                const cloudinaryId = stockImages[stock.symbol] || "default_stock_image_lcwpuj";
+                                const cloudinaryId = stockImages[stock.symbol];
+                                const tickerToDomain = {
+                                  RELIANCE: "ril.com",
+                                  TCS: "tcs.com",
+                                  HDFCBANK: "hdfcbank.com",
+                                  INFY: "infosys.com",
+                                  ICICIBANK: "icicibank.com",
+                                  SBIN: "sbi.co.in",
+                                  BHARTIARTL: "airtel.in",
+                                  TATAMOTORS: "tatamotors.com"
+                                };
+                                const fallbackDomain =
+                                  tickerToDomain[stock.symbol] || `${stock.symbol.toLowerCase()}.com`;
+                  
                                 try {
-                                  const img = cld
-                                    .image(cloudinaryId)
-                                    .format("auto")
-                                    .quality("auto")
-                                    .resize(
-                                      auto()
-                                        .gravity(autoGravity())
-                                        .width(500)
-                                        .height(500)
-                                    );
-                                  
-                                  return (
-                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
+                                  if (cloudinaryId) {
+                                    const img = cld
+                                      .image(cloudinaryId)
+                                      .format("auto")
+                                      .quality("auto")
+                                      .resize(auto().gravity(autoGravity()).width(500).height(500));
+                  
+                                    return (
                                       <AdvancedImage
                                         className="w-10 h-10 object-contain rounded-full"
                                         cldImg={img}
                                         onError={(e) => {
                                           e.target.onerror = null;
-                                          const tickerToDomain = {
-                                            "RELIANCE": "ril.com",
-                                            "TCS": "tcs.com", 
-                                            "HDFCBANK": "hdfcbank.com",
-                                            "INFY": "infosys.com",
-                                            "ICICIBANK": "icicibank.com",
-                                            "SBIN": "sbi.co.in", 
-                                            "BHARTIARTL": "airtel.in",
-                                            "TATAMOTORS": "tatamotors.com"
-                                          };
-                                          const domain = tickerToDomain[stock.symbol] || 
-                                                        `${stock.symbol.toLowerCase()}.com`;
-                                          e.target.src = `https://logo.clearbit.com/${domain}`;
-                                          
-                                          // Final fallback if clearbit fails
-                                          e.target.addEventListener('error', () => {
-                                            e.target.src = createFallbackImage(stock.symbol, 'stock');
+                                          e.target.src = `https://logo.clearbit.com/${fallbackDomain}`;
+                                          e.target.addEventListener("error", () => {
+                                            e.target.src = createFallbackImage(stock.symbol, "stock");
                                           });
                                         }}
                                       />
-                                    </div>
-                                  );
+                                    );
+                                  } else {
+                                    throw new Error("Cloudinary ID not found");
+                                  }
                                 } catch (err) {
                                   return (
-                                    <div className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md overflow-hidden">
-                                      <img 
-                                        src={`https://logo.clearbit.com/${stock.symbol.toLowerCase()}.com`}
-                                        className="w-10 h-10 object-contain rounded-full"
-                                        alt={stock.symbol}
-                                        onError={(e) => {
-                                          e.target.onerror = null;
-                                          e.target.src = createFallbackImage(stock.symbol, 'stock');
-                                        }}
-                                      />
-                                    </div>
+                                    <img
+                                      src={`https://logo.clearbit.com/${fallbackDomain}`}
+                                      className="w-10 h-10 object-contain rounded-full"
+                                      alt={stock.symbol}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = createFallbackImage(stock.symbol, "stock");
+                                      }}
+                                    />
                                   );
                                 }
                               })()}
                             </div>
                           </div>
-                        );
-                      })
-                  )
+                        </div>
+                      );
+                    })
+                )
                 ) : category.type === "Mutual Funds" ? (
                   isLoadingMF ? (
                     // Instead of loading indicator, render the static data
