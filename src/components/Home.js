@@ -377,10 +377,6 @@ const Home = ({ mail }) => {
     fetchStockData();
   };
 
-  function createFallbackImage(symbol, type = "stock") {
-    // You can customize this service or use your own
-    return `https://ui-avatars.com/api/?name=${symbol}&background=random&size=128`;
-  }
 
   // Format the last updated time
   const formatLastUpdated = (date = lastUpdated) => {
@@ -1485,8 +1481,7 @@ const Home = ({ mail }) => {
       bgColor = generateConsistentColor(name);
       initials = name.substring(0, 2).toUpperCase();
     }
-    
-    // Use rounded=true to ensure perfect circle and adjust font size for better appearance
+
     return `https://ui-avatars.com/api/?name=${initials}&background=${bgColor}&color=${textColor}&bold=true&size=150&font-size=0.33&rounded=true`;
   };
 
