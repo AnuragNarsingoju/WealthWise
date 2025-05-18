@@ -874,8 +874,6 @@ const Home = ({ mail }) => {
                                           const domain = tickerToDomain[stock.symbol] || 
                                                         `${stock.symbol.toLowerCase()}.com`;
                                          e.target.onerror = null; // prevent infinite loop
-
-                                          const domain = "bajaj.com"; 
                                           
                                           if (domain === "bajaj.com") {
                                             e.target.src = "https://ui-avatars.com/api/?name=bajaj&background=random&size=128";
