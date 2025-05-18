@@ -287,6 +287,9 @@ const Home = ({ mail }) => {
       
       // Try different image sources in sequence
       if (domain) {
+        if(domain==="bajaj.com"{
+          return `https://ui-avatars.com/api/?name=bajaj&background=random&size=128`;
+        }
         return `https://logo.clearbit.com/${domain}`;
       } 
     },
@@ -870,7 +873,15 @@ const Home = ({ mail }) => {
                                           };
                                           const domain = tickerToDomain[stock.symbol] || 
                                                         `${stock.symbol.toLowerCase()}.com`;
-                                          e.target.src = `https://logo.clearbit.com/${domain}`;
+                                         e.target.onerror = null; // prevent infinite loop
+
+                                          const domain = "bajaj.com"; 
+                                          
+                                          if (domain === "bajaj.com") {
+                                            e.target.src = "https://ui-avatars.com/api/?name=bajaj&background=random&size=128";
+                                          } else {
+                                            e.target.src = `https://logo.clearbit.com/${domain}`;
+}
                                           
                                           // Final fallback if clearbit fails
                                           e.target.addEventListener('error', () => {
@@ -963,7 +974,11 @@ const Home = ({ mail }) => {
                                         cldImg={img}
                                         onError={(e) => {
                                           e.target.onerror = null;
-                                          e.target.src = `https://logo.clearbit.com/${fallbackDomain}`;
+                                          if (fallbackDomain === "bajaj.com") {
+                                              e.target.src = "https://ui-avatars.com/api/?name=Bajaj&background=random&size=128";
+                                            } else {
+                                              e.target.src = `https://logo.clearbit.com/${fallbackDomain}`;
+                                              }
                                           e.target.addEventListener("error", () => {
                                             e.target.src = createFallbackImage(stock.symbol, "stock");
                                           });
@@ -1054,7 +1069,11 @@ const Home = ({ mail }) => {
                                           
                                           // Try company logo from clearbit
                                           const cleanName = fund.name.toLowerCase().replace(/\s+/g, '');
-                                          imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          if (cleanName === "bajaj") {
+                                            imgElement.src = `https://ui-avatars.com/api/?name=Bajaj&background=random&size=128`;
+                                          } else {
+                                            imgElement.src = `https://logo.clearbit.com/${cleanName}.com`;
+                                          }
                                           
                                           // Final fallback if clearbit fails
                                           imgElement.addEventListener('error', () => {
