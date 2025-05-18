@@ -989,7 +989,11 @@ const Home = ({ mail }) => {
                                 } catch (err) {
                                   return (
                                     <img
-                                      src={`https://logo.clearbit.com/${fallbackDomain}`}
+                                      src={
+                                        fallbackDomain === "bajaj.com"
+                                          ? "https://ui-avatars.com/api/?name=Bajaj&background=random&size=128"
+                                          : `https://logo.clearbit.com/${fallbackDomain}`
+                                      }
                                       className="w-10 h-10 object-contain rounded-full"
                                       alt={stock.symbol}
                                       onError={(e) => {
