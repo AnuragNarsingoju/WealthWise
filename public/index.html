@@ -105,7 +105,8 @@
   <body >
     <noscript>You need to enable JavaScript to run this app.</noscript>
      <div id="loading-screen">
-      <img src="%PUBLIC_URL%/logo192.png" alt="WealthWisee" class="loading-logo">
+     <img src="%PUBLIC_URL%/logo192.png" alt="WealthWisee" class="loading-logo" style="border-radius: 12px;">
+      <div class="spinner"></div>
     </div>
     <div id="root"></div>
     
@@ -119,5 +120,17 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+     <script>
+      window.addEventListener('load', function () {
+        const checkReactReady = setInterval(() => {
+          const root = document.getElementById('root');
+          if (root && root.children.length > 0) {
+            document.getElementById('loading-screen').style.display = 'none';
+            clearInterval(checkReactReady);
+          }
+        }, 100); // checks every 100ms
+      });
+    </script>
   </body>
 </html>
