@@ -131,7 +131,7 @@ const Navbar = (props) => {
     console.log("logout");
     e.preventDefault();
     Cookies.remove("sessionToken");
-    localStorage.remove("userEmail");
+    localStorage.removeItem("userEmail");
     navigate("/", { replace: true });
   };
 
