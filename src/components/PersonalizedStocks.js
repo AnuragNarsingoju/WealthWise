@@ -190,7 +190,7 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                 However, we're actively working on optimizing this feature for online deployment. In future releases, we aim to make it available directly through the platform, bringing seamless, real-time recommendations to your fingertips.
 
                 If you want to explore how it works, want a technical demo, or would like to discuss the system in more detail —
-                📬 Feel free to reach out at nagasaipraneeththipparthi@gmail.com — we'd love to connect and share the innovation behind the scenes.`);
+                📬 Feel free to reach out at support@wealthwisee.live — we'd love to connect and share the innovation behind the scenes.`);
                 setTimeout(() => setError(null), 20000);
         } finally {
             setLoading(false);
