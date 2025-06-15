@@ -417,6 +417,7 @@ const Navbar = (props) => {
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </button>
+            </div>
 
           </div>
         </div>
