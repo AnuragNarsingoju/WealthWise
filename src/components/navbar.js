@@ -14,7 +14,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,7 +23,7 @@ const Navbar = () => {
   const [data, setData] = useState({});
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [balance, setBalance] = useState(null);
-  const mail = localStorage.getItem("userEmail");
+  const mail = localStorage.getItem("userEmail") || props.mail;
 
   // Fetch balance from API
   const fetchBalance = async () => {
