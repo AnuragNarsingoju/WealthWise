@@ -303,7 +303,7 @@ const Navbar = () => {
                       onClick={handleLogout}
                       className="w-full px-4 py-2 flex items-center justify-center text-red-500 hover:text-red-600"
                     >
-                      <button className="w-4 h-4" />
+                      <button className="w-4 h-4" onClick={handleLogout}/>
                       Logout
                     </button>
                   </div>
