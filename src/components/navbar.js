@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = (props) => {
   const navigate = useNavigate();
@@ -128,6 +128,7 @@ const Navbar = (props) => {
 
   
   const handleLogout = (e) => {
+    console.log("logout");
     e.preventDefault();
     Cookies.remove("sessionToken");
     localStorage.remove("userEmail");
