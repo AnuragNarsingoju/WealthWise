@@ -126,11 +126,14 @@ const Navbar = (props) => {
     }
   };
 
-  const handleLogout = () => {
+  
+  const handleLogout = (e) => {
+    e.preventDefault();
     Cookies.remove("sessionToken");
     localStorage.remove("userEmail");
     navigate("/", { replace: true });
   };
+
 
   const navItems = [
     {
