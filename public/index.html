@@ -28,10 +28,87 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LfCBZUqAAAAAL_BH37jCaL7MgJycDRweqjDKiGN"></script>
     <title>WealthWise</title>
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #root {
+        height: 100%;
+      }
+
+      /* Loading screen styles */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #7C78B8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        z-index: 9999;
+      }
+
+      .loading-logo {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+        animation: pulse 2s infinite;
+      }
+
+      .loading-text {
+        font-family: 'Arial', sans-serif;
+        color: #f3f3f3;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 20px;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        position: relative;
+        animation: spin 1.4s linear infinite;
+      }
+      .spinner::before, .spinner::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        border: 3px dotted #d4af37;
+        animation: spin 2s linear infinite reverse;
+      }
+      .spinner::after {
+        border: 3px dotted #ffffff;
+        animation-duration: 3s;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body >
     <noscript>You need to enable JavaScript to run this app.</noscript>
+     <div id="loading-screen">
+      <img src="%PUBLIC_URL%/logo192.png" alt="WealthWisee" class="loading-logo">
+    </div>
     <div id="root"></div>
+    
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
