@@ -209,7 +209,7 @@ const StockSearch = ({ email, onSuccess }) => {
 
   return (
     <div
-      className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6 relative"
+      className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6"
       ref={searchRef}
       style={{ zIndex: 40 }}
     >
