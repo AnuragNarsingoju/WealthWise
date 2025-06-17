@@ -450,7 +450,7 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                             className="whitespace-pre-wrap" 
 
                             dangerouslySetInnerHTML={{
-                                __html: formatChatbotResponse(recommendation)
+                                __html: formatChatbotResponse(recommendation.groqRecommendation)
                             }}
                         >{recommendation}</motion.p>
                     </motion.div>
