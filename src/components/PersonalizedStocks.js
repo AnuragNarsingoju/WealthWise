@@ -764,7 +764,7 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                 </form>
 
                 {recommendation && (
-			{ /*<motion.div 
+		<motion.div 
                         id="recommendation-section"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -788,16 +788,10 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                             className="whitespace-pre-wrap" 
 
                         >{parseMarkdown(recommendation)}</motion.p>
-                    </motion.div> */}
+                    </motion.div>
 
 
-		  <motion.div 
-		      initial={{ opacity: 0 }}
-		      animate={{ opacity: 1 }}
-		      className="max-w-6xl mx-auto p-6"
-		    >
-		      <StockCards recommendation={recommendation} />
-		 </motion.div>
+		
                 )}
             </motion.div>
         </div>
