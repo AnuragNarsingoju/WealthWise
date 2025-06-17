@@ -274,7 +274,7 @@ const PersonalizedStocks = ({mail}) => {
 const parseMarkdown = (text) => {
   if (!text) return [];
 
-  text = text.slice(5);
+  text = text.slice(2);
   
   const lines = text.split('\n');
   const elements = [];
