@@ -17,48 +17,90 @@ import Navbar from './navbar';
 
 const PersonalizedStocks = ({mail}) => {
 
-    const parseMarkdown = (text) => {
-    // Split by lines to preserve structure
-    const lines = text.split('\n');
     
-    return lines.map((line, index) => {
-      // Handle bold text (**text**)
-      let parts = line.split(/(\*\*.*?\*\*)/g);
-      
-      const processedParts = parts.map((part, partIndex) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          // Remove ** and make bold
-          const boldText = part.slice(2, -2);
-          return <strong key={partIndex}>{boldText}</strong>;
-        }
-        
-        // Handle headers (lines starting with #)
-        if (part.startsWith('# ')) {
-          return <h1 key={partIndex} className="text-2xl font-bold mb-2">{part.slice(2)}</h1>;
-        }
-        if (part.startsWith('## ')) {
-          return <h2 key={partIndex} className="text-xl font-bold mb-2">{part.slice(3)}</h2>;
-        }
-        if (part.startsWith('### ')) {
-          return <h3 key={partIndex} className="text-lg font-bold mb-1">{part.slice(4)}</h3>;
-        }
-        
-        // Handle list items
-        if (part.trim().startsWith('- ')) {
-          return <li key={partIndex} className="ml-4">{part.trim().slice(2)}</li>;
-        }
-        
-        return part;
-      });
-      
-      // Wrap in div for each line, add key
-      return (
-        <div key={index} className="mb-1">
-          {processedParts}
+// Markdown Parser Function
+const parseMarkdown = (text) => {
+  if (!text) return [];
+  
+  const lines = text.split('\n');
+  const elements = [];
+  
+  lines.forEach((line, index) => {
+    // Skip empty lines
+    if (line.trim() === '') {
+      elements.push(<br key={index} />);
+      return;
+    }
+    
+    // Handle different markdown elements
+    let element = null;
+    
+    // Headers
+    if (line.startsWith('### ')) {
+      const headerText = line.slice(4);
+      const parsedHeader = parseInlineMarkdown(headerText);
+      element = <h3 key={index} className="text-xl font-bold text-gray-800 mt-6 mb-3">{parsedHeader}</h3>;
+    } else if (line.startsWith('#### ')) {
+      const headerText = line.slice(5);
+      const parsedHeader = parseInlineMarkdown(headerText);
+      element = <h4 key={index} className="text-lg font-semibold text-gray-700 mt-4 mb-2">{parsedHeader}</h4>;
+    }
+    // Bullet points
+    else if (line.trim().startsWith('- ')) {
+      const listText = line.trim().slice(2);
+      const parsedText = parseInlineMarkdown(listText);
+      element = (
+        <div key={index} className="ml-4 mb-2">
+          <span className="text-blue-600 font-bold mr-2">•</span>
+          <span className="text-gray-700">{parsedText}</span>
         </div>
       );
-    });
-  };
+    }
+    // Regular paragraphs
+    else {
+      const parsedText = parseInlineMarkdown(line);
+      element = <p key={index} className="text-gray-700 mb-2 leading-relaxed">{parsedText}</p>;
+    }
+    
+    elements.push(element);
+  });
+  
+  return elements;
+};
+
+// Helper function to parse inline markdown (bold, etc.)
+const parseInlineMarkdown = (text) => {
+  const parts = [];
+  let currentIndex = 0;
+  
+  // Regular expression to find **text** patterns
+  const boldRegex = /\*\*(.*?)\*\*/g;
+  let match;
+  
+  while ((match = boldRegex.exec(text)) !== null) {
+    // Add text before the bold part
+    if (match.index > currentIndex) {
+      parts.push(text.substring(currentIndex, match.index));
+    }
+    
+    // Add the bold part
+    parts.push(
+      <strong key={match.index} className="font-semibold text-gray-900">
+        {match[1]}
+      </strong>
+    );
+    
+    currentIndex = match.index + match[0].length;
+  }
+  
+  // Add remaining text
+  if (currentIndex < text.length) {
+    parts.push(text.substring(currentIndex));
+  }
+  
+  return parts.length > 0 ? parts : text;
+};
+
 
     function formatChatbotResponse(response) {
         return response
