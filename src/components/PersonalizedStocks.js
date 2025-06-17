@@ -15,6 +15,258 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import Cookies from 'js-cookie';
 import Navbar from './navbar';
 
+
+// Add this complete component before your main component
+const StockCards = ({ recommendation }) => {
+  const parseStockData = (text) => {
+    if (!text) return [];
+    
+    const stocks = [];
+    const lines = text.split('\n');
+    let currentStock = null;
+    let currentSection = null;
+    
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      
+      // Check for stock header (#### 1. **Stock Name**)
+      const stockMatch = trimmedLine.match(/^####\s+(\d+)\.\s+\*\*(.*?)\*\*$/);
+      if (stockMatch) {
+        if (currentStock) stocks.push(currentStock);
+        
+        currentStock = {
+          id: parseInt(stockMatch[1]),
+          name: stockMatch[2],
+          symbol: '',
+          financialMetrics: [],
+          sentimentAnalysis: [],
+          reasoning: [],
+          riskAssessment: []
+        };
+        
+        const symbolMatch = currentStock.name.match(/\((.*?)\)$/);
+        if (symbolMatch) {
+          currentStock.symbol = symbolMatch[1];
+          currentStock.name = currentStock.name.replace(/\s*\(.*?\)$/, '');
+        }
+        currentSection = null;
+        return;
+      }
+      
+      // Check for section headers
+      if (trimmedLine.includes('**Financial Metrics:**')) currentSection = 'financialMetrics';
+      else if (trimmedLine.includes('**Sentiment Analysis:**')) currentSection = 'sentimentAnalysis';
+      else if (trimmedLine.includes('**Reasoning:**')) currentSection = 'reasoning';
+      else if (trimmedLine.includes('**Risk Assessment:**')) currentSection = 'riskAssessment';
+      
+      // Add content to current section
+      if (currentStock && currentSection && trimmedLine.startsWith('- ')) {
+        currentStock[currentSection].push(trimmedLine.slice(2).trim());
+      }
+    });
+    
+    if (currentStock) stocks.push(currentStock);
+    return stocks;
+  };
+
+  // Extract key metrics
+  const extractMetrics = (financialMetrics) => {
+    const metrics = {};
+    financialMetrics.forEach(metric => {
+      if (metric.includes('EPS')) {
+        const match = metric.match(/EPS.*?:\s*([\d,]+\.?\d*)/);
+        if (match) metrics.eps = parseFloat(match[1].replace(/,/g, ''));
+      }
+      if (metric.includes('Sales Growth')) {
+        const match = metric.match(/([\d.]+)%/);
+        if (match) metrics.salesGrowth = parseFloat(match[1]);
+      }
+      if (metric.includes('Market Cap')) {
+        const match = metric.match(/Market.*?:\s*([\d,]+\.?\d*)/);
+        if (match) metrics.marketCap = parseFloat(match[1].replace(/,/g, ''));
+      }
+      if (metric.includes('Debt-to-Equity')) {
+        const match = metric.match(/([\d.]+)/);
+        if (match) metrics.debtToEquity = parseFloat(match[1]);
+      }
+      if (metric.includes('ROE')) {
+        const match = metric.match(/([\d.]+)%/);
+        if (match) metrics.roe = parseFloat(match[1]);
+      }
+    });
+    return metrics;
+  };
+
+  // Extract sentiment and risk
+  const extractSentiment = (sentimentAnalysis) => {
+    let score = 0, text = 'Neutral';
+    sentimentAnalysis.forEach(item => {
+      if (item.includes('Sentiment Score')) {
+        const match = item.match(/([\d.]+)/);
+        if (match) score = parseFloat(match[1]);
+        if (item.includes('Positive')) text = 'Positive';
+      }
+    });
+    return { score, text };
+  };
+
+  const extractRisk = (riskAssessment) => {
+    let riskLevel = 'Moderate';
+    riskAssessment.forEach(item => {
+      if (item.includes('Low Risk')) riskLevel = 'Low';
+      else if (item.includes('High Risk')) riskLevel = 'High';
+      else if (item.includes('Low to Moderate')) riskLevel = 'Low to Moderate';
+      else if (item.includes('Moderate to High')) riskLevel = 'Moderate to High';
+    });
+    return riskLevel;
+  };
+
+  const stocks = parseStockData(recommendation);
+  
+  const getRiskColor = (risk) => {
+    if (risk.includes('Low')) return 'text-green-600 bg-green-100 border-green-200';
+    if (risk.includes('High')) return 'text-red-600 bg-red-100 border-red-200';
+    return 'text-orange-600 bg-orange-100 border-orange-200';
+  };
+  
+  const getSentimentColor = (sentiment) => {
+    if (sentiment === 'Positive') return 'text-green-600 bg-green-100 border-green-200';
+    return 'text-gray-600 bg-gray-100 border-gray-200';
+  };
+  
+  const formatNumber = (num) => {
+    if (!num) return 'N/A';
+    return new Intl.NumberFormat('en-IN').format(num);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center mb-8"
+      >
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Stock Recommendations</h2>
+        <p className="text-gray-600">Based on Financial Metrics and Sentiment Analysis</p>
+      </motion.div>
+      
+      {/* Stock Cards */}
+      {stocks.map((stock, index) => {
+        const metrics = extractMetrics(stock.financialMetrics);
+        const sentiment = extractSentiment(stock.sentimentAnalysis);
+        const risk = extractRisk(stock.riskAssessment);
+        
+        return (
+          <motion.div
+            key={stock.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+          >
+            {/* Card Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold">#{stock.id}. {stock.name}</h3>
+                  <p className="text-blue-100 text-lg">{stock.symbol}</p>
+                </div>
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl font-bold">{stock.id}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Card Content */}
+            <div className="p-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Financial Metrics */}
+                <div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-4">📊 Financial Metrics</h4>
+                  <div className="space-y-3">
+                    {metrics.eps && (
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">EPS</span>
+                        <span className="font-bold text-gray-900">₹{formatNumber(metrics.eps)}</span>
+                      </div>
+                    )}
+                    {metrics.salesGrowth && (
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Sales Growth</span>
+                        <span className="font-bold text-green-600">{metrics.salesGrowth}%</span>
+                      </div>
+                    )}
+                    {metrics.marketCap && (
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Market Cap</span>
+                        <span className="font-bold text-gray-900">₹{formatNumber(metrics.marketCap)}</span>
+                      </div>
+                    )}
+                    {metrics.debtToEquity && (
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Debt to Equity</span>
+                        <span className="font-bold text-gray-900">{metrics.debtToEquity}</span>
+                      </div>
+                    )}
+                    {metrics.roe && (
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">ROE</span>
+                        <span className="font-bold text-blue-600">{metrics.roe}%</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Analysis */}
+                <div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-4">📈 Analysis</h4>
+                  <div className="space-y-4">
+                    {/* Sentiment */}
+                    <div className={`p-4 rounded-lg border ${getSentimentColor(sentiment.text)}`}>
+                      <div className="flex items-center mb-2">
+                        <span className="font-semibold">💭 Sentiment</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold">{sentiment.text}</span>
+                        {sentiment.score > 0 && (
+                          <span className="text-sm font-medium">Score: {sentiment.score}</span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {/* Risk Assessment */}
+                    <div className={`p-4 rounded-lg border ${getRiskColor(risk)}`}>
+                      <div className="flex items-center mb-2">
+                        <span className="font-semibold">🛡️ Risk Level</span>
+                      </div>
+                      <span className="font-bold">{risk} Risk</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Reasoning */}
+              {stock.reasoning.length > 0 && (
+                <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h5 className="font-bold text-gray-900 mb-2">📋 Investment Reasoning</h5>
+                  <ul className="space-y-1 text-gray-700">
+                    {stock.reasoning.map((reason, idx) => (
+                      <li key={idx} className="text-sm leading-relaxed">
+                        • {reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
+
 const PersonalizedStocks = ({mail}) => {
 
     
@@ -512,7 +764,7 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                 </form>
 
                 {recommendation && (
-                    <motion.div 
+			{ /*<motion.div 
                         id="recommendation-section"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -536,7 +788,16 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                             className="whitespace-pre-wrap" 
 
                         >{parseMarkdown(recommendation)}</motion.p>
-                    </motion.div>
+                    </motion.div> */}
+
+
+		  <motion.div 
+			  initial={{ opacity: 0 }}
+			  animate={{ opacity: 1 }}
+			  className="max-w-6xl mx-auto p-6"
+			>
+			  <StockCards recommendation={recommendation} />
+			</motion.div>
                 )}
             </motion.div>
         </div>
