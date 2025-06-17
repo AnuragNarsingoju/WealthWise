@@ -16,6 +16,50 @@ import Cookies from 'js-cookie';
 import Navbar from './navbar';
 
 const PersonalizedStocks = ({mail}) => {
+
+    const parseMarkdown = (text) => {
+    // Split by lines to preserve structure
+    const lines = text.split('\n');
+    
+    return lines.map((line, index) => {
+      // Handle bold text (**text**)
+      let parts = line.split(/(\*\*.*?\*\*)/g);
+      
+      const processedParts = parts.map((part, partIndex) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          // Remove ** and make bold
+          const boldText = part.slice(2, -2);
+          return <strong key={partIndex}>{boldText}</strong>;
+        }
+        
+        // Handle headers (lines starting with #)
+        if (part.startsWith('# ')) {
+          return <h1 key={partIndex} className="text-2xl font-bold mb-2">{part.slice(2)}</h1>;
+        }
+        if (part.startsWith('## ')) {
+          return <h2 key={partIndex} className="text-xl font-bold mb-2">{part.slice(3)}</h2>;
+        }
+        if (part.startsWith('### ')) {
+          return <h3 key={partIndex} className="text-lg font-bold mb-1">{part.slice(4)}</h3>;
+        }
+        
+        // Handle list items
+        if (part.trim().startsWith('- ')) {
+          return <li key={partIndex} className="ml-4">{part.trim().slice(2)}</li>;
+        }
+        
+        return part;
+      });
+      
+      // Wrap in div for each line, add key
+      return (
+        <div key={index} className="mb-1">
+          {processedParts}
+        </div>
+      );
+    });
+  };
+
     function formatChatbotResponse(response) {
         return response
           .replace(/\n/g, '<br>') 
@@ -160,13 +204,13 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
             }
             
             // Add market alert to all responses
-            recommendationText += `
+//             recommendationText += `
 
-*Market Alert: Geopolitical Tensions Affecting Market Stability*
+// *Market Alert: Geopolitical Tensions Affecting Market Stability*
 
-->The recent *terrorist attack in Pahalgam, Kashmir*, has escalated tensions between India and Pakistan, leading to increased market volatility and investor caution.
-->The imposition of *widespread tariffs by the U.S.* has triggered a significant global stock market downturn, with major indices experiencing sharp declines and heightened volatility.
--> Additionally, the disruption in global oil supply due to conflicts in the **Strait of Hormuz** has further exacerbated concerns about energy prices and economic stability worldwide.`;
+// ->The recent *terrorist attack in Pahalgam, Kashmir*, has escalated tensions between India and Pakistan, leading to increased market volatility and investor caution.
+// ->The imposition of *widespread tariffs by the U.S.* has triggered a significant global stock market downturn, with major indices experiencing sharp declines and heightened volatility.
+// -> Additionally, the disruption in global oil supply due to conflicts in the **Strait of Hormuz** has further exacerbated concerns about energy prices and economic stability worldwide.`;
             
             setRecommendation(recommendationText);
             
@@ -449,10 +493,7 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
                             animate={{ opacity: 1 }}
                             className="whitespace-pre-wrap" 
 
-                            dangerouslySetInnerHTML={{
-                                __html: formatChatbotResponse(recommendation.groqRecommendation)
-                            }}
-                        >{recommendation}</motion.p>
+                        >{parseMarkdown(recommendation)}</motion.p>
                     </motion.div>
                 )}
             </motion.div>
