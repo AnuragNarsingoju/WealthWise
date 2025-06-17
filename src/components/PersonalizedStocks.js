@@ -521,16 +521,15 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
             }, 500);
         } catch (error) {
             console.error('Error fetching recommendation:', error);
-            setError(`🔒 Stock Recommendation Feature – Available via Offline Access Only
+            setError(`🔒Stock Recommendation Feature – Temporarily Unavailable
 
-                Thank you for your interest in our AI-powered stock recommendation system. This feature utilizes Large Language Models (LLMs), advanced machine learning classification algorithms, and pulls real-time financial data from multiple search engine APIs to generate intelligent, data-backed investment insights.
-
-                Due to the high computational demands and security considerations, this system currently operates on offline servers and is not accessible through our live online platform.
-
-                However, we're actively working on optimizing this feature for online deployment. In future releases, we aim to make it available directly through the platform, bringing seamless, real-time recommendations to your fingertips.
-
-                If you want to explore how it works, want a technical demo, or would like to discuss the system in more detail —
-                📬 Feel free to reach out at support@wealthwisee.live — we'd love to connect and share the innovation behind the scenes.`);
+		Thank you for your interest in our AI-powered stock recommendation system. This feature utilizes Large Language Models (LLMs), advanced machine learning classification algorithms, and pulls real-time financial data from multiple search engine APIs to generate intelligent, data-backed investment insights.
+		
+		Due to high demand, our servers are currently busy. Please try again after some time.
+		We appreciate your patience as we work to ensure smooth and reliable access for all users.
+		
+		If you’d like a technical demo, want to explore how the system works, or wish to discuss the innovation behind the scenes —
+		📬 Feel free to reach out at support@wealthwisee.live — we’d love to connect.`);
                 setTimeout(() => setError(null), 20000);
         } finally {
             setLoading(false);
