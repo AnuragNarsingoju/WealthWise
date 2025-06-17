@@ -792,12 +792,12 @@ The top 5 recommended stocks—JNJ, PG, KO, MMM, and CSCO—offer a balanced mix
 
 
 		  <motion.div 
-			  initial={{ opacity: 0 }}
-			  animate={{ opacity: 1 }}
-			  className="max-w-6xl mx-auto p-6"
-			>
-			  <StockCards recommendation={recommendation} />
-			</motion.div>
+		      initial={{ opacity: 0 }}
+		      animate={{ opacity: 1 }}
+		      className="max-w-6xl mx-auto p-6"
+		    >
+		      <StockCards recommendation={recommendation} />
+		 </motion.div>
                 )}
             </motion.div>
         </div>
