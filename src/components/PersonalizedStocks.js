@@ -273,6 +273,8 @@ const PersonalizedStocks = ({mail}) => {
 // Markdown Parser Function
 const parseMarkdown = (text) => {
   if (!text) return [];
+
+  text = text.slice(5);
   
   const lines = text.split('\n');
   const elements = [];
