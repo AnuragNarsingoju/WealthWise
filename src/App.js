@@ -18,7 +18,6 @@ import PersonalizedStocks from './components/PersonalizedStocks';
 import Portfolio from './components/Portfolio';
 import Cookies from 'js-cookie';
 
-
 const App = () => {
   const [log, setLog] = useState(false);
   const [mail, setMail] = useState(localStorage.getItem('userEmail') || '');
