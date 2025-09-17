@@ -211,7 +211,7 @@ const StockSearch = ({ email, onSuccess }) => {
     <div
       className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6"
       ref={searchRef}
-      style={{ zIndex: 40 }}
+      style={{ zIndex: 100 }}
     >
       {" "}
       {/* Notification */}
@@ -436,3 +436,4 @@ const StockSearch = ({ email, onSuccess }) => {
 };
 
 export default StockSearch;
+
