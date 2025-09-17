@@ -282,7 +282,7 @@ const Portfolio = ({ mail }) => {
           </div>
 
           {/* Stock Search Component */}
-          <div className="mb-6">
+          <div className="mb-6" style={{ zIndex: 90 }}>
             <StockSearch email={emailId} onSuccess={handlePurchaseSuccess} />
           </div>
 
