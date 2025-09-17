@@ -209,17 +209,16 @@ const StockSearch = ({ email, onSuccess }) => {
 
   return (
     <div
-      className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6"
-      ref={searchRef}
-      style={{ zIndex: 100 }}
+      className="w-full bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-6 relative"
+      style={{ zIndex: 1 }}
     >
-      {" "}
       {/* Notification */}
       {notification && (
         <div
-          className={`absolute top-0 right-0 m-4 p-3 rounded-lg shadow-lg z-50 flex items-center max-w-md ${
+          className={`fixed top-4 right-4 p-3 rounded-lg shadow-lg flex items-center max-w-md ${
             notification.type === "error" ? "bg-red-500/90" : "bg-green-500/90"
           } text-white`}
+          style={{ zIndex: 9999 }}
         >
           {notification.type === "error" ? (
             <AlertTriangle className="w-5 h-5 mr-2 flex-shrink-0" />
@@ -229,12 +228,14 @@ const StockSearch = ({ email, onSuccess }) => {
           <p>{notification.message}</p>
         </div>
       )}
+      
       <h2 className="text-xl font-semibold mb-4 flex items-center">
         <Search className="w-5 h-5 mr-2" />
         Search & Buy Stocks
       </h2>
+      
       {/* Search Input Section */}
-      <div className="mb-6">
+      <div className="mb-6 relative" ref={searchRef}>
         <div className="flex items-center">
           <div className="relative flex-grow">
             <input
@@ -280,7 +281,10 @@ const StockSearch = ({ email, onSuccess }) => {
 
         {/* Search Results Dropdown */}
         {showResults && (
-          <div className="absolute z-50 left-0 right-0 bg-gray-800/95 backdrop-blur-sm mt-1 rounded-lg border border-white/20 shadow-xl max-h-80 overflow-y-auto mx-0">
+          <div 
+            className="absolute left-0 right-0 bg-gray-800/95 backdrop-blur-sm mt-1 rounded-lg border border-white/20 shadow-xl max-h-80 overflow-y-auto"
+            style={{ zIndex: 9998 }}
+          >
             {loading ? (
               <div className="p-4 flex justify-center">
                 <Loader className="w-6 h-6 animate-spin text-indigo-400" />
@@ -347,6 +351,7 @@ const StockSearch = ({ email, onSuccess }) => {
           </div>
         )}
       </div>
+
       {/* Selected Stock Information */}
       {selectedStock && (
         <div className="bg-white/5 rounded-lg p-4 border border-indigo-500/20 mb-6">
@@ -425,6 +430,7 @@ const StockSearch = ({ email, onSuccess }) => {
           </div>
         </div>
       )}
+      
       {/* Disclaimer */}
       <p className="text-xs text-gray-400 mt-2">
         Market data is delayed. Trading in securities involves risk and may
@@ -436,4 +442,3 @@ const StockSearch = ({ email, onSuccess }) => {
 };
 
 export default StockSearch;
-
