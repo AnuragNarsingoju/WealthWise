@@ -293,11 +293,11 @@ const parseMarkdown = (text) => {
     if (line.startsWith('### ')) {
       const headerText = line.slice(4);
       const parsedHeader = parseInlineMarkdown(headerText);
-      element = <h3 key={index} className="text-xl font-bold text-gray-800 mt-6 mb-3">{parsedHeader}</h3>;
+      element = <h3 key={index} className="text-xl font-bold text-white-800 mt-6 mb-3">{parsedHeader}</h3>;
     } else if (line.startsWith('#### ')) {
       const headerText = line.slice(5);
       const parsedHeader = parseInlineMarkdown(headerText);
-      element = <h4 key={index} className="text-lg font-semibold text-gray-700 mt-4 mb-2">{parsedHeader}</h4>;
+      element = <h4 key={index} className="text-lg font-semibold text-white-700 mt-4 mb-2">{parsedHeader}</h4>;
     }
     // Bullet points
     else if (line.trim().startsWith('- ')) {
@@ -306,14 +306,14 @@ const parseMarkdown = (text) => {
       element = (
         <div key={index} className="ml-4 mb-2">
           <span className="text-blue-600 font-bold mr-2">•</span>
-          <span className="text-gray-700">{parsedText}</span>
+          <span className="text-white-700">{parsedText}</span>
         </div>
       );
     }
     // Regular paragraphs
     else {
       const parsedText = parseInlineMarkdown(line);
-      element = <p key={index} className="text-gray-700 mb-2 leading-relaxed">{parsedText}</p>;
+      element = <p key={index} className="text-white-700 mb-2 leading-relaxed">{parsedText}</p>;
     }
     
     elements.push(element);
